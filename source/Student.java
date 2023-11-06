@@ -38,7 +38,7 @@ public class Student extends User {
             }
         }
         else {
-            System.out.println ("No camps registered as camp attendee") ;
+            System.out.println ("No camps registered as camp attendee") ; 
         }
     }
 
@@ -62,6 +62,6 @@ public class Student extends User {
     }
 
     public boolean withdrawFromCamp (String campName) {
-        return true ;
+        return false ;
     }
 }
