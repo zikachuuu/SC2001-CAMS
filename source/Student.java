@@ -9,8 +9,8 @@ public class Student extends User {
     private CampCommittee campCommittee ;
     private ArrayList<CampAttendee> campAttendees ;
 
-    public Student(String userId , String userName , String password , Faculty faculty) {
-        super (userId , userName , password , faculty) ;
+    public Student(String userId , String userName , Faculty faculty, String password) {
+        super (userId , userName, faculty , password) ;
 
         this.campCommittee = null ;
         this.campAttendees = new ArrayList<CampAttendee>() ;

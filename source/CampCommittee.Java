@@ -1,3 +1,5 @@
-public class CampCommittee {
+package source;
 
+public class CampCommittee {
+    
 }
