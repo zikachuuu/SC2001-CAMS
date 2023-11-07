@@ -38,7 +38,7 @@ public class Student extends User {
             }
         }
         else {
-            System.out.println ("No camps registered as camp attendee") ;
+            System.out.println ("No camps registered as camp attendee") ; 
         }
     }
 
@@ -59,9 +59,22 @@ public class Student extends User {
 
         if (committeeRole) campCommittee = new CampCommittee (camp) ;
         else campAttendees.add(new CampAttendee (camp)) ;
+
+        // to update csv
     }
 
     public boolean withdrawFromCamp (String campName) {
-        return true ;
+        Camp camp = Utility.findCampByName(campName) ;
+
+        if (campCommittee.getCamp() == camp) throw new CommitteeWithdrawException() ;
+
+        for (int i = 0 ; i < campAttendees.size() ; i++) {
+            if (campAttendees[i].getCamp == camp) {
+                campAttendees.remove (i) ;
+                // to update csv
+                return true ;
+            }
+        }
+        return false ;
     }
 }
