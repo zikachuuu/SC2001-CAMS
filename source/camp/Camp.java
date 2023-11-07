@@ -1,10 +1,12 @@
 package source.camp;
 
-import java.util.List ;
+import java.util.ArrayList ;
 
 import source.exception.CampFullException;
 import source.user.CampAttendee;
 import source.user.CampCommittee;
+import source.user.Staff;
+import source.user.User;
 
 /**
  * to be fixed...
@@ -12,15 +14,39 @@ import source.user.CampCommittee;
 public class Camp {
     
     CampInformation campInfo ;
-    List<Enquiry> enquiries ;
-    List<Suggestion> suggestions ;
+    ArrayList<Enquiry> enquiries ;
+    ArrayList<Suggestion> suggestions ;
+
+
+    public Camp(CampInformation campInfo) {
+        this.campInfo = campInfo ;
+        this.enquiries = new ArrayList<Enquiry>() ;
+        this.suggestions = new ArrayList<Suggestion>() ;
+    }
+
+    
+    public Camp (CampInformation campInfo , ArrayList<Enquiry> enquiries , ArrayList<Suggestion> suggestions) {
+        this.campInfo = campInfo ;
+        this.enquiries = enquiries ;
+        this.suggestions = suggestions ;
+    }
+
+    public void viewCampDetails(User user) {
+        //todo
+    }
+
+    public boolean toggleVisibility(Staff staffInCharge) {
+        //todo
+        return true ;
+    }
+
 
     /**
      * 
     */
     public boolean addCommittee (CampCommittee committee) {
 
-        committees.add(committee) ;
+        campInfo.addCommittee(committee) ;
         totalSlots-- ;
         campCommitteeSlots-- ;
         return true ;
