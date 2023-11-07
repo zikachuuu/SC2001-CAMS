@@ -16,6 +16,9 @@ public class Student extends User {
         this.campAttendees = new ArrayList<CampAttendee>() ;
     }
 
+    public CampCommittee getCampCommittee() {return campCommittee ;}
+    public ArrayList<CampAttendee> getCampAttendees() {return campAttendees ;}
+
     public void viewOpenCamps() {
         //todo
     }
@@ -52,6 +55,8 @@ public class Student extends User {
         if (LocalDate.now().isAfter(camp.getRegistrationClosingDate())) throw new DeadlineOverException() ;
 
         // to implement check clash in date
+
+        // if (campCommittee.getCamp().getStartDate camp.getStartDate())
 
         if ((camp.getTotalSlots() - camp.getCampCommitteeSlots() == 0) || 
             (committeeRole && camp.getCampCommitteeSlots() == 0)
