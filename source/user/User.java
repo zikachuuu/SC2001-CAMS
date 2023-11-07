@@ -1,4 +1,4 @@
-package source;
+package source.user;
 
 public class User {
     private String userId ;

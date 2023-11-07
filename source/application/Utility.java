@@ -1,10 +1,18 @@
-package source;
+package source.application;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import source.camp.Camp;
+import source.camp.Enquiry;
+import source.camp.Suggestion;
+import source.user.Faculty;
+import source.user.Staff;
+import source.user.Student;
+import source.user.User;
 
 public class Utility {
     

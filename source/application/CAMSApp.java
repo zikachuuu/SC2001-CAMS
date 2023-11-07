@@ -1,8 +1,14 @@
-package source;
+package source.application;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import source.camp.Camp;
+import source.camp.Enquiry;
+import source.camp.Suggestion;
+import source.user.Staff;
+import source.user.Student;
 
 public class CAMSApp {
 
