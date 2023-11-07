@@ -12,6 +12,22 @@ public class Utility {
         return null ;
     }
 
+    public static User findUserByName (String userId) {
+
+        User user ;
+        if ((user = findStaffByName(userId)) != null) return user ;
+        if ((user = findStudentByName(userId)) != null) return user ;
+        return null ;
+    }
+
+    public static Student findStudentByName (String studentId) {
+        return null ;
+    }
+
+    public static Staff findStaffByName (String staffId) {
+        return null ;
+    }
+
     private static String extractUserIdFromEmail(String email) {
         int atIndex = email.indexOf('@');
         if (atIndex != -1) {
@@ -130,10 +146,10 @@ public class Utility {
                     String enquiriesText = data[2].trim();
                     boolean processed = Boolean.parseBoolean(data[3].trim());
                     String processedBy = data[4].trim();
+                    String replies ;
 
                     // Create a new camp and add it to the list
-                    Enquiry enquiry = new Enquiry(studentId, campName, enquiriesText,
-                            processed, processedBy);
+                    Enquiry enquiry = new Enquiry(findCampByName(campName) , findStudentByName(studentId) , enquiriesText , processed , findUserByName(processedBy) , replies) ;
                     enquiries.add(enquiry);
                 } else {
                     System.out.println("Invalid data format in the camp file: " + line);
@@ -159,8 +175,7 @@ public class Utility {
                     String suggestionsText = data[2].trim();
                     boolean approvalState = Boolean.parseBoolean(data[3].trim());
 
-                    Suggestion suggestion = new Suggestion (studentId, campName,
-                            suggestionsText, approvalState);
+                    Suggestion suggestion = new Suggestion (findCampByName(campName) , findStudentByName(studentId) , suggestionsText, approvalState);
                     suggestions.add(suggestion);
                 }
             }

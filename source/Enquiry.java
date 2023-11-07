@@ -30,6 +30,13 @@ public class Enquiry {
         this.content = content ;
         this.replied = false ;
     }
+    
+    public Enquiry (Camp camp , Student student , String content , boolean replied , User repliedBy , String replies) {
+        this (camp , student , content) ;
+        this.replied = replied ;
+        this.repliedBy = repliedBy ;
+        this.replies = replies ;
+    }
 
     public boolean getActive() {return active ;}
     public Camp getCamp() {return camp ;}
