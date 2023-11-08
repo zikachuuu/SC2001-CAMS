@@ -5,13 +5,12 @@ import source.camp.Camp;
 /**
  * Represents a camp committee member of a certain camp. A camp committee is part of a student (composition).
  * @author Le Yanzhi
- * @version beta 1
+ * @version beta 2
  * @since 2023-11-7
  */
-public class CampCommittee {
+public class CampCommittee extends CampRole {
 
-    private Camp camp ;
-    private Student student ;
+
     private int points;
 
     /**
@@ -20,8 +19,7 @@ public class CampCommittee {
      * @param student The student that take this committee role.
      */
     public CampCommittee(Camp camp , Student student) {
-        this.camp = camp ;
-        this.student = student ;
+        super(camp, student) ;
         this.points = 0 ;
     }
 
@@ -34,26 +32,11 @@ public class CampCommittee {
      * @param points The number of points this committee have.
      */
     public CampCommittee (Camp camp , Student student , int points) {
-        this (camp , student) ;
+        super(camp, student) ;
         this.points = points ;
     }
 
 
-    
-    public Camp getCamp() {return camp ;}
-    public Student getStudent() {return student ;}
     public int getPoints() {return points ;}
     public void addPoint() {points++ ;}
-
-
-
-
-    /**
-     * Check if the 2 camp committees are the same person. 2 Camp committees are the same if they have the same student. 
-     * @param other The other committee to compare with.
-     * @return True if same, false otherwise.
-     */
-    public boolean equals (CampCommittee other) {
-        return student.equals(other.getStudent()) ;
-    }
 }

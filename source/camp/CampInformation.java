@@ -3,8 +3,7 @@ package source.camp;
 import java.time.LocalDate;
 import java.util.ArrayList ;
 
-import source.user.CampAttendee;
-import source.user.CampCommittee;
+import source.user.Student ;
 import source.user.Faculty ;
 import source.user.Staff;
 
@@ -13,8 +12,8 @@ import source.user.Staff;
  * No logic is implemented within this class. All this class does is to store the information and provide get and set methods.
  * Implement logic within camp class.
  * @author Le Yanzhi
- * @version beta 1
- * @since 2023-11-7
+ * @version beta 2
+ * @since 2023-11-8
  */
 public class CampInformation {
 
@@ -29,12 +28,11 @@ public class CampInformation {
     private String description ;
     private Staff staffInCharge ;
     private boolean visibility ;
-    private ArrayList<CampCommittee> committees ;
-    private ArrayList<CampAttendee> attendees ;
-    private ArrayList<CampAttendee> withdrawnAttendees ;
+    private ArrayList<Student> participants ;
+    private ArrayList<Student> withdrawnParticipants ;
 
 
-    public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge , boolean visibility , ArrayList<CampCommittee> committees , ArrayList<CampAttendee> attendees , ArrayList<CampAttendee> withdrawnAttendees) {
+    public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge , boolean visibility , ArrayList<Student> participants , ArrayList<Student> withdrawnParticipants) {
 
         this.campName = campName ;
         this.startDate = startDate ;
@@ -47,14 +45,13 @@ public class CampInformation {
         this.description = description ;
         this.staffInCharge = staffInCharge ;
         this.visibility = visibility ;
-        this.committees = committees ;
-        this.attendees = attendees ;
-        this.withdrawnAttendees = withdrawnAttendees ;
+        this.participants = participants ;
+        this.withdrawnParticipants = withdrawnParticipants ;
     }
 
     public String getCampName() {return campName ;}
     public void setCampname(String campName) {this.campName = campName ;} 
-    public LocalDate getStarDate() {return startDate ;}
+    public LocalDate getStartDate() {return startDate ;}
     public void setStartState(LocalDate startDate) {this.startDate = startDate ;}
     public LocalDate getEndDate() {return endDate ;}
     public void setEndDate(LocalDate endDate) {this.endDate = endDate ;}
@@ -67,32 +64,22 @@ public class CampInformation {
 
     public int getTotalSlots() {return totalSlots ;}
     public void setTotalSlots(int totalSlots) {this.totalSlots = totalSlots ;}
-    public void incrementTotalSlots() {totalSlots++ ;}
-    public void decrementTotalSlots() {totalSlots-- ;}
-
     public int getCampCommitteeSlots() {return campCommitteeSlots ;}
     public void setCampCommitteeSlots(int campCommitteeSlots) {this.campCommitteeSlots = campCommitteeSlots ;}
-    public void incrementCampCommitteeSlots() {campCommitteeSlots++ ;}
-    public void decrementCampCommitteeSlots() {campCommitteeSlots-- ;} 
-
     public String getDescription() {return description ;}
     public void setDescription(String description) {this.description = description ;}
 
     public Staff getStaffInCharge() {return staffInCharge ;}
     public boolean getVisibility() {return visibility ;}
     public void setVisibility(boolean visibility) {this.visibility = visibility ;}
+    public boolean toggleVisibility() {return visibility = ! visibility ;}
 
-    public ArrayList<CampCommittee> getCommittees() {return committees ;}
-    public void setCommittees(ArrayList<CampCommittee> committees) {this.committees = committees ;}
-    public boolean addCommittee(CampCommittee committee) {return this.committees.add(committee) ;}
-    public boolean removeCommittee(CampCommittee committee) {return this.committees.remove(committee) ;}
+    public ArrayList<Student> getParticipants() {return participants ;}
+    public void setParticipants(ArrayList<Student> participants) {this.participants = participants;}
+    public boolean addParticipants(Student student) {return this.participants.add(student) ;}
+    public boolean removeParticipants(Student student) {return this.participants.remove(student) ;}
 
-    public ArrayList<CampAttendee> getAttendees() {return attendees ;}
-    public void setAttendees(ArrayList<CampAttendee> attendees) {this.attendees = attendees ;}
-    public boolean addAttendee(CampAttendee attendee) {return this.attendees.add(attendee) ;}
-    public boolean removeAttendee(CampAttendee attendee) {return this.attendees.remove(attendee) ;}
-    
-    public ArrayList<CampAttendee> getWithdrawnAttendees() {return withdrawnAttendees ;}
-    public void setWithdrawnAttendees(ArrayList<CampAttendee> withdrawnAttendees) {this.withdrawnAttendees = withdrawnAttendees;}
-    public boolean addWithdrawnAttendee(CampAttendee withdrawnAttendee) {return this.withdrawnAttendees.add(withdrawnAttendee) ;}
+    public ArrayList<Student> getWithdrawnParticipants() {return withdrawnParticipants ;}
+    public void setWithdrawnParticipants(ArrayList<Student> withdrawnParticipants) {this.withdrawnParticipants = withdrawnParticipants ;}
+    public boolean addWithdrawnParticipants(Student student) {return this.withdrawnParticipants.add(student) ;}
 }

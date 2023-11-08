@@ -3,9 +3,11 @@ package source.camp;
 import java.util.ArrayList ;
 
 import source.exception.CampFullException;
+import source.exception.NoAccessException;
 import source.user.CampAttendee;
 import source.user.CampCommittee;
 import source.user.Staff;
+import source.user.Student;
 import source.user.User;
 
 /**
@@ -14,41 +16,61 @@ import source.user.User;
 public class Camp {
     
     CampInformation campInfo ;
+    int numCommittees ;
+    int numAttendees ;
     ArrayList<Enquiry> enquiries ;
     ArrayList<Suggestion> suggestions ;
 
 
     public Camp(CampInformation campInfo) {
         this.campInfo = campInfo ;
+        this.numCommittees = 0 ;
+        this.numAttendees = 0 ;
         this.enquiries = new ArrayList<Enquiry>() ;
         this.suggestions = new ArrayList<Suggestion>() ;
     }
 
     
-    public Camp (CampInformation campInfo , ArrayList<Enquiry> enquiries , ArrayList<Suggestion> suggestions) {
+    public Camp (CampInformation campInfo , int numCommittees , int numAttendees , ArrayList<Enquiry> enquiries , ArrayList<Suggestion> suggestions) {
         this.campInfo = campInfo ;
+        this.numCommittees = numCommittees ;
+        this.numAttendees = numAttendees ;
         this.enquiries = enquiries ;
         this.suggestions = suggestions ;
     }
+
+    public CampInformation getCampInfo () {return campInfo ;}
 
     public void viewCampDetails(User user) {
         //todo
     }
 
+    /**
+     * Toggle the visibility of this camp (Not visible <-> Visible).
+     * Visibility can be toggled iff no students have signed up for this camp yet.
+     * @param staffInCharge The staff who attempts to toggle.
+     * @return The new visibility of this camp.
+     * @throws NoAccessException If staff is not the owner of this camp, or if students have already signed up for this camp. 
+     */
     public boolean toggleVisibility(Staff staffInCharge) {
-        //todo
-        return true ;
+        if (! staffInCharge.equals(campInfo.getStaffInCharge())) throw new NoAccessException("Only the creator of this camp can toggle visibility!") ;
+        if (numAttendees != 0 || numCommittees != 0) throw new NoAccessException("Cannot toggle visibility if students have already signed up for this camp!") ;
+
+        return campInfo.toggleVisibility() ;
     }
 
 
     /**
-     * 
-    */
-    public boolean addCommittee (CampCommittee committee) {
+     * Add a participant to the camp.
+     * @param 
+     * @return
+     */
+    public boolean addParticipant (Student student) {
 
-        campInfo.addCommittee(committee) ;
-        totalSlots-- ;
-        campCommitteeSlots-- ;
+        if (numCommittees == campInfo.getCampCommitteeSlots())  throw new CampFullException() ;
+
+        campInfo.addParticipants(student) ;
+     
         return true ;
     }
 
@@ -59,10 +81,11 @@ public class Camp {
      * @return True if successfully added, false if attendee is already in camp or have withdrawn from camp before.
      * @throws CampFullException If camp is full.
      */
-    public boolean addAttendee (CampAttendee attendee) {
-        if (totalSlots - campCommitteeSlots == 0) throw new CampFullException() ;
-        if (withdrawAttendees.contains(attendee)) return false ;
-        if (attendees.contains(attendee)) return false ;
+    public boolean addAttendee (Student student) {
+        if (numAttendees + numCommittees == campInfo.getTotalSlots()) throw new CampFullException() ;
+        if (campInfo.getWithdrawnAttendees().contains(attendee)) return false ;
+        if (campInfo.getAttendees().contains(attendee)) return false ;
+        if (campInfo.getCommittees().
 
         attendees.add(attendee) ;
         totalSlots-- ;
@@ -83,5 +106,9 @@ public class Camp {
             return true ;
         }
         return false ;
+    }
+
+    public void viewCampDetails() {
+        
     }
 }
