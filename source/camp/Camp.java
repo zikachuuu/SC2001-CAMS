@@ -43,6 +43,14 @@ public class Camp {
 
     public void viewCampDetails(User user) {
         //todo
+        if ( user instanceof Student)
+        {
+            if( ! user.isCampCommittee(this) ) throw new NoAccessException();
+        }
+        else // all staff can view details of camp  && camp committee member can also view details of his camp
+        {
+            //print camp details
+        }
     }
 
     /**
@@ -83,12 +91,14 @@ public class Camp {
      */
     public boolean addAttendee (Student student) {
         if (numAttendees + numCommittees == campInfo.getTotalSlots()) throw new CampFullException() ;
-        if (campInfo.getWithdrawnAttendees().contains(attendee)) return false ;
-        if (campInfo.getAttendees().contains(attendee)) return false ;
-        if (campInfo.getCommittees().
+        if (campInfo.getWithdrawnAttendees().contains(student)) return false ; //fixed attribute
+        if (/*campInfo.getAttendees().contains(attendee)*/ campInfo.getParticipant().contain(student)) return false ; //fixed attribute and method
+        /*if (campInfo.getCommittees().*/
 
-        attendees.add(attendee) ;
-        totalSlots-- ;
+        //attendees.add(attendee) ;
+        campInfo.addParticipants(student) // fixed method
+        //totalSlots-- ;
+        numAttendees++; //fixed attribute
         return true ;
     }
 
@@ -100,9 +110,10 @@ public class Camp {
      * @return True if successfully withdraw, false if attendee is not in the camp.
      */
     public boolean withdrawAttendee (CampAttendee attendee) {
-        if (attendees.remove(attendee)) {
-            withdrawAttendees.add(attendee) ;
-            totalSlots++ ;
+        if ( /*attendees*/ campInfo.removeParticipants(attendee)) { //fixed method
+            campInfo.addWithdrawnParticipants(attendee) ;
+            //totalSlots++ ;
+            numAttendees--; //fixed attribute
             return true ;
         }
         return false ;
