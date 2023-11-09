@@ -15,43 +15,69 @@ import source.user.User;
  */
 public class Camp {
     
-    CampInformation campInfo ;
-    int numCommittees ;
-    int numAttendees ;
-    ArrayList<Enquiry> enquiries ;
-    ArrayList<Suggestion> suggestions ;
+    private CampInformation campInfo ;
+    private int numCommittees ;
+    private int numAttendees ;
+    private ArrayList<Student> participants;
+    private ArrayList<Student> withdrawnParticipants;
+    private ArrayList<Enquiry> enquiries ;
+    private ArrayList<Suggestion> suggestions ;
 
 
+    /**
+     * Create a new Camp with the provided camp information.
+     * @param campInfo
+     */
     public Camp(CampInformation campInfo) {
         this.campInfo = campInfo ;
         this.numCommittees = 0 ;
         this.numAttendees = 0 ;
+        this.participants = new ArrayList<Student>() ;
+        this.withdrawnParticipants = new ArrayList<Student>() ;
         this.enquiries = new ArrayList<Enquiry>() ;
         this.suggestions = new ArrayList<Suggestion>() ;
     }
 
     
-    public Camp (CampInformation campInfo , int numCommittees , int numAttendees , ArrayList<Enquiry> enquiries , ArrayList<Suggestion> suggestions) {
+    /**
+     * Create a new Camp from the database with the provided data.
+     * @param campInfo
+     * @param numCommittees
+     * @param numAttendees
+     * @param enquiries
+     * @param suggestions
+     */
+    public Camp (CampInformation campInfo , int numCommittees , int numAttendees , ArrayList<Student> participants , ArrayList<Student> withdrawnParticipants , ArrayList<Enquiry> enquiries , ArrayList<Suggestion> suggestions) {
         this.campInfo = campInfo ;
         this.numCommittees = numCommittees ;
         this.numAttendees = numAttendees ;
+        this.participants = participants ;
+        this.withdrawnParticipants = withdrawnParticipants ;
         this.enquiries = enquiries ;
         this.suggestions = suggestions ;
     }
 
+
     public CampInformation getCampInfo () {return campInfo ;}
 
+
+    /**
+     * Print out the information of this camp. This can only be done by the commmittee of this camp or any staff.
+     * @param user The user who attempts to view.
+     */
     public void viewCampDetails(User user) {
         //todo
         if ( user instanceof Student)
         {
-            if( ! user.isCampCommittee(this) ) throw new NoAccessException();
+            Student student = (Student) user ;
+            if( ! student.isCampCommittee(this) ) throw new NoAccessException();
         }
         else // all staff can view details of camp  && camp committee member can also view details of his camp
         {
             //print camp details
         }
     }
+
 
     /**
      * Toggle the visibility of this camp (Not visible <-> Visible).
@@ -76,8 +102,6 @@ public class Camp {
     public boolean addParticipant (Student student) {
 
         if (numCommittees == campInfo.getCampCommitteeSlots())  throw new CampFullException() ;
-
-        campInfo.addParticipants(student) ;
      
         return true ;
     }
@@ -109,17 +133,23 @@ public class Camp {
      * @param attendee The attendee to withdraw.
      * @return True if successfully withdraw, false if attendee is not in the camp.
      */
-    public boolean withdrawAttendee (CampAttendee attendee) {
-        if ( /*attendees*/ campInfo.removeParticipants(attendee)) { //fixed method
-            campInfo.addWithdrawnParticipants(attendee) ;
-            //totalSlots++ ;
-            numAttendees--; //fixed attribute
-            return true ;
-        }
+    public boolean withdrawAttendee (Student student) {
+        // if ( /*attendees*/ campInfo.removeParticipants(attendee)) { //fixed method
+        //     campInfo.addWithdrawnParticipants(attendee) ;
+        //     //totalSlots++ ;
+        //     numAttendees--; //fixed attribute
+        //     return true ;
+        // }
         return false ;
     }
 
-    public void viewCampDetails() {
-        
+
+    /**
+     * Check if 2 camps are the same, using their campName (campName is unique!).
+     * @param other The camp to compare with.
+     * @return True if same, false otherwise.
+     */
+    public boolean equals (Camp other) {
+        return this.getCampInfo().getCampName() == other.getCampInfo().getCampName() ;
     }
 }

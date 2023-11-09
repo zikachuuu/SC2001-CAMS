@@ -1,9 +1,7 @@
 package source.camp;
 
 import java.time.LocalDate;
-import java.util.ArrayList ;
 
-import source.user.Student ;
 import source.user.Faculty ;
 import source.user.Staff;
 
@@ -12,8 +10,8 @@ import source.user.Staff;
  * No logic is implemented within this class. All this class does is to store the information and provide get and set methods.
  * Implement logic within camp class.
  * @author Le Yanzhi
- * @version beta 2
- * @since 2023-11-8
+ * @version beta 3 (moved the arrayList of participants to camp instead, campInformation should only store "static" data)
+ * @since 2023-11-10
  */
 public class CampInformation {
 
@@ -28,11 +26,9 @@ public class CampInformation {
     private String description ;
     private Staff staffInCharge ;
     private boolean visibility ;
-    private ArrayList<Student> participants ;
-    private ArrayList<Student> withdrawnParticipants ;
 
 
-    public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge , boolean visibility , ArrayList<Student> participants , ArrayList<Student> withdrawnParticipants) {
+    public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge , boolean visibility) {
 
         this.campName = campName ;
         this.startDate = startDate ;
@@ -45,8 +41,6 @@ public class CampInformation {
         this.description = description ;
         this.staffInCharge = staffInCharge ;
         this.visibility = visibility ;
-        this.participants = participants ;
-        this.withdrawnParticipants = withdrawnParticipants ;
     }
 
     public String getCampName() {return campName ;}
@@ -73,13 +67,4 @@ public class CampInformation {
     public boolean getVisibility() {return visibility ;}
     public void setVisibility(boolean visibility) {this.visibility = visibility ;}
     public boolean toggleVisibility() {return visibility = ! visibility ;}
-
-    public ArrayList<Student> getParticipants() {return participants ;}
-    public void setParticipants(ArrayList<Student> participants) {this.participants = participants;}
-    public boolean addParticipants(Student student) {return this.participants.add(student) ;}
-    public boolean removeParticipants(Student student) {return this.participants.remove(student) ;}
-
-    public ArrayList<Student> getWithdrawnParticipants() {return withdrawnParticipants ;}
-    public void setWithdrawnParticipants(ArrayList<Student> withdrawnParticipants) {this.withdrawnParticipants = withdrawnParticipants ;}
-    public boolean addWithdrawnParticipants(Student student) {return this.withdrawnParticipants.add(student) ;}
 }

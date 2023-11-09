@@ -23,11 +23,9 @@ public class CampRole {
         this.student = student ;
     }
 
-
     
     public Camp getCamp() {return camp ;}
     public Student getStudent() {return student ;}
-
 
 
     /**

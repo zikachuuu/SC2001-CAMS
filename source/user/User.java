@@ -28,5 +28,14 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    /**
+     * Check if both users (Staff or student) are the same user, using userId.
+     * @param other The other user to compare with.
+     * @return True if same user, false otherwise.
+     */
+    public boolean equals (User other) {
+        return this.userId == other.getUserId() ;
+    }
     
 }

@@ -24,7 +24,6 @@ public class CampCommittee extends CampRole {
     }
 
 
-
     /**
      * Creates a new camp committee from the database with the given points.
      * @param camp The camp this committee belongs to.
@@ -36,7 +35,7 @@ public class CampCommittee extends CampRole {
         this.points = points ;
     }
 
-
+    
     public int getPoints() {return points ;}
     public void addPoint() {points++ ;}
 }
