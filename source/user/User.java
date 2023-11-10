@@ -1,5 +1,11 @@
 package source.user;
 
+/**
+ * Represents a user. User is the parent class of Student and Staff (Inheritance).
+ * @author Le Yanzhi
+ * @version beta 1 (dont think log in and log out belongs here ah.. should be just in main)
+ * @since 2023-11-10
+ */
 public class User {
     private String userId ;
     private String userName ;
@@ -13,21 +19,24 @@ public class User {
         this.password = password ;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserName() {return userName ;}
+    public String getUserId() {return userId ;}
+    public Faculty getFaculty() {return faculty ;}
+    public String getPassword() {return password ;}
+
+
+    /**
+     * Change password (duh).
+     * @param oldPassword The old password (to verify).
+     * @param newPassword The new password.
+     * @return True if successfully changed, false if oldPassword does not match.
+     */
+    public boolean changePassword (String oldPassword, String newPassword) {
+        if (oldPassword != password) return false ;
+        password = newPassword ;
+        return true ;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     /**
      * Check if both users (Staff or student) are the same user, using userId.
@@ -37,5 +46,4 @@ public class User {
     public boolean equals (User other) {
         return this.userId == other.getUserId() ;
     }
-    
 }

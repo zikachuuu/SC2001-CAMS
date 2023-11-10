@@ -4,4 +4,8 @@ public class DateClashException extends RuntimeException {
     public DateClashException() {
         super ("Clash in date!") ;
     }
+
+    public DateClashException(String message) {
+        super (message) ;
+    }
 }
