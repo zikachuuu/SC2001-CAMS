@@ -8,6 +8,9 @@ import source.user.Student;
 public class StudentInterface {
 
     protected static void handleStudentFunctionalities(Student loggedInStudent, ArrayList<Student> students, ArrayList<Camp> camps) {
+        Utility.clearConsole();
+        System.out.println("test...in student interface") ;
+    
     //     Scanner scanner = new Scanner(System.in);
 
     //     while (!exit) {

@@ -6,20 +6,25 @@ import java.util.List;
 import java.util.Scanner;
 
 import source.camp.Camp;
-import source.camp.Enquiry;
-import source.camp.Suggestion;
 import source.user.Staff;
 import source.user.Student;
 
 
 public class CAMSApp {
 
+    private static final String studentFilePath = "data\\student_list.csv";
+    private static final String staffFilePath = "data\\staff_list.csv";
+    private static final String CAMPS_FILE_PATH = "data\\camps_list.csv";
+    private static final String CAMP_MEMBERS_FILE_PATH = "data\\camp_members.csv";
+    private static final String ENQUIRIES_FILE_PATH = "data\\enquiries.csv";
+    private static final String SUGGESTIONS_FILE_PATH = "data\\suggestions.csv";
+
     public static void main(String[] args) {
 
         // just dummies
-        ArrayList<Student> students = new ArrayList<>() ;
-        ArrayList<Staff> staffs = new ArrayList<>() ;
         ArrayList<Camp> camps = new ArrayList<>() ;
+        ArrayList<Student> students = FileProcessing.readStudentsFromFile(studentFilePath, CAMP_MEMBERS_FILE_PATH) ;
+        ArrayList<Staff> staffs = new ArrayList<>() ;
 
         Scanner scanner = new Scanner(System.in);
         int loginAttempts = 0;
@@ -85,8 +90,7 @@ public class CAMSApp {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("Maximum login attempts reached. Exiting.") ;
+        if (loginAttempts == 3) System.out.println("Maximum login attempts reached. Exiting.") ;
         scanner.close();
     }
 
