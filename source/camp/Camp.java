@@ -155,4 +155,146 @@ public class Camp {
     public boolean equals (Camp other) {
         return this.getCampInfo().getCampName() == other.getCampInfo().getCampName() ;
     }
+
+
+
+
+    
+
+    /* Submit Camp Suggestions */
+    private static void submitCampSuggestionsToStaff(Student user, List<CampClass> camps, List<Suggestion> suggestions) {
+    Scanner scanner = new Scanner(System.in);
+    viewActiveCommitteeCamps(user, camps);
+    System.out.println("Enter the name of the camp you want to submit suggestions for:");
+    String campNameToSuggest = scanner.nextLine();
+    CampClass campToSuggest = findCampByName(campNameToSuggest, camps);
+
+    if (campToSuggest != null) {
+        System.out.println("Enter your suggestions for changes to the camp details:");
+        String suggestionsText = scanner.nextLine();
+        boolean approvalState = false;
+        Suggestion suggestion = new Suggestion(user.getUserId(), campToSuggest.getCampName(), suggestionsText, approvalState);
+        suggestions.add(suggestion);
+         
+        writeSuggestionToFile(suggestion);
+
+        System.out.println("Suggestions submitted successfully!");
+    } else {
+        System.out.println("Camp not found or not eligible for suggestions.");
+    }
+}
+
+private static void writeSuggestionToFile(Suggestion suggestion) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(SUGGESTIONS_FILE_PATH, true))) {
+        writer.write(suggestion.getStudentId() + "," + suggestion.getCampName() + "," +suggestion.
+                getSuggestionsText()+ "," + suggestion.isApproved());                
+        writer.newLine();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+
+    
+
+    
+
+    /* Viewing Camp Suggestions */
+    private static void viewAllSuggestions(Staff user, List<Suggestion> suggestions, List<Camp> camps, List<CampRegistration> studentRegistrations) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Enter the name of the camp for which you want to view suggestions:");
+    String targetCampName = scanner.nextLine();
+
+    // Check if the logged-in staff is the staff in charge for the specified camp
+    boolean isStaffInCharge = false;
+    for (Camp camp : camps) {
+        if (camp.getCampName().equalsIgnoreCase(targetCampName) && camp.getStaffInCharge().equals(loggedInStaff.getUserId())) {
+            isStaffInCharge = true;
+            break;
+        }
+    }
+
+    if (isStaffInCharge) {
+        System.out.println("Suggestions for camp: " + targetCampName);
+        int count = 1;
+        for (Suggestion suggestion : suggestions) {
+            if (suggestion.getCampName().equalsIgnoreCase(targetCampName)) {
+                System.out.println(count);
+                System.out.println("Student ID: " + suggestion.getStudentId());
+                System.out.println("Suggestions: " + suggestion.getSuggestionsText());
+                System.out.println("-------------------------");
+                System.out.println();
+            }
+            count++;
+        }
+    } else {
+        System.out.println("You are not the staff in charge of the camp or the camp does not exist.");
+    }
+}
+
+
+
+    
+
+/* Submitting camp Enquiry */
+private static void submitCampEnquiry(Student user, List<Camp> camps) {
+    Scanner scanner = new Scanner(System.in);
+    List<Camp> eligibleCamps = getEligibleCamps(user, camps);
+    listEligibleCamps(eligibleCamps);
+
+    System.out.println("Enter the name of the camp you want to submit an enquiry for:");
+    String campNameToEnquire = scanner.nextLine();
+    Camp campToEnquire = findCampByName(campNameToEnquire, eligibleCamps);
+
+    if (campToEnquire != null) {
+        System.out.println("Enter your enquiry:");
+        String enquiryText = scanner.nextLine();
+        Enquiry enquiry = new EnquiriesClass(user.getUserId(), campToEnquire.getCampName(), enquiryText, false, null);
+        
+        writeEnquiriesToFile(enquiry);
+
+        System.out.println("Enquiry submitted successfully!");
+    } else {
+        System.out.println("Camp not found or not eligible for enquiry.");
+    }
+}
+
+
+
+
+    
+/* Viewing camp enquiry */
+private static void viewAllEnquiries(Staff user, List<Enquiry> enquiries, List<Camp> camps) {
+    Scanner scanner = new Scanner(System.in);
+    List<Camp> staffCamps = new ArrayList<>();
+    for (Camp camp : camps) {
+        if (camp.getStaffInCharge().equals(user.getUserId())) {
+            staffCamps.add(camp);
+        }
+    }
+    if (staffCamps.isEmpty()) {
+        System.out.println("You haven't created any camps with enquiries.");
+        return;
+    }
+    List<Enquiry> staffEnquiries = new ArrayList<>();
+    for (Enquiry enquiry : enquiries) {
+        for (Camp camp : staffCamps) {
+            if (enquiry.getCampName().equalsIgnoreCase(camp.getCampName())) {
+                staffEnquiries.add(enquiry);
+            }
+        }
+    }
+
+    if (staffEnquiries.isEmpty()) {
+        System.out.println("There are no enquiries associated with the camps you've created.");
+        return;
+    }
+
+    for (int i = 0; i < staffEnquiries.size(); i++) {
+        System.out.println((i + 1) + ". " + staffEnquiries.get(i).getEnquiriesText());
+        System.out.println( "Enquiry for Camp: " + staffEnquiries.get(i).getCampName());
+        System.out.println( "Asked by: " + staffEnquiries.get(i).getStudentId());
+    }
+}
+    
 }
