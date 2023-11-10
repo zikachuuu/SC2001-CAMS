@@ -5,8 +5,14 @@ import source.application.Utility;
 import source.camp.Camp;
 import source.exception.* ;
 import java.lang.String ;
-import java.time.LocalDate; 
 
+
+/**
+ * Represents a student. A student is a user (inheritance), and can have campCommittee and campAttendee roles (composition)
+ * @author Le Yanzhi
+ * @version beta 2 (Some methods have yet to be implemented; no methods here update the csv, csv update is done in main)
+ * @since 2023-11-10
+ */
 public class Student extends User {
 
     private CampCommittee campCommittee ;
@@ -53,20 +59,7 @@ public class Student extends User {
     private boolean checkFaculty(Camp camp) {
         return (camp.getCampInfo().getUserGroup() == Faculty.NTU) || (camp.getCampInfo().getUserGroup() == this.getFaculty()) ;
     }
-
-
-    /**
-     * Check if the given date is within the start date and end date
-     * @param starDate
-     * @param endDate
-     * @param date
-     * @return True if within, false otherwise.
-     */
-    private boolean withinDates (LocalDate starDate , LocalDate endDate , LocalDate date) {
-        if (starDate.isBefore(date) && endDate.isAfter(date)) return true ;
-        return false ;
-    }
-
+    
 
     /**
      * Check is there is a clash in date betweeen the camp and the camps the student already signed up.
@@ -74,17 +67,25 @@ public class Student extends User {
      * @return True if there is no clash in date, false otherwise.
      */
     private boolean checkClashInDate(Camp camp) {
-        return ! (isCampAttendee(camp) || isCampCommittee(camp)) ;
+        if (campCommittee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
+            campCommittee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
+
+        for (CampAttendee attendee : campAttendees) {
+            if (attendee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
+            attendee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
+        }
+
+        return true ;
     }
 
 
     /**
      * Check if the student is already attending the given camp.
      * @param camp
-     * @return True if student is not attending the camp, false otherwise.
+     * @return True if student is attending the camp, false otherwise.
      */
-    public boolean checkAttendingCamp (Camp camp) {
-        return checkClashInDate(camp) ;
+    public boolean isAttendingCamp (Camp camp) {
+        return isCampAttendee(camp) || isCampAttendee(camp) ;
     }
 
 
@@ -94,8 +95,7 @@ public class Student extends User {
      * @return True if student is a camp committee, false otherwise.
      */
     public boolean isCampCommittee (Camp camp) {
-        if (withinDates(campCommittee.getCamp().getCampInfo().getStartDate(), campCommittee.getCamp().getCampInfo().getEndDate(), camp.getCampInfo().getStartDate())) return false ;
-        if (withinDates(campCommittee.getCamp().getCampInfo().getStartDate(), campCommittee.getCamp().getCampInfo().getEndDate(), camp.getCampInfo().getEndDate())) return false ;
+        if (campCommittee == null || ! campCommittee.getCamp().equals(camp)) return false ;
         return true ;
     }
 
@@ -107,10 +107,9 @@ public class Student extends User {
      */
     public boolean isCampAttendee (Camp camp) {
         for (CampAttendee attendee : campAttendees) {
-            if (withinDates(attendee.getCamp().getCampInfo().getStartDate(), attendee.getCamp().getCampInfo().getEndDate() , camp.getCampInfo().getStartDate())) return false ;
-            if (withinDates(attendee.getCamp().getCampInfo().getStartDate(), attendee.getCamp().getCampInfo().getEndDate() , camp.getCampInfo().getStartDate())) return false ;
+            if (attendee.getCamp().equals(camp)) return true ;
         }
-        return true ;
+        return false ;
     }
 
 
@@ -153,7 +152,7 @@ public class Student extends User {
 
 
     /**
-     * Print out a list of open camps (valid user group and camp set to visible).
+     * (todo) Print out a list of open camps (valid user group and camp set to visible).
      */
     public void viewOpenCamps() {
         //todo
@@ -161,14 +160,14 @@ public class Student extends User {
 
 
     /**
-     * Print out a list of registered camps.
+     * Print out a list of registered camps (only camp names).
      */
     public void viewRegisteredCamps() {
 
         System.out.println("List of camps that you have registered for: ") ;
         System.out.println ("Registered as camp committee: ") ;
         if (campCommittee != null) {
-            campCommittee.getCamp().viewCampDetails() ;
+            System.out.println(campCommittee.getCamp().getCampInfo().getCampName()) ;
         }
         else {
             System.out.println ("No camps registered as camp committee") ;
@@ -177,7 +176,7 @@ public class Student extends User {
         System.out.println ("Registered as camp attendee: ") ;
         if (campAttendees.size() > 0) {
             for (CampAttendee attendee : campAttendees) {
-                attendee.getCamp().viewCampDetails() ;
+                System.out.println(attendee.getCamp().getCampInfo().getCampName()) ;
             }
         }
         else {
@@ -194,14 +193,18 @@ public class Student extends User {
      * It then calls camp.addParticipant() to add the student inside the camp, which will check: <p>
      * 1) registration deadline has not pass yet <p>
      * 2) camp still has slots left <p>
+     * 3) student did not withdraw from this camp before <p>
      * Corresponding exception will be thrown if there is any error. No exceptions means student is sucessfully registered. <p>
      * Please remenber to catch all exceptions when calling it from CAMSApp.
      * 
      * @param campName Name of the camp.
      * @param committeeRole True for committee, false for attendee.
-     * @throws CampNotFoundException If camp name does not have any matching camp.
+     * @throws CampNotFoundException Thrown by Utility.findCampByName()
      * @throws InvalidUserGroupException
      * @throws MultipleCommitteeRoleException
+     * @throws DeadlineOverException Thrown by camp.addParticipant()
+     * @throws CampFullException Thrown by camp.addParticipant()
+     * @throws withdrawnException Thrown by camp.addParticipant()
      */
     public void registerForCamp (String campName , boolean committeeRole) {
 
@@ -211,26 +214,29 @@ public class Student extends User {
         if (committeeRole && this.campCommittee != null) throw new MultipleCommitteeRoleException() ;
         if (! checkClashInDate(camp)) throw new DateClashException() ;
 
-        camp.addParticipant (this) ;
+        camp.addParticipant (this , committeeRole) ;
 
         if (committeeRole) addCampCommittee(camp) ;
         else addCampAttendee(camp); 
-
-        // to update csv
     }
 
-    // public boolean withdrawFromCamp (String campName) {
-    //     // Camp camp = Utility.findCampByName(campName) ;
 
-    //     // if (campCommittee.getCamp() == camp) throw new CommitteeWithdrawException() ;
+    /**
+     * Withdraw from a camp. This method checks: <p>
+     * 1) student is actually an attendee of the camp. <p>
+     * It then calls camp.withdrawParticipant() to add the student to the withdrawnParticipants list. <p>
+     * @param campName
+     * @return True if sucessfully withdrawn, false if student is not attending the camp as attendee in the first place.
+     * @throws CampNotFoundException Thrown by Utility.findCampByName()
+     */
+    public boolean withdrawFromCamp (String campName) {
+        Camp camp = Utility.findCampByName(campName) ;
 
-    //     // for (int i = 0 ; i < campAttendees.size() ; i++) {
-    //     //     if (campAttendees[i].getCamp == camp) {
-    //     //         campAttendees.remove (i) ;
-    //     //         // to update csv
-    //     //         return true ;
-    //     //     }
-    //     // }
-    //     // return false ;
-    // }
+        if (! isCampAttendee(camp)) return false ;
+
+        removeCampAttendee(camp) ;
+        camp.withdrawParticipant(this) ;
+
+        return true ;
+    }
 }
