@@ -8,10 +8,10 @@ import java.lang.String ;
 
 
 /**
- * Represents a student. A student is a user, and can have campCommittee and campAttendee roles (composition)
+ * Represents a student. A student is a user (inheritance), and can have campCommittee and campAttendee roles (composition)
  * @author Le Yanzhi
- * @version beta 1 (Some methods have yet to be implemented, esp the view methods and csv update)
- * @since 2023-11-9
+ * @version beta 2 (Some methods have yet to be implemented; no methods here update the csv, csv update is done in main)
+ * @since 2023-11-10
  */
 public class Student extends User {
 
@@ -152,7 +152,7 @@ public class Student extends User {
 
 
     /**
-     * Print out a list of open camps (valid user group and camp set to visible).
+     * (todo) Print out a list of open camps (valid user group and camp set to visible).
      */
     public void viewOpenCamps() {
         //todo
@@ -202,6 +202,9 @@ public class Student extends User {
      * @throws CampNotFoundException Thrown by Utility.findCampByName()
      * @throws InvalidUserGroupException
      * @throws MultipleCommitteeRoleException
+     * @throws DeadlineOverException Thrown by camp.addParticipant()
+     * @throws CampFullException Thrown by camp.addParticipant()
+     * @throws withdrawnException Thrown by camp.addParticipant()
      */
     public void registerForCamp (String campName , boolean committeeRole) {
 
@@ -211,17 +214,17 @@ public class Student extends User {
         if (committeeRole && this.campCommittee != null) throw new MultipleCommitteeRoleException() ;
         if (! checkClashInDate(camp)) throw new DateClashException() ;
 
-        camp.addParticipant (this) ;
+        camp.addParticipant (this , committeeRole) ;
 
         if (committeeRole) addCampCommittee(camp) ;
         else addCampAttendee(camp); 
-
-        // todo: update csv
     }
 
 
     /**
-     * Withdraw from a camp. This method calls camp.withdrawParticipant() to add the student to the withdrawnParticipants list.
+     * Withdraw from a camp. This method checks: <p>
+     * 1) student is actually an attendee of the camp. <p>
+     * It then calls camp.withdrawParticipant() to add the student to the withdrawnParticipants list. <p>
      * @param campName
      * @return True if sucessfully withdrawn, false if student is not attending the camp as attendee in the first place.
      * @throws CampNotFoundException Thrown by Utility.findCampByName()
@@ -232,9 +235,8 @@ public class Student extends User {
         if (! isCampAttendee(camp)) return false ;
 
         removeCampAttendee(camp) ;
-        camp.withdrawAttendee(this) ;
+        camp.withdrawParticipant(this) ;
 
-        // todo: update csv
         return true ;
     }
 }
