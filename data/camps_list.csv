@@ -1,5 +1,6 @@
-SCSE Top 2023,1/11/2023,30/11/2023,SCSE,NTU,40,10,Camp Interstellar promises 3 days of fun-filled activities,where you will get to know your fellow SCSE-ians,learn more about life in NTU
-NTU UOC 2023,1/11/2023,11/11/2023,whole NTU,NTU,40,10,UOC,OURIN,ON
-SCSE 2023 Interstellar,1/11/2023,11/11/2023,SCSE,NTU,40,10,Make friend with other SCSE ppl lmao,ANWIT,ON
-AFA,27/11/2023,23/11/2023,Faculty,North Spine,30,6,lmaooooo,HUKUMAR,ON
-AFA2023,26/11/2023,24/11/2023,SCSE,South Spine,50,8,meet girls,HUKUMAR,ON
+CampName, StartDate, EndDate, RegistrationClosingDate,UserGroup, Location,TotalSlots, CampCommitteeSlots, Description, StaffInCharge,Visibility
+SCSE Top 2023,1/11/2023,3/11/2023,30/10/2023,SCSE,NTU,40,10,Camp Interstellar promises 3 days of fun-filled activities; where you will get to know your fellow SCSE-ians; learn more about life in NTU,ARVI,ON
+NTU UOC 2023,1/11/2023,2/11/2023,11/10/2023,NTU,NTU,40,10,UOC,OURIN,ON
+SCSE 2023 Interstellar,1/11/2023,3/11/2023,11/10/2023,SCSE,NTU,40,10,Make friend with other SCSE ppl lmao,ANWIT,ON
+AFA,27/11/2023,28/11/2023,23/11/2023,SPMS,North Spine,30,6,lmaooooo,HUKUMAR,ON
+AFA2023,26/11/2023,28/11/2023,24/11/2023,SCSE,South Spine,50,8,meet girls,HUKUMAR,ON
