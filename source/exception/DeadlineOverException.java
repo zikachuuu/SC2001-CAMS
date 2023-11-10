@@ -5,4 +5,8 @@ public class DeadlineOverException extends RuntimeException{
     public DeadlineOverException() {
         super("Camp registration deadline passed!") ;
     }
+
+    public DeadlineOverException(String message) {
+        super (message) ;
+    }
 }
