@@ -122,9 +122,9 @@ public class Student extends User {
      * @param camp The camp to sign up as committee in.
      * @return True if role successfully taken, false if student already has a camp committee role.
      */
-    private boolean addCampCommittee(Camp camp) {
+    private boolean addCampCommittee(Camp camp , int points) {
         if (this.campCommittee != null) return false ;
-        this.campCommittee = new CampCommittee(camp, this) ;
+        this.campCommittee = new CampCommittee(camp, this , points) ;
         return true ;
     }
 
@@ -207,6 +207,10 @@ public class Student extends User {
      * @throws withdrawnException Thrown by camp.addParticipant()
      */
     public void registerForCamp (String campName , boolean committeeRole) {
+        addCampRole(campName, committeeRole, 0);
+    }
+
+    public void addCampRole (String campName , boolean committeeRole , int points) {
 
         Camp camp = Utility.findCampByName(campName) ;
 
@@ -216,7 +220,7 @@ public class Student extends User {
 
         camp.addParticipant (this , committeeRole) ;
 
-        if (committeeRole) addCampCommittee(camp) ;
+        if (committeeRole) addCampCommittee(camp , points) ;
         else addCampAttendee(camp); 
     }
 
@@ -238,5 +242,9 @@ public class Student extends User {
         camp.withdrawParticipant(this) ;
 
         return true ;
+    }
+
+    public void addRole () {
+
     }
 }

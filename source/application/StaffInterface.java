@@ -9,6 +9,9 @@ import source.user.Student;
 public class StaffInterface {
     protected static void handleStaffFunctionalities(Staff loggedInStaff, ArrayList<Staff> staffMembers,
             ArrayList<Camp> camps, ArrayList<Student> students) {
+        Utility.clearConsole();
+        System.out.println("test...in student interface") ;
+
     //     Scanner scanner = new Scanner(System.in);
 
     //     while (!exit) {

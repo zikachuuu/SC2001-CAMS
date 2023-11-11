@@ -33,11 +33,13 @@ public class Camp {
     /**
      * Create a new Camp with the provided camp information.
      * @param campInfo
+     * @param numCommittees
+     * @param numAttendees
      */
-    public Camp(CampInformation campInfo) {
+    public Camp(CampInformation campInfo, int numCommittees , int numAttendees) {
         this.campInfo = campInfo ;
-        this.numCommittees = 0 ;
-        this.numAttendees = 0 ;
+        this.numCommittees = numCommittees ;
+        this.numAttendees = numAttendees ;
         this.participants = new ArrayList<Student>() ;
         this.withdrawnParticipants = new ArrayList<Student>() ;
         this.enquiries = new ArrayList<Enquiry>() ;
