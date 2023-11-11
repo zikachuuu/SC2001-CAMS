@@ -2,15 +2,16 @@ package source.user;
 
 /**
  * Represents a user. User is the parent class of Student and Staff (Inheritance).
- * @author Le Yanzhi
- * @version beta 1 (dont think log in and log out belongs here ah.. should be just in main)
- * @since 2023-11-10
+ * @author Le Yanzhi, Florian Goering
+ * @version beta 2 (added login and logout anyway)
+ * @since 2023-11-11
  */
 public class User {
     private String userId ;
     private String userName ;
     private Faculty faculty ;
     private String password ;
+    private boolean loggedIn;
 
     public User (String userId, String userName, Faculty faculty, String password) {
         this.userId = userId ;
@@ -47,3 +48,19 @@ public class User {
         return this.userId == other.getUserId() ;
     }
 }
+
+    /**
+     * Check if both userId and password entered by user are true.
+     * If login successfully, change state of loggedIn to true.
+     */
+    public boolean login (string userID, string password) {
+        if(userID == this.userId && password == this.password) {
+            loggedIn = true;
+            return true;
+        }
+    }
+
+    /**
+     * Change the state of loggedIn to false after logging out.
+     */
+    public void logout() { loggedIn = false; }

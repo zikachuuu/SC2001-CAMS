@@ -83,6 +83,7 @@ public class Camp {
         else // all staff can view details of camp  && camp committee member can also view details of his camp
         {
             //print camp details
+            this.getCampInfo().printCampInfo();
         }
     }
 
