@@ -78,6 +78,6 @@ public class CampInformation {
         System.out.printf("Total slots: %d \n", totalSlots);
         System.out.printf("Camp Committee Slots (max 10): %d \n", campCommitteeSlots);
         System.out.printf("Description: %s \n", description);
-        System.out.printf("Staff in charge: %s \n", staffInCharge.getUserName);
+        System.out.printf("Staff in charge: %s \n", staffInCharge.getUserName());
     }
 }

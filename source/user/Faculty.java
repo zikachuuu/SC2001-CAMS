@@ -6,26 +6,26 @@ public enum Faculty {
     ADM , 
     EEE , 
     NBS , 
-    SSS
+    SSS ;
 
-    public override String ToString()
-    {
-        return Enum.InternalFormat((RuntimeType)GetType(), GetValue());
-    }
+    // public String ToString()
+    // {
+    //     return Enum.InternalFormat((RuntimeType)GetType(), GetValue());
+    // }
 
-    private static String InternalFormat(RuntimeType eT, Object value)
-    {
-        if(!eT.IsDefined(typeof(System.FlagAttribute), false))
-        {
-            String retval = GetName(eT, value);
-            if(retval == null)
-                return value.ToString();
-            else
-                return retval;
-        }
-        else
-        {
-            return InternalFlagsFormat(eT, value);
-        }
-    }
+    // private static String InternalFormat(RuntimeType eT, Object value)
+    // {
+    //     if(!eT.IsDefined(typeof(System.FlagAttribute), false))
+    //     {
+    //         String retval = GetName(eT, value);
+    //         if(retval == null)
+    //             return value.ToString();
+    //         else
+    //             return retval;
+    //     }
+    //     else
+    //     {
+    //         return InternalFlagsFormat(eT, value);
+    //     }
+    // }
 }

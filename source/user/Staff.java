@@ -1,6 +1,6 @@
-import java.util.ArrayList;
 package source.user;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import source.camp.Camp;
@@ -24,22 +24,38 @@ public class Staff extends User{
         createdCamps.add(camp) ;
     }
 
+
     /**
-     * Create a camp and append it to the createdCamp list.
+     * Create a new camp by the staff.<p>
+     * Todo: check there is no duplicate in camp name before creating.
+     * @param campName
+     * @param startDate
+     * @param endDate
+     * @param registrationClosingDate
+     * @param userGroup
+     * @param location
+     * @param totalSlots
+     * @param campCommitteeSlots
+     * @param description
+     * @return
      */
-    public boolean createCamp (CampInformation campInfo) {
-        createdCamps.add(new Camp(campInfo));
+    public boolean createCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
+        
+        CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this, true) ;
+        createdCamps.add(new Camp(campInfo ,0 ,0));
         return true;
     }
 
+
     /**
+     * (todo) Must also remove the references to this camp in each of the students objects.<p>
      * Iterate through the list of camps and get the name of the current camp accessed.
      * If the campName is the same as the one that user entered, remove the camp from createdCamps list.
      * If the camp is not found at all in the list of createdCamps, failure to delete.
      */
-    public boolean deleteCamp (string campName) {
+    public boolean deleteCamp (String campName) {
         for(int i = 0; i < createdCamps.size(); i++) {
-            if(createdCamps.get(i).getCampInfo(this).getCampName() == campName) {
+            if(createdCamps.get(i).getCampInfo().getCampName() == campName) {
                 createdCamps.remove(i);
                 return true;
             }
@@ -47,11 +63,22 @@ public class Staff extends User{
         return false;
     }
 
+
     /**
-     * Iterate throught all the camps in createdCamps list, and display campName to the command line interface.
+     * Iterate throught all the camps in createdCamps list, and display camp details to the command line interface.
      */
-    public void viewAllCamps () {
-        for(int i = 0; i < createdCamps.size(); i++)
-            System.out.println(createdCamps.get(i).getCampInfo(this).getCampName());
+    public void viewCreatedCamps () {
+        for(int i = 0; i < createdCamps.size(); i++) {
+            createdCamps.get(i).viewCampDetails(this) ;
+            System.out.println();
+        }
+    }
+
+    
+    /**
+     * (Todo) View all camps (including those created by other staffs)
+     */
+    public void viewAllCamps() {
+
     }
 }
