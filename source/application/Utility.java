@@ -1,46 +1,111 @@
 package source.application;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 import source.camp.Camp;
-import source.camp.Enquiry;
-import source.camp.Suggestion;
-import source.user.Faculty;
+import source.exception.CampNotFoundException;
+import source.exception.UserNotFoundException;
 import source.user.Staff;
 import source.user.Student;
 import source.user.User;
 
+
+/**
+ * Utility class to provide commonly used static methods for all other classes. 
+ */
 public class Utility {
 
     /**
-     * Clears the console (for aesthetic)
+     * Clears the console (for aesthetic purposes).
      */
     public static void clearConsole() {
         System.out.print("\033\143");
     }
     
+
+    /**
+     * Find the camp object using the camp name provided.
+     * @param campName The name of the camp.
+     * @return Camp object.
+     * @throws CampNotFoundException If camp not found for the provided name.
+     */
     public static Camp findCampByName(String campName) {
-        return null ;
+
+        for (Camp camp : CAMSApp.camps) {
+            if (camp.getCampInfo().getCampName().equals (campName)) return camp ;
+        }
+        throw new CampNotFoundException("Camp not found for " + campName) ;
     }
 
-    public static User findUserByName (String userId) {
+    
+    /**
+     * Check if the camp with the provided name already exists.
+     * @param campName The name of the camp.
+     * @return True if camp already exists, false otherwise.
+     */
+    public static boolean campExists (String campName) {
+        try {
+            findCampByName(campName) ;
+            return true ;
+        } catch (CampNotFoundException e) {
+            return false ;
+        }
+    }
+
+
+    /**
+     * Find the user object using the userId provided.
+     * @param userId 
+     * @return User object (can be downcasted to either staff or student).
+     * @throws UserNotFoundException If user not found for the provided Id.
+     */
+    public static User findUserByUserId (String userId) {
 
         User user ;
-        if ((user = findStaffByName(userId)) != null) return user ;
-        if ((user = findStudentByName(userId)) != null) return user ;
-        return null ;
+        if ((user = findStaffByUserId(userId)) != null) return user ;
+        if ((user = findStudentByUserId(userId)) != null) return user ;
+        throw new UserNotFoundException("User not found for " + userId) ;
     }
 
-    public static Student findStudentByName (String studentId) {
-        return null ;
+
+    /**
+     * Find the student object using the userId provided.
+     * @param userId 
+     * @return Student object.
+     * @throws UserNotFoundException If student not found for the provided Id.
+     */
+    public static Student findStudentByUserId (String userId) {
+        for (Student student : CAMSApp.students) {
+            if (student.getUserId().equals(userId)) return student ;
+        }
+        throw new UserNotFoundException("Student not found for " + userId) ;
     }
 
-    public static Staff findStaffByName (String staffId) {
-        return null ;
+    
+    /**
+     * Find the staff object using the userId provided.
+     * @param userId
+     * @return Staff object.
+     * @throws UserNotFoundException If staff not found for the provided Id.
+     */
+    public static Staff findStaffByUserId (String userId) {
+        for (Staff staff : CAMSApp.staffs) {
+            if (staff.getUserId().equals(userId)) return staff ;
+        }
+        throw new UserNotFoundException("Staff not found for " + userId) ;
+    }
+
+    
+    /**
+     * Convert a string date in the format of dd/mm/yyyy to a LocalDate object
+     * @param date String in the format of dd/mm/yyyy
+     * @return LocalDate object
+     * @throws DateTimeException If string date provided is of the wrong format.
+     */
+    public static LocalDate convertStringToLocalDate(String date) {
+        String[] dateSplitted = date.split("/") ;
+        LocalDate newDate = LocalDate.of (Integer.valueOf(dateSplitted[2]) , Integer.valueOf(dateSplitted[1]) , Integer.valueOf(dateSplitted[0])) ;
+        return newDate ;
     }
 
 }

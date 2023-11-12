@@ -67,12 +67,17 @@ public class Student extends User {
      * @return True if there is no clash in date, false otherwise.
      */
     private boolean checkClashInDate(Camp camp) {
-        if (campCommittee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
-            campCommittee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
 
-        for (CampAttendee attendee : campAttendees) {
-            if (attendee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
-            attendee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
+        if (campCommittee != null) {
+            if (campCommittee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
+                campCommittee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
+        }
+
+        if (campAttendees != null){
+            for (CampAttendee attendee : campAttendees) {
+                if (attendee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
+                attendee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
+            }
         }
 
         return true ;
@@ -207,11 +212,6 @@ public class Student extends User {
      * @throws withdrawnException Thrown by camp.addParticipant()
      */
     public void registerForCamp (String campName , boolean committeeRole) {
-        addCampRole(campName, committeeRole, 0);
-    }
-
-    public void addCampRole (String campName , boolean committeeRole , int points) {
-
         Camp camp = Utility.findCampByName(campName) ;
 
         if (! checkFaculty(camp)) throw new InvalidUserGroupException() ;
@@ -220,8 +220,23 @@ public class Student extends User {
 
         camp.addParticipant (this , committeeRole) ;
 
-        if (committeeRole) addCampCommittee(camp , points) ;
+        if (committeeRole) addCampCommittee(camp , 0) ;
         else addCampAttendee(camp); 
+    }
+
+
+    /**
+     * Restore the role of a student from csv. <p>
+     * User registerForCamp instead when student want to register for a camp.
+     * @param campName Name of the camp.
+     * @param committeeRole True for committee, false for attendee.
+     * @param points Points (for committee).
+     */
+    public void restoreCampRole (String campName , boolean committeeRole , boolean active, int points) {
+        Camp camp = Utility.findCampByName(campName) ;
+        camp.restoreParticipant(this, active);
+        if (committeeRole) addCampCommittee(camp , 0) ;
+        else if (active) addCampAttendee(camp); 
     }
 
 

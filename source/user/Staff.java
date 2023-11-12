@@ -3,6 +3,7 @@ package source.user;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import source.application.Utility;
 import source.camp.Camp;
 import source.camp.CampInformation;
 
@@ -10,24 +11,25 @@ public class Staff extends User{
 
     private ArrayList<Camp> createdCamps ;
     
+    
     public Staff (String userId, String userName, Faculty faculty, String password) {
         super (userId , userName , faculty, password) ;
         createdCamps = new ArrayList<Camp>() ;
     }
 
+
     /**
-     * Add a camp to the list of created camps. Used by readCampsFromFile() to convert csv into staff objects. <p>
+     * Restore a previously created camp from csv. <p>
      * Use createCamp() instead when the staff want to create a new camp.
      * @param camp
      */
-    public void addCamp (Camp camp) {
+    public void restoreCreatedCamp (Camp camp) {
         createdCamps.add(camp) ;
     }
 
 
     /**
      * Create a new camp by the staff.<p>
-     * Todo: check there is no duplicate in camp name before creating.
      * @param campName
      * @param startDate
      * @param endDate
@@ -37,10 +39,11 @@ public class Staff extends User{
      * @param totalSlots
      * @param campCommitteeSlots
      * @param description
-     * @return
+     * @return True if successfully created, false if there is already a camp with the same camp name.
      */
     public boolean createCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
         
+        if (Utility.campExists(campName)) return false ;
         CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this, true) ;
         createdCamps.add(new Camp(campInfo ,0 ,0));
         return true;

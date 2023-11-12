@@ -10,7 +10,7 @@ public class StaffInterface {
     protected static void handleStaffFunctionalities(Staff loggedInStaff, ArrayList<Staff> staffMembers,
             ArrayList<Camp> camps, ArrayList<Student> students) {
         Utility.clearConsole();
-        System.out.println("test...in student interface") ;
+        System.out.println("test...in staff interface") ;
 
     //     Scanner scanner = new Scanner(System.in);
 

@@ -104,6 +104,19 @@ public class Camp {
 
 
     /**
+     * Restore a student participant from csv. <p>
+     * Use addParticipant instead when a camp wants to add a new participant.
+     * @param student
+     * @param active False for withdrawn.
+     */
+    public void restoreParticipant (Student student, boolean active) {
+
+        if (active) participants.add(student) ;
+        else withdrawnParticipants.add(student) ;
+    }
+
+
+    /**
      * Add a participant to the camp. This method is called by student.registerForCamp(), which have already checked: <p>
      * 1) student's faculty belongs to the user group of the camp <p>
      * 2) student has no committee role <p>
