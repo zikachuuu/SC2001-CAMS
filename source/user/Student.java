@@ -258,8 +258,4 @@ public class Student extends User {
 
         return true ;
     }
-
-    public void addRole () {
-
-    }
 }

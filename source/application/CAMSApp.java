@@ -2,7 +2,6 @@ package source.application;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 import source.camp.Camp;
@@ -85,6 +84,7 @@ public class CAMSApp {
 
             loginAttempts++;
             System.out.println("You have " + (3 - loginAttempts) + " attempts remaining.");
+            System.out.println ("Please wait, redirecting...") ;
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

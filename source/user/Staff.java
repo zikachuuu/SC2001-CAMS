@@ -19,16 +19,6 @@ public class Staff extends User{
 
 
     /**
-     * Restore a previously created camp from csv. <p>
-     * Use createCamp() instead when the staff want to create a new camp.
-     * @param camp
-     */
-    public void restoreCreatedCamp (Camp camp) {
-        createdCamps.add(camp) ;
-    }
-
-
-    /**
      * Create a new camp by the staff.<p>
      * @param campName
      * @param startDate
@@ -83,5 +73,15 @@ public class Staff extends User{
      */
     public void viewAllCamps() {
 
+    }
+
+
+    /**
+     * Restore a previously created camp from csv. <p>
+     * Use createCamp() instead when the staff want to create a new camp.
+     * @param camp
+     */
+    public void restoreCreatedCamp (Camp camp) {
+        createdCamps.add(camp) ;
     }
 }
