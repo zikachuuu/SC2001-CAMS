@@ -27,6 +27,7 @@ public class FileProcessing {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
+            br.readLine() ; // first line is heading
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data.length == 4) {
@@ -45,7 +46,7 @@ public class FileProcessing {
                     staffMembers.add(staffMember);
                 } else {
                     System.out.println("Invalid data format in the staff file: " + line);
-                    System.exit(0);
+                    System.exit(-1);
                 }
             }
         } catch (IOException e) {
@@ -99,6 +100,10 @@ public class FileProcessing {
                     int index = 0 ;
                     for (index = 0 ; index < staffs.size() ; index++) {
                         if (staffs.get(index).getUserId() == staffInChargeString) break ;
+                    }
+
+                    if (index == 5) {
+                        system.out.printf ("No staff found for %s" , staffInChargeString) ;
                     }
 
                     boolean visible = data[12].trim().equals("visible"); 

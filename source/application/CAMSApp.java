@@ -21,7 +21,6 @@ public class CAMSApp {
 
     public static void main(String[] args) {
 
-        // just dummies
         ArrayList<Staff> staffs = FileProcessing.readStaffFromFile (STAFF_FILE_PATH) ;
         ArrayList<Camp> camps = FileProcessing.readCampsFromFile(CAMP_FILE_PATH, staffs) ;
         ArrayList<Student> students = FileProcessing.readStudentsFromFile(STUDENT_FILE_PATH, CAMP_MEMBERS_FILE_PATH, camps) ;
