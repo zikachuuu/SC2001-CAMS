@@ -7,9 +7,12 @@ import java.time.LocalDate;
 
 import source.camp.Camp;
 import source.camp.CampInformation;
+import source.camp.Enquiry;
+import source.camp.Suggestion;
 import source.user.Faculty;
 import source.user.Student;
 import source.user.Staff;
+import source.user.User;
 
 
 public class FileProcessing {
@@ -19,6 +22,8 @@ public class FileProcessing {
         readStaffsFromFile() ;
         readCampsFromFile() ;
         readStudentsFromFile() ;
+        readEnquiriesFromFile() ;
+        readSuggestionsFromFile() ;
     }
 
     /**
@@ -61,8 +66,8 @@ public class FileProcessing {
 
     /**
      * Read from camps_list.csv to generate the camp arrayList, and restores the created camps in staff. <p>
-     * This method generates the default Camp object, without any participants or withdrawn participants under it.
-     * Use readStudentsFromFile() to restore them.
+     * This method generates the default Camp object, without any participants, withdrawn participants, enquires, and suggestions under it.
+     * Use readStudentsFromFile(), readEnquiriesFromFile(), readSuggestionsFromFile() to restore them.
      */
     private static void readCampsFromFile() {
 
@@ -71,7 +76,7 @@ public class FileProcessing {
             br.readLine() ; // first line is heading
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length >= 9) { 
+                if (data.length == 13) { 
                     String campName = data[0].trim();
 
                     String startDateString = data[1].trim();
@@ -107,12 +112,12 @@ public class FileProcessing {
 
                 } else {
                     System.out.println("Invalid data format in the camp file: " + line);
-                    System.exit(0);
+                    System.exit(-1);
                 }
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
-        }
+        }        
     }
 
     
@@ -143,7 +148,7 @@ public class FileProcessing {
                     CAMSApp.students.add(student);
                 } else {
                     System.out.println("Invalid data format in the file: " + line);
-                    System.exit(0);
+                    System.exit(-1);
                 }
             }
 
@@ -168,7 +173,69 @@ public class FileProcessing {
                     
                 } else {
                     System.out.println("Invalid data format in the file: " + line);
-                    System.exit(0);
+                    System.exit(-1);
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Read from enquiries.csv to restore the enquries in camps.
+     */
+    private static void readEnquiriesFromFile() {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(CAMSApp.ENQUIRIES_FILE_PATH))) {
+            String line;
+            br.readLine() ; // first line is heading
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length == 6) {
+                    String campName = data[0].trim();
+                    String studentId = data[1].trim();
+                    String enquiriesText = data[2].trim();
+                    boolean processed = Boolean.parseBoolean(data[3].trim());
+                    String processedBy = data[4].trim();
+                    String replies = data[5].trim() ;
+
+                    Camp camp = Utility.findCampByName(campName) ;
+                    Student student = Utility.findStudentByUserId(studentId) ;
+                    User user ;
+                    if (processed) user = Utility.findUserByUserId(processedBy) ;
+                    else user = null ;
+                    camp.restoreEnquiry(new Enquiry(camp, student, enquiriesText , processed , user , replies));
+
+                } else {
+                    System.out.println("Invalid data format in the camp file: " + line);
+                    System.exit(-1);
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Read from suggestions.csv to restore suggestions in camps.
+     */
+    private static void readSuggestionsFromFile() {
+        try (BufferedReader br = new BufferedReader(new FileReader(CAMSApp.SUGGESTIONS_FILE_PATH))) {
+            String line;
+            br.readLine() ; // first line is heading
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 3) {
+                    String campName = data[0].trim();
+                    String studentId = data[1].trim();
+                    String suggestionsText = data[2].trim();
+                    boolean approvalState = Boolean.parseBoolean(data[3].trim());
+
+                    Camp camp = Utility.findCampByName(campName) ;
+                    Student student = Utility.findStudentByUserId(studentId) ;
+                    camp.restoreSuggestion(new Suggestion(camp, student, suggestionsText, approvalState));
                 }
             }
         } catch (IOException | NumberFormatException e) {

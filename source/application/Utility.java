@@ -62,9 +62,16 @@ public class Utility {
     public static User findUserByUserId (String userId) {
 
         User user ;
-        if ((user = findStaffByUserId(userId)) != null) return user ;
-        if ((user = findStudentByUserId(userId)) != null) return user ;
-        throw new UserNotFoundException("User not found for " + userId) ;
+        try {
+            user = findStaffByUserId(userId) ;
+        } catch (UserNotFoundException e1) {
+            try {
+                user = findStudentByUserId(userId) ;
+            } catch (UserNotFoundException e2) {
+                throw new UserNotFoundException("User not found for " + userId) ;
+            }
+        }
+        return user ;
     }
 
 
