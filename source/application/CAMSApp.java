@@ -12,18 +12,20 @@ import source.user.Student;
 
 public class CAMSApp {
 
-    private static final String STUDENT_FILE_PATH = "data\\student_list.csv";
-    private static final String STAFF_FILE_PATH = "data\\staff_list.csv";
-    private static final String CAMP_FILE_PATH = "data\\camps_list.csv";
-    private static final String CAMP_MEMBERS_FILE_PATH = "data\\camp_members.csv";
-    private static final String ENQUIRIES_FILE_PATH = "data\\enquiries.csv";
-    private static final String SUGGESTIONS_FILE_PATH = "data\\suggestions.csv";
+    protected static final String STUDENT_FILE_PATH = "data\\student_list.csv";
+    protected static final String STAFF_FILE_PATH = "data\\staff_list.csv";
+    protected static final String CAMP_FILE_PATH = "data\\camps_list.csv";
+    protected static final String CAMP_MEMBERS_FILE_PATH = "data\\camp_members.csv";
+    protected static final String ENQUIRIES_FILE_PATH = "data\\enquiries.csv";
+    protected static final String SUGGESTIONS_FILE_PATH = "data\\suggestions.csv";
+
+    protected static ArrayList<Staff> staffs = new ArrayList<Staff>();
+    protected static ArrayList<Camp> camps = new ArrayList<Camp>();
+    protected static ArrayList<Student> students = new ArrayList<Student>();
 
     public static void main(String[] args) {
 
-        ArrayList<Staff> staffs = FileProcessing.readStaffFromFile (STAFF_FILE_PATH) ;
-        ArrayList<Camp> camps = FileProcessing.readCampsFromFile(CAMP_FILE_PATH, staffs) ;
-        ArrayList<Student> students = FileProcessing.readStudentsFromFile(STUDENT_FILE_PATH, CAMP_MEMBERS_FILE_PATH, camps) ;
+        FileProcessing.readDataFromFile();
 
         Scanner scanner = new Scanner(System.in);
         int loginAttempts = 0;
@@ -59,7 +61,7 @@ public class CAMSApp {
             System.out.println() ; 
             
             if (userTypeChoice == 1) {
-                Student loggedInStudent = authenticateStudent (enteredUserId, enteredPassword, students);
+                Student loggedInStudent = authenticateStudent (enteredUserId, enteredPassword);
 
                 if (loggedInStudent != null) {
                     System.out.println("Student Login successful!");
@@ -70,7 +72,7 @@ public class CAMSApp {
                 }
 
             } else if (userTypeChoice == 2) {
-                Staff loggedInStaff = authenticateStaff(enteredUserId, enteredPassword, staffs);
+                Staff loggedInStaff = authenticateStaff(enteredUserId, enteredPassword);
 
                 if (loggedInStaff != null) {
                     System.out.println("Staff Login successful!");
@@ -93,7 +95,7 @@ public class CAMSApp {
         scanner.close();
     }
 
-    private static Student authenticateStudent(String userId, String password, List<Student> students) {
+    private static Student authenticateStudent(String userId, String password) {
         for (Student student : students) {
             if (student.getUserId().equals(userId) && student.getPassword().equals(password)) {
                 return student; 
@@ -102,8 +104,8 @@ public class CAMSApp {
         return null; 
     }
 
-    private static Staff authenticateStaff(String userId, String password, List<Staff> staffMembers) {
-        for (Staff staffMember : staffMembers) {
+    private static Staff authenticateStaff(String userId, String password) {
+        for (Staff staffMember : staffs) {
             if (staffMember.getUserId().equals(userId) && staffMember.getPassword().equals(password)) {
                 return staffMember; 
             }
