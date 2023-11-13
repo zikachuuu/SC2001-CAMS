@@ -10,8 +10,8 @@ import source.user.Staff;
  * No logic is implemented within this class. All this class does is to store the information and provide get and set methods.
  * Implement logic within camp class.
  * @author Le Yanzhi
- * @version beta 3 (moved the arrayList of participants to camp instead, campInformation should only store "static" data)
- * @since 2023-11-10
+ * @version beta 4
+ * @since 2023-11-13
  */
 public class CampInformation {
 
@@ -25,10 +25,9 @@ public class CampInformation {
     private int campCommitteeSlots ;
     private String description ;
     private Staff staffInCharge ;
-    private boolean visibility ;
 
 
-    public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge , boolean visibility) {
+    public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge) {
 
         this.campName = campName ;
         this.startDate = startDate ;
@@ -40,7 +39,6 @@ public class CampInformation {
         this.campCommitteeSlots = campCommitteeSlots ;
         this.description = description ;
         this.staffInCharge = staffInCharge ;
-        this.visibility = visibility ;
     }
 
     public String getCampName() {return campName ;}
@@ -55,23 +53,18 @@ public class CampInformation {
     public void setUserGroup(Faculty userGroup) {this.userGroup = userGroup ;}
     public String getLocation() {return location ;}
     public void setLocation(String location) {this.location = location ;}
-
     public int getTotalSlots() {return totalSlots ;}
     public void setTotalSlots(int totalSlots) {this.totalSlots = totalSlots ;}
     public int getCampCommitteeSlots() {return campCommitteeSlots ;}
     public void setCampCommitteeSlots(int campCommitteeSlots) {this.campCommitteeSlots = campCommitteeSlots ;}
     public String getDescription() {return description ;}
     public void setDescription(String description) {this.description = description ;}
-
     public Staff getStaffInCharge() {return staffInCharge ;}
-    public boolean getVisibility() {return visibility ;}
-    public void setVisibility(boolean visibility) {this.visibility = visibility ;}
-    public boolean toggleVisibility() {return visibility = ! visibility ;}
 
     public void printCampInfo()
     {
-        System.out.printf("Camp Name :  %s \n", campName);
-        System.out.printf("Dates :  %s to %s \n ", startDate.toString() , endDate.toString());
+        System.out.printf("Camp Name:  %s \n", campName);
+        System.out.printf("Dates:  %s to %s \n ", startDate.toString() , endDate.toString());
         System.out.printf("Registration closing date: %s \n", registrationClosingDate.toString());
         System.out.printf("Opened to: %s \n", userGroup.toString());
         System.out.printf("Location: %s \n", location);

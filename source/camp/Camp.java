@@ -29,44 +29,57 @@ public class Camp {
     private ArrayList<Enquiry> enquiries ;
     private ArrayList<Suggestion> suggestions ;
 
+    private boolean visible ;
+    private boolean active ;
+
 
     /**
-     * Create a new Camp with the provided camp information.
+     * Create a new default Camp with the provided camp information.
      * @param campInfo
-     * @param numCommittees
-     * @param numAttendees
      */
-    public Camp(CampInformation campInfo, int numCommittees , int numAttendees) {
+    public Camp(CampInformation campInfo) {
         this.campInfo = campInfo ;
-        this.numCommittees = numCommittees ;
-        this.numAttendees = numAttendees ;
+        this.numCommittees = 0 ;
+        this.numAttendees = 0 ;
         this.participants = new ArrayList<Student>() ;
         this.withdrawnParticipants = new ArrayList<Student>() ;
         this.enquiries = new ArrayList<Enquiry>() ;
         this.suggestions = new ArrayList<Suggestion>() ;
+        this.visible = true ;
+        this.active = true ;
     }
 
     
     /**
-     * Create a new Camp from the database with the provided data.
+     * Create a Camp from the database with the provided data.
      * @param campInfo
      * @param numCommittees
      * @param numAttendees
      * @param enquiries
      * @param suggestions
      */
-    public Camp (CampInformation campInfo , int numCommittees , int numAttendees , ArrayList<Student> participants , ArrayList<Student> withdrawnParticipants , ArrayList<Enquiry> enquiries , ArrayList<Suggestion> suggestions) {
+    public Camp (CampInformation campInfo , int numCommittees , int numAttendees, boolean visible) {
         this.campInfo = campInfo ;
         this.numCommittees = numCommittees ;
         this.numAttendees = numAttendees ;
-        this.participants = participants ;
-        this.withdrawnParticipants = withdrawnParticipants ;
-        this.enquiries = enquiries ;
-        this.suggestions = suggestions ;
+        this.participants = new ArrayList<Student>() ;
+        this.withdrawnParticipants = new ArrayList<Student>() ;
+        this.enquiries = new ArrayList<Enquiry>() ;
+        this.suggestions = new ArrayList<Suggestion>() ;        
+        this.visible = visible ;
+        this.active = true ;
     }
 
 
-    public CampInformation getCampInfo () {return campInfo ;}
+    public CampInformation getCampInfo() {return campInfo ;}
+    public int getNumCommittees() {return numCommittees ;}
+    public int getNumAttendees() {return numAttendees ;}
+    public ArrayList<Student> getParticipants() {return participants ;}
+    public ArrayList<Student> getWithdrawnParticipants() {return withdrawnParticipants ;}
+    public ArrayList<Enquiry> getEnquiries() {return enquiries ;}
+    public ArrayList<Suggestion> getSuggestions() {return suggestions ;}
+    public boolean getVisible() {return visible ;}
+    public boolean getActive () {return active ;}
 
 
     /**
@@ -75,14 +88,17 @@ public class Camp {
      * @throws NoAccessException If user does not have access to the information.
      */
     public void viewCampDetails(User user) {
-        if ( user instanceof Student)
+        if (user instanceof Student)
         {
             Student student = (Student) user ;
-            if( ! student.isCampCommittee(this) ) throw new NoAccessException("Only committee member of this camp can view camp information!");
+            if(! student.isCampCommittee(this) ) throw new NoAccessException("Only committee member of this camp can view camp information!");
         }
 
         //print camp details
-        this.getCampInfo().printCampInfo();
+        campInfo.printCampInfo();
+        System.out.println();
+        System.out.println("Current number of committees: " + numCommittees);
+        System.out.println("Current number of attendees: " + numAttendees);
     }
 
 
@@ -94,54 +110,33 @@ public class Camp {
      * @throws NoAccessException If staff is not the owner of this camp, or if students have already signed up for this camp. 
      */
     public boolean toggleVisibility(Staff staffInCharge) {
+
         if (! staffInCharge.equals(campInfo.getStaffInCharge())) throw new NoAccessException("Only the creator of this camp can toggle visibility!") ;
         if (numAttendees != 0 || numCommittees != 0) throw new NoAccessException("Cannot toggle visibility if students have already signed up for this camp!") ;
 
-        return campInfo.toggleVisibility() ;
+        return visible = ! visible ;
     }
 
 
     /**
-     * Add a participant to the camp. This method is called by student.registerForCamp(), which have already checked: <p>
-     * 1) student's faculty belongs to the user group of the camp <p>
-     * 2) student has no committee role <p>
-     * 3) student has no clash in dates (as well as not already signed up for this camp) <p>
-     * This method will check: <p>
-     * 1) registration deadline has not pass yet <p>
-     * 2) camp still has slots left <p>
-     * 3) student did not withdraw from this camp before <p>
-     * Corresponding exception will be thrown if there is any error. No exceptions means student is sucessfully registered. <p>
-     * To register a student for a camp, one should only call student.registerForCamp(). This method should not be called standalone.
+     * Add a participant to the camp. This method is only called by CampManager.addParticipantToCamp().
      * @param student The student to be added into the camp.
      * @param committeeRole True for camp committee, false for camp attendee.
-     * @throws DeadlineOverException
-     * @throws CampFullException
-     * @throws WithdrawnException If student has already withdrawn from the camp before.
      */
     public void addParticipant (Student student , boolean committeeRole) {
-        if (LocalDate.now().isAfter(campInfo.getRegistrationClosingDate())) throw new DeadlineOverException() ;
         
-        if (
-            (committeeRole && numCommittees == campInfo.getCampCommitteeSlots()) ||
-            (! committeeRole && numAttendees + numCommittees == campInfo.getTotalSlots())
-        ) throw new CampFullException() ;
-
-        if (withdrawnParticipants.contains(student)) throw new WithdrawnException();
-
         participants.add(student) ;
-        
         if (committeeRole) numCommittees++ ;
         else numAttendees++ ;
     }
 
 
     /**
-     * Withdraw an participant. The student is removed from the participants list and added to the withdrawnParticipants list. <p>
-     * This method is called by student.withdrawFromCamp(), which have already checked if student is actually a camp attendee. <p>
-     * To withdraw a student from a camp, one should only call student.withdrawFromCamp(). This method should not be called standalone.
+     * Withdraw an participant. This method is only called by CampManager.removeParticipantFromCamp()
      * @param attendee The attendee to withdraw.
      */
     public void withdrawParticipant (Student student) {
+
         participants.remove(student) ;
         withdrawnParticipants.add(student) ;
         numAttendees-- ;
@@ -150,7 +145,6 @@ public class Camp {
 
     /**
      * Restore a student participant from csv. <p>
-     * Use addParticipant instead when a camp wants to add a new participant.
      * @param student
      * @param active False for withdrawn.
      */
@@ -185,6 +179,6 @@ public class Camp {
      * @return True if same, false otherwise.
      */
     public boolean equals (Camp other) {
-        return this.getCampInfo().getCampName() == other.getCampInfo().getCampName() ;
+        return campInfo.getCampName() == other.getCampInfo().getCampName() ;
     }        
 }
