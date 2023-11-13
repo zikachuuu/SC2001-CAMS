@@ -1,11 +1,11 @@
 package source.exception;
 
-public class withdrawnException extends RuntimeException {
-    public withdrawnException() {
+public class WithdrawnException extends RuntimeException {
+    public WithdrawnException() {
         super("Student has already withdrawn from the camp before!") ;
     }
 
-    public withdrawnException(String message) {
+    public WithdrawnException(String message) {
         super (message) ;
     }
 }

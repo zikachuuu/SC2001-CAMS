@@ -32,7 +32,7 @@ public class User {
      * @return True if successfully changed, false if oldPassword does not match.
      */
     public boolean changePassword (String oldPassword, String newPassword) {
-        if (oldPassword != password) return false ;
+        if (! oldPassword.equals(password)) return false ;
         password = newPassword ;
         return true ;
     }

@@ -6,7 +6,7 @@ import java.util.ArrayList ;
 import source.exception.CampFullException;
 import source.exception.DeadlineOverException;
 import source.exception.NoAccessException;
-import source.exception.withdrawnException;
+import source.exception.WithdrawnException;
 import source.user.CampAttendee;
 import source.user.CampCommittee;
 import source.user.Staff;
@@ -116,7 +116,7 @@ public class Camp {
      * @param committeeRole True for camp committee, false for camp attendee.
      * @throws DeadlineOverException
      * @throws CampFullException
-     * @throws withdrawnException If student has already withdrawn from the camp before.
+     * @throws WithdrawnException If student has already withdrawn from the camp before.
      */
     public void addParticipant (Student student , boolean committeeRole) {
         if (LocalDate.now().isAfter(campInfo.getRegistrationClosingDate())) throw new DeadlineOverException() ;
@@ -126,7 +126,7 @@ public class Camp {
             (! committeeRole && numAttendees + numCommittees == campInfo.getTotalSlots())
         ) throw new CampFullException() ;
 
-        if (withdrawnParticipants.contains(student)) throw new withdrawnException();
+        if (withdrawnParticipants.contains(student)) throw new WithdrawnException();
 
         participants.add(student) ;
         

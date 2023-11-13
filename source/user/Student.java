@@ -95,6 +95,15 @@ public class Student extends User {
 
 
     /**
+     * Check if the student is a camp committee of some camp.
+     * @return True if student is a camp committee, false otherwise.
+     */
+    public boolean isCampCommittee() {
+        return campCommittee != null ;
+    }
+
+
+    /**
      * Check if the student is a camp committee of the given camp.
      * @param camp
      * @return True if student is a camp committee, false otherwise.
@@ -207,9 +216,10 @@ public class Student extends User {
      * @throws CampNotFoundException Thrown by Utility.findCampByName()
      * @throws InvalidUserGroupException
      * @throws MultipleCommitteeRoleException
+     * @throws DateClashException
      * @throws DeadlineOverException Thrown by camp.addParticipant()
      * @throws CampFullException Thrown by camp.addParticipant()
-     * @throws withdrawnException Thrown by camp.addParticipant()
+     * @throws WithdrawnException Thrown by camp.addParticipant()
      */
     public void registerForCamp (String campName , boolean committeeRole) {
         Camp camp = Utility.findCampByName(campName) ;
