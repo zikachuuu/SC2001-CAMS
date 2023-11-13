@@ -22,11 +22,13 @@ public class CAMSApp {
     protected static ArrayList<Camp> camps = new ArrayList<Camp>();
     protected static ArrayList<Student> students = new ArrayList<Student>();
 
+    public static Scanner scanner ;
+
     public static void main(String[] args) {
 
         FileProcessing.readDataFromFile();
 
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         int loginAttempts = 0;
         
         while (loginAttempts < 3) {
@@ -64,7 +66,7 @@ public class CAMSApp {
 
                 if (loggedInStudent != null) {
                     System.out.println("Student Login successful!");
-                    StudentInterface.handleStudentFunctionalities(loggedInStudent, students, camps);
+                    StudentInterface.handleStudentFunctionalities(loggedInStudent);
                     break; 
                 } else {
                     System.out.println("Invalid student credentials. Login failed.");
@@ -91,7 +93,11 @@ public class CAMSApp {
                 e.printStackTrace();
             }
         }
-        if (loginAttempts == 3) System.out.println("Maximum login attempts reached. Exiting.") ;
+        if (loginAttempts == 3) System.out.println("\nMaximum login attempts reached. Exiting.") ;
+        else {
+            System.out.println ("Thank you for using the CAMS system.") ;
+            FileProcessing.writeDataToFile(); 
+        }
         scanner.close();
     }
 

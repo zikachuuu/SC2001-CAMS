@@ -243,6 +243,10 @@ public class FileProcessing {
         }
     }
 
+    protected static void writeDataToFile() {
+        
+    }
+
     /**
      * Extract out the userId from the email provided. UserId is the part before '@' 
      * @param email The email to extract from.
