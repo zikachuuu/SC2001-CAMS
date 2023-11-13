@@ -66,6 +66,7 @@ public class CAMSApp {
 
                 if (loggedInStudent != null) {
                     System.out.println("Student Login successful!");
+                    Utility.redirectingPage();
                     StudentInterface.handleStudentFunctionalities(loggedInStudent);
                     break; 
                 } else {
@@ -77,6 +78,7 @@ public class CAMSApp {
 
                 if (loggedInStaff != null) {
                     System.out.println("Staff Login successful!");
+                    Utility.redirectingPage();
                     StaffInterface.handleStaffFunctionalities(loggedInStaff, staffs, camps, students);
                     break; 
                 } else {
@@ -85,15 +87,16 @@ public class CAMSApp {
             }
 
             loginAttempts++;
-            System.out.println("You have " + (3 - loginAttempts) + " attempts remaining.");
-            System.out.println ("Please wait, redirecting...") ;
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (loginAttempts < 3) {
+                System.out.println("You have " + (3 - loginAttempts) + " attempts remaining.");
+                Utility.redirectingPage();
             }
+            else {
+               break ;
+            }
+            
         }
-        if (loginAttempts == 3) System.out.println("\nMaximum login attempts reached. Exiting.") ;
+        if (loginAttempts == 3) System.out.println("Maximum login attempts reached. Exiting.") ;
         else {
             System.out.println ("Thank you for using the CAMS system.") ;
             FileProcessing.writeDataToFile(); 

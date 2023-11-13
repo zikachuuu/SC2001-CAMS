@@ -34,8 +34,8 @@ public class Staff extends User{
     public boolean createCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
         
         if (Utility.campExists(campName)) return false ;
-        CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this, true) ;
-        createdCamps.add(new Camp(campInfo ,0 ,0));
+        CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this) ;
+        createdCamps.add(new Camp(campInfo));
         return true;
     }
 

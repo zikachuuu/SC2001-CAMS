@@ -104,7 +104,7 @@ public class FileProcessing {
                     boolean visible = data[12].trim().equals("visible"); 
 
                     // Create new camp and add it to the list
-                    Camp camp = new Camp(new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, staffInCharge, visible), numCommittees , numAttendees) ;
+                    Camp camp = new Camp(new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, staffInCharge), numCommittees , numAttendees, visible) ;
                     CAMSApp.camps.add(camp) ;
                     
                     // Add the camp to the list of created camps in that staff

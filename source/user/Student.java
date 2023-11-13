@@ -1,6 +1,8 @@
 package source.user;
 import java.util.ArrayList ;
 
+import source.application.CAMSApp;
+import source.application.CampsManager;
 import source.application.Utility;
 import source.camp.Camp;
 import source.exception.* ;
@@ -50,38 +52,9 @@ public class Student extends User {
         this.campAttendees = campAttendees ;
     }
 
-
-    /**
-     * Check if student belongs to the camp user group.
-     * @param camp
-     * @return True if belongs, false otherwise.
-     */
-    private boolean checkFaculty(Camp camp) {
-        return (camp.getCampInfo().getUserGroup() == Faculty.NTU) || (camp.getCampInfo().getUserGroup() == this.getFaculty()) ;
-    }
     
-
-    /**
-     * Check is there is a clash in date betweeen the camp and the camps the student already signed up.
-     * @param camp
-     * @return True if there is no clash in date, false otherwise.
-     */
-    private boolean checkClashInDate(Camp camp) {
-
-        if (campCommittee != null) {
-            if (campCommittee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
-                campCommittee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
-        }
-
-        if (campAttendees != null){
-            for (CampAttendee attendee : campAttendees) {
-                if (attendee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
-                attendee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return false ;
-            }
-        }
-
-        return true ;
-    }
+    public CampCommittee getCampCommittee() {return campCommittee ;}
+    public ArrayList<CampAttendee> getCampAttendees() {return campAttendees ;}
 
 
     /**
@@ -99,7 +72,7 @@ public class Student extends User {
      * @return True if student is a camp committee, false otherwise.
      */
     public boolean isCampCommittee() {
-        return campCommittee != null ;
+        return campCommittee != null && campCommittee.getCamp().getActive() ;
     }
 
 
@@ -109,7 +82,10 @@ public class Student extends User {
      * @return True if student is a camp committee, false otherwise.
      */
     public boolean isCampCommittee (Camp camp) {
-        if (campCommittee == null || ! campCommittee.getCamp().equals(camp)) return false ;
+        if (campCommittee == null 
+            || ! campCommittee.getCamp().equals(camp) 
+            || ! campCommittee.getCamp().getActive()
+        ) return false ;
         return true ;
     }
 
@@ -121,76 +97,43 @@ public class Student extends User {
      */
     public boolean isCampAttendee (Camp camp) {
         for (CampAttendee attendee : campAttendees) {
-            if (attendee.getCamp().equals(camp)) return true ;
-        }
-        return false ;
-    }
-
-
-    public CampCommittee getCampCommittee() {return campCommittee ;}
-    public ArrayList<CampAttendee> getCampAttendees() {return campAttendees ;}
-
-
-    /**
-     * Add a camp committee role to this student.
-     * @param camp The camp to sign up as committee in.
-     * @return True if role successfully taken, false if student already has a camp committee role.
-     */
-    private boolean addCampCommittee(Camp camp , int points) {
-        if (this.campCommittee != null) return false ;
-        this.campCommittee = new CampCommittee(camp, this , points) ;
-        return true ;
-    }
-
-
-    /**
-     * Add a camp attendee role to this student.
-     * @param camp The camp to sign up as attendee in.
-     */
-    private void addCampAttendee (Camp camp) {
-        this.campAttendees.add(new CampAttendee(camp, this)) ;
-    }
-
-
-    /**
-     * Remove a camp attendee role from this student.
-     * @param camp The camp to withdraw from.
-     * @return True if successfully withdrawn, false if student is not a attendee of this camp.
-     */
-    private boolean removeCampAttendee (Camp camp) {
-        for (CampAttendee attendee : campAttendees) {
-            if (attendee.getCamp().equals(camp)) return campAttendees.remove(attendee) ;
+            if (attendee.getCamp().equals(camp) && attendee.getCamp().getActive()) return true ;
         }
         return false ;
     }
 
 
     /**
-     * (todo) Print out a list of open camps (valid user group and camp set to visible).
+     * Print out a list of camps that the student can register (only camp information).
      */
     public void viewOpenCamps() {
-        //todo
+        CampsManager.viewOpenCamps(this);
     }
 
 
     /**
-     * Print out a list of registered camps (only camp names).
+     * Print out a list of registered camps (only camp information).
      */
     public void viewRegisteredCamps() {
 
         System.out.println("List of camps that you have registered for: ") ;
-        System.out.println ("Registered as camp committee: ") ;
+
         if (campCommittee != null) {
-            System.out.println(campCommittee.getCamp().getCampInfo().getCampName()) ;
+            System.out.println ("Registered as camp committee: ") ;
+            System.out.println();
+            campCommittee.getCamp().getCampInfo().printCampInfo();
         }
         else {
             System.out.println ("No camps registered as camp committee") ;
         }
+        System.out.println();
 
-        System.out.println ("Registered as camp attendee: ") ;
         if (campAttendees.size() > 0) {
+            System.out.println ("Registered as camp attendee: ") ;
+            System.out.println();
             for (CampAttendee attendee : campAttendees) {
-                System.out.println(attendee.getCamp().getCampInfo().getCampName()) ;
+                attendee.getCamp().getCampInfo().printCampInfo();
+                System.out.println();
             }
         }
         else {
@@ -200,38 +143,33 @@ public class Student extends User {
 
 
     /**
-     * Register for a camp. This methods checks: <p>
-     * 1) student's faculty belongs to the user group of the camp <p>
-     * 2) student has no committee role <p>
-     * 3) student has no clash in dates (as well as not already signed up for this camp) <p>
-     * It then calls camp.addParticipant() to add the student inside the camp, which will check: <p>
-     * 1) registration deadline has not pass yet <p>
-     * 2) camp still has slots left <p>
-     * 3) student did not withdraw from this camp before <p>
-     * Corresponding exception will be thrown if there is any error. No exceptions means student is sucessfully registered. <p>
-     * Please remenber to catch all exceptions when calling it from CAMSApp.
-     * 
+     * Register for a camp. This method calls CampManager.addParticipantToCamp() to do the actual registration. <p>
+     * Corresponding exception will be thrown if there is any error. No exceptions means student is sucessfully registered.
      * @param campName Name of the camp.
      * @param committeeRole True for committee, false for attendee.
-     * @throws CampNotFoundException Thrown by Utility.findCampByName()
-     * @throws InvalidUserGroupException
      * @throws MultipleCommitteeRoleException
+     * @throws CampNotFoundException 
+     * @throws InvalidUserGroupException
      * @throws DateClashException
-     * @throws DeadlineOverException Thrown by camp.addParticipant()
-     * @throws CampFullException Thrown by camp.addParticipant()
-     * @throws WithdrawnException Thrown by camp.addParticipant()
+     * @throws DeadlineOverException 
+     * @throws CampFullException 
+     * @throws WithdrawnException 
      */
     public void registerForCamp (String campName , boolean committeeRole) {
-        Camp camp = Utility.findCampByName(campName) ;
 
-        if (! checkFaculty(camp)) throw new InvalidUserGroupException() ;
         if (committeeRole && this.campCommittee != null) throw new MultipleCommitteeRoleException() ;
-        if (! checkClashInDate(camp)) throw new DateClashException() ;
+        CampsManager.addParticipantToCamp(this, campName, committeeRole);
+    }
 
-        camp.addParticipant (this , committeeRole) ;
-
-        if (committeeRole) addCampCommittee(camp , 0) ;
-        else addCampAttendee(camp); 
+    
+    /**
+     * Withdraw from a camp. This method calls CampManager.removeParticipantFromCamp() to do the actual withdrawal.<p>
+     * @param campName Name of the camp.
+     * @return True if sucessfully withdrawn, false if student is not attending the camp as attendee in the first place.
+     * @throws CampNotFoundException Thrown by Utility.findCampByName()
+     */
+    public boolean withdrawFromCamp (String campName) { 
+        return CampsManager.removeParticipantFromCamp(this, campName) ;
     }
 
 
@@ -251,21 +189,36 @@ public class Student extends User {
 
 
     /**
-     * Withdraw from a camp. This method checks: <p>
-     * 1) student is actually an attendee of the camp. <p>
-     * It then calls camp.withdrawParticipant() to add the student to the withdrawnParticipants list. <p>
-     * @param campName
-     * @return True if sucessfully withdrawn, false if student is not attending the camp as attendee in the first place.
-     * @throws CampNotFoundException Thrown by Utility.findCampByName()
+     * Add a camp committee role to this student.
+     * @param camp The camp to sign up as committee in.
+     * @return True if role successfully taken, false if student already has a camp committee role.
      */
-    public boolean withdrawFromCamp (String campName) {
-        Camp camp = Utility.findCampByName(campName) ;
-
-        if (! isCampAttendee(camp)) return false ;
-
-        removeCampAttendee(camp) ;
-        camp.withdrawParticipant(this) ;
-
+    public boolean addCampCommittee(Camp camp , int points) {
+        if (this.campCommittee != null) return false ;
+        this.campCommittee = new CampCommittee(camp, this , points) ;
         return true ;
     }
+
+
+    /**
+     * Add a camp attendee role to this student.
+     * @param camp The camp to sign up as attendee in.
+     */
+    public void addCampAttendee (Camp camp) {
+        this.campAttendees.add(new CampAttendee(camp, this)) ;
+    }
+
+
+    /**
+     * Remove a camp attendee role from this student.
+     * @param camp The camp to withdraw from.
+     * @return True if successfully withdrawn, false if student is not a attendee of this camp.
+     */
+    public boolean removeCampAttendee (Camp camp) {
+        for (CampAttendee attendee : campAttendees) {
+            if (attendee.getCamp().equals(camp)) return campAttendees.remove(attendee) ;
+        }
+        return false ;
+    }
+
 }

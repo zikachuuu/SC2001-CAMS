@@ -1,5 +1,6 @@
 package source.application;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 
 import source.camp.Camp;
@@ -21,6 +22,23 @@ public class Utility {
     public static void clearConsole() {
         System.out.print("\033\143");
     }
+
+
+    /**
+     * Does the following 3 things: <p>
+     * 1) print out "redirecting..." message <p>
+     * 2) sleep for 3 seconds<p>
+     * 3) clears the console
+     */
+    public static void redirectingPage() {
+        System.out.println ("Please wait, redirecting...") ;
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        clearConsole() ;
+    }
     
 
     /**
@@ -32,7 +50,7 @@ public class Utility {
     public static Camp findCampByName(String campName) {
 
         for (Camp camp : CAMSApp.camps) {
-            if (camp.getCampInfo().getCampName().equals (campName)) return camp ;
+            if (camp.getCampInfo().getCampName().equals (campName) && camp.getActive()) return camp ;
         }
         throw new CampNotFoundException("Camp not found for " + campName) ;
     }

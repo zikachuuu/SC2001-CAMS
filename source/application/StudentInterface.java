@@ -1,6 +1,7 @@
 package source.application;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import source.camp.Camp;
@@ -20,10 +21,8 @@ public class StudentInterface {
     protected static void handleStudentFunctionalities(Student loggedInStudent) {
 
         while (! exit) {
-            Utility.clearConsole();
-
             // Prompt user to choose an option
-            System.out.println ("Logged in as student: " + loggedInStudent.getUserId()) ;
+            System.out.println ("Welcome, " + loggedInStudent.getUserName() + " (student id: " + loggedInStudent.getUserId() + ")") ;
             System.out.println("Press 1 to change password");
             System.out.println("Press 2 to view camps in your faculty");
             System.out.println("Press 3 to register for a camp");
@@ -158,27 +157,105 @@ public class StudentInterface {
 
                 case "10":
                     if (loggedInStudent.isCampCommittee()) {
-                        System.out.println("U/C");
-                        // handleCampCommiteeFunctionalities(loggedInStudent, students, camps, enquiries,
-                        //         studentRegistrations, suggestions);
-                        offerReturnToMenuOption();
+                        Utility.redirectingPage() ;
+                        handleCampCommiteeFunctionalities(loggedInStudent, loggedInStudent.getCampCommittee().getCamp());
                     } else {
-                        System.out.println("Invalid option.");
+                        System.out.println("You have no camp committee role.");
                     }
                     break;
+
                 default:
                     exit = true;
                     break;
             }
+            Utility.redirectingPage() ;
         }
     }
 
+    private static void handleCampCommiteeFunctionalities(Student loggedInStudent, Camp camp) {
+
+        boolean innermenu = true;
+        while (innermenu) {
+            System.out.println("Viewing " + loggedInStudent.getUserName() + "'s camp comittee role.");
+            System.out.println("Press 1 to view details of the camp you've registered for");
+            System.out.println("Press 2 to submit suggestions");
+            System.out.println("Press 3 to view and reply to student enquiries");
+            System.out.println("Press 4 to view students registered");
+            System.out.println("Press 5 to generate reports");
+            System.out.println("Press any other key to exit commitee menu");
+            System.out.print ("Enter your choice: ") ;
+
+            String choice = CAMSApp.scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    System.out.println("\nViewing details of the camp you've registered for as a committee member\n");
+                    camp.viewCampDetails(loggedInStudent);
+                    System.out.println();
+                    offerReturnToInnerMenuOption();
+                    break;
+
+                case "2":
+                    //todo
+                    offerReturnToInnerMenuOption();
+                    break;
+
+                case "3":
+                    //todo
+                    offerReturnToInnerMenuOption();
+                    break;
+
+                case "4":
+                    //todo
+                    offerReturnToInnerMenuOption();
+                    break;
+
+                case "5":
+                    boolean reportMenu = true;
+                    while (reportMenu) {
+                        System.out.println("Press 1 to generate committee members report");
+                        System.out.println("Press 2 to generate attendee members report");
+                        System.out.println("Press any other key to return to the main menu");
+                        String reportChoice = CAMSApp.scanner.nextLine();
+                        switch (reportChoice) {
+                            case "1":
+                                // Generate committee members report
+                                //todo
+                                break;
+
+                            case "2":
+                                //attendee reports
+                                //todo
+                                break;  
+
+                            default:
+                                reportMenu = false;
+                                break;
+                        }
+                    }
+                    offerReturnToInnerMenuOption();
+                    break;
+
+                default:
+                    innermenu = false;
+                    break;
+            }
+            Utility.redirectingPage() ;
+        }
+    }
+
+
     private static void offerReturnToMenuOption () {
-        System.out.println("Press 'M' to go back to the menu or any other key to exit.");
+        System.out.print("Press 'M' to go back to the menu or any other key to exit: ");
         String backChoice = CAMSApp.scanner.nextLine();
         if (!"M".equalsIgnoreCase(backChoice)) {
             exit = true;
         }
+    }
+
+    private static void offerReturnToInnerMenuOption() {
+        System.out.print("Press any key to continue...");
+        CAMSApp.scanner.nextLine();
     }
 
 }
