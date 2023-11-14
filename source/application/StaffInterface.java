@@ -1,8 +1,10 @@
 package source.application;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import source.camp.Camp;
+import source.user.Faculty;
 import source.user.Staff;
 import source.user.Student;
 
@@ -49,8 +51,39 @@ public class StaffInterface {
 
                 case "2":
                     // Add a new camp
-                    
-                    
+                    System.out.print("Enter camp name:");
+                    String campName = CAMSApp.scanner.nextLine();
+
+                    System.out.print("Enter start date:");
+                    String startDateStr = CAMSApp.scanner.nextLine();
+                    LocalDate startDate = Utility.convertStringToLocalDate(startDateStr) ;
+
+                    System.out.print("Enter end date:");
+                    String endDateStr = CAMSApp.scanner.nextLine();
+                    LocalDate endDate = Utility.convertStringToLocalDate(endDateStr) ;
+
+                    System.out.print("Enter registration closing date:");
+                    String registrationClosingDateStr = CAMSApp.scanner.nextLine();
+                    LocalDate registrationClosingDate = Utility.convertStringToLocalDate(registrationClosingDateStr) ;
+
+                    System.out.println("Which group of students is this camp open to? (Enter a school acryonym or'NTU' for all students): ");
+                    String userGroupStr = CAMSApp.scanner.nextLine();
+                    Faculty userGroup = Faculty.valueOf(userGroupStr) ;
+
+                    //todo
+
+                    // System.out.println("Camp location");
+                    // String location = scanner.nextLine();
+
+                    // System.out.println("Total slots");
+                    // int totalSlots = scanner.nextInt();
+
+                    // System.out.println("Camp committee slots(max 10)");
+                    // int campCommitteeSlots = scanner.nextInt();
+                    // scanner.nextLine();
+                    // System.out.println("Description");
+                    // String description = scanner.nextLine();
+
                     offerReturnToMenuOption();
                     break;
 
