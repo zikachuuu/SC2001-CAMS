@@ -122,15 +122,25 @@ public class Utility {
 
     
     /**
-     * Convert a string date in the format of dd/mm/yyyy to a LocalDate object
-     * @param date String in the format of dd/mm/yyyy
+     * Convert a string date in the format of yyyy-mm-dd to a LocalDate object
+     * @param date String in the format of yyyy-mm-dd
      * @return LocalDate object
      * @throws DateTimeException If string date provided is of the wrong format.
      */
     public static LocalDate convertStringToLocalDate(String date) {
-        String[] dateSplitted = date.split("/") ;
-        LocalDate newDate = LocalDate.of (Integer.valueOf(dateSplitted[2]) , Integer.valueOf(dateSplitted[1]) , Integer.valueOf(dateSplitted[0])) ;
+        String[] dateSplitted = date.split("-") ;
+        LocalDate newDate = LocalDate.of (Integer.valueOf(dateSplitted[0]) , Integer.valueOf(dateSplitted[1]) , Integer.valueOf(dateSplitted[2])) ;
         return newDate ;
+    }
+
+
+    /**
+     * Comma in string will fk up the csv real bad. Call this method whenever there is a string input.
+     * @param string The string to replace.
+     * @return The new string.
+     */
+    public static String replaceCommaWithSemicolon(String string) {
+        return string.replaceAll(",", ";") ;
     }
 
 }

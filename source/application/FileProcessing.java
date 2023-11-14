@@ -1,9 +1,12 @@
 package source.application;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import source.camp.Camp;
 import source.camp.CampInformation;
@@ -244,19 +247,121 @@ public class FileProcessing {
     }
 
     protected static void writeDataToFile() {
-        
+        writeStaffsToFile() ;
+        writeCampsToFile() ;
+        writeStudentsToFile();
+        writeEnquiriesToFile();
+        writeSuggestionsToFiles();
     }
 
     private static void writeStaffsToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.STAFF_FILE_PATH, false))) {
+            writer.write ("Name,Email@e.ntu.edu.sg,Faculty,Password\r\n") ;
+
+            for (Staff staff : CAMSApp.staffs) {
+                writer.write(
+                    staff.getUserName() + "," + 
+                    staff.getUserId() + "@e.ntu.edu.sg," + 
+                    staff.getFaculty().toString() + "," + 
+                    staff.getPassword()
+                );
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
     private static void writeCampsToFile() {
 
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.CAMP_FILE_PATH, false))) {
+            writer.write("CampName, StartDate, EndDate, RegistrationClosingDate,UserGroup, Location,TotalSlots, CampCommitteeSlots, NumAttendees, NumCommittees, Description, StaffInCharge,Visibility\r\n");
+            
+            for (Camp camp : CAMSApp.camps) {
+                // Write each camp's details to the file
+                if (! camp.getActive()) continue ;
+
+                writer.write(
+                    camp.getCampInfo().getCampName() + "," + 
+                    camp.getCampInfo().getStartDate().toString() + "," + 
+                    camp.getCampInfo().getEndDate().toString() + "," + 
+                    camp.getCampInfo().getRegistrationClosingDate().toString() + "," + 
+                    camp.getCampInfo().getUserGroup().toString() + "," + 
+                    camp.getCampInfo().getLocation() + "," +
+                    camp.getCampInfo().getTotalSlots() + "," +
+                    camp.getCampInfo().getCampCommitteeSlots() + "," +
+                    camp.getNumAttendees() + "," +
+                    camp.getNumCommittees() + "," +
+                    camp.getCampInfo().getDescription() + "," +
+                    camp.getCampInfo().getStaffInCharge().getUserId()+ "," +
+                    (camp.getVisible() == true ? "visible" : "unvisible" )
+                ) ;
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void writeStudentsToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.STUDENT_FILE_PATH, false))) {
+            writer.write ("Name,Email@e.ntu.edu.sg,Faculty,Password\r\n") ;
 
+            for (Student student : CAMSApp.students) {
+                writer.write(
+                    student.getUserName() + "," + 
+                    student.getUserId() + "@e.ntu.edu.sg," + 
+                    student.getFaculty().toString() + "," + 
+                    student.getPassword()
+                );
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeEnquiriesToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.ENQUIRIES_FILE_PATH , false))) {
+            writer.write("Camp,Student,EnquiryText,Processed,ProcessedBy,Replies\r\n");
+            ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry() ;
+
+            for (Enquiry enquiry : enquiries) {
+                writer.write(
+                    enquiry.getCamp().getCampInfo().getCampName() + "," + 
+                    enquiry.getStudent().getUserId() + "," + 
+                    enquiry.getContent() + "," + 
+                    Boolean.toString(enquiry.getReplied())  + "," + 
+                    (enquiry.getReplied() ? enquiry.getRepliedBy().getUserId() : "null") + "," +
+                    enquiry.getReplies()
+                );
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeSuggestionsToFiles() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.SUGGESTIONS_FILE_PATH , false))) {
+            writer.write("Camp,Student,Suggestion,Approved\r\n");
+            ArrayList<Suggestion> suggestions = SuggestionManager.findAllSuggestions() ;
+
+            for (Suggestion suggestion : suggestions) {
+                writer.write(
+                    suggestion.getCamp().getCampInfo().getCampName() + "," +
+                    suggestion.getStudent().getUserId() + "," +
+                    suggestion.getContent() + "," +
+                    Boolean.toString(suggestion.getApproved()) 
+                );
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

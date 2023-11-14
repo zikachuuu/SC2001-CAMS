@@ -64,7 +64,7 @@ public class CampInformation {
     public void printCampInfo()
     {
         System.out.printf("Camp Name: %s \n", campName);
-        System.out.printf("Dates: %s to %s \n ", startDate.toString() , endDate.toString());
+        System.out.printf("Dates: %s to %s \n", startDate.toString() , endDate.toString());
         System.out.printf("Registration closing date: %s \n", registrationClosingDate.toString());
         System.out.printf("Opened to: %s \n", userGroup.toString());
         System.out.printf("Location: %s \n", location);
