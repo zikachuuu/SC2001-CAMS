@@ -2,7 +2,8 @@ package source.user;
 import java.util.ArrayList ;
 
 import source.application.CAMSApp;
-import source.application.CampsManager;
+import source.application.CampManager;
+import source.application.EnquiryManager;
 import source.application.Utility;
 import source.camp.Camp;
 import source.exception.* ;
@@ -107,7 +108,7 @@ public class Student extends User {
      * Print out a list of camps that the student can register (only camp information).
      */
     public void viewOpenCamps() {
-        CampsManager.viewOpenCamps(this);
+        CampManager.viewOpenCamps(this);
     }
 
 
@@ -158,33 +159,7 @@ public class Student extends User {
     public void registerForCamp (String campName , boolean committeeRole) {
 
         if (committeeRole && this.campCommittee != null) throw new MultipleCommitteeRoleException() ;
-        CampsManager.addParticipantToCamp(this, campName, committeeRole);
-    }
-
-    
-    /**
-     * Withdraw from a camp. This method calls CampManager.removeParticipantFromCamp() to do the actual withdrawal.<p>
-     * @param campName Name of the camp.
-     * @return True if sucessfully withdrawn, false if student is not attending the camp as attendee in the first place.
-     * @throws CampNotFoundException Thrown by Utility.findCampByName()
-     */
-    public boolean withdrawFromCamp (String campName) { 
-        return CampsManager.removeParticipantFromCamp(this, campName) ;
-    }
-
-
-    /**
-     * Restore the role of a student from csv. <p>
-     * User registerForCamp instead when student want to register for a camp.
-     * @param campName Name of the camp.
-     * @param committeeRole True for committee, false for attendee.
-     * @param points Points (for committee).
-     */
-    public void restoreCampRole (String campName , boolean committeeRole , boolean active, int points) {
-        Camp camp = Utility.findCampByName(campName) ;
-        camp.restoreParticipant(this, active);
-        if (committeeRole) addCampCommittee(camp , 0) ;
-        else if (active) addCampAttendee(camp); 
+        CampManager.addParticipantToCamp(this, campName, committeeRole);
     }
 
 
@@ -208,6 +183,17 @@ public class Student extends User {
         this.campAttendees.add(new CampAttendee(camp, this)) ;
     }
 
+    
+    /**
+     * Withdraw from a camp. This method calls CampManager.removeParticipantFromCamp() to do the actual withdrawal.<p>
+     * @param campName Name of the camp.
+     * @return True if sucessfully withdrawn, false if student is not attending the camp as attendee in the first place.
+     * @throws CampNotFoundException Thrown by Utility.findCampByName()
+     */
+    public boolean withdrawFromCamp (String campName) { 
+        return CampManager.removeParticipantFromCamp(this, campName) ;
+    }
+
 
     /**
      * Remove a camp attendee role from this student.
@@ -219,6 +205,45 @@ public class Student extends User {
             if (attendee.getCamp().equals(camp)) return campAttendees.remove(attendee) ;
         }
         return false ;
+    }
+
+
+    /**
+     * Submit a enquiry regarding a camp.
+     * @param campName
+     * @param Enquiry
+     * @throws CampNotFoundException
+     */
+    public void submitEnquiry(String campName, String Enquiry) {
+        EnquiryManager.addEnquiryToCamp(campName, Enquiry, this);
+    }
+
+
+    /**
+     * Print out all the enquiries that this student have submitted.
+     */
+    public void viewSubmittedEnquiries() {
+        EnquiryManager.viewEnquiry(this);
+    }
+
+
+    public void editEnquiry() {
+
+    }
+
+
+    /**
+     * Restore the role of a student from csv. <p>
+     * User registerForCamp instead when student want to register for a camp.
+     * @param campName Name of the camp.
+     * @param committeeRole True for committee, false for attendee.
+     * @param points Points (for committee).
+     */
+    public void restoreCampRole (String campName , boolean committeeRole , boolean active, int points) {
+        Camp camp = Utility.findCampByName(campName) ;
+        camp.restoreParticipant(this, active);
+        if (committeeRole) addCampCommittee(camp , 0) ;
+        else if (active) addCampAttendee(camp); 
     }
 
 }
