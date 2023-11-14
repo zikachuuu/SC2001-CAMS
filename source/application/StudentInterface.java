@@ -48,6 +48,8 @@ public class StudentInterface {
                     String currentPassword = CAMSApp.scanner.nextLine();
                     System.out.println("Enter a new password:");
                     String newPassword = CAMSApp.scanner.nextLine();
+                    newPassword = Utility.replaceCommaWithSemicolon(newPassword);
+
                     if (loggedInStudent.changePassword(currentPassword, newPassword)) {
                         System.out.println("Password changed successfully");
                     } else {
@@ -125,6 +127,7 @@ public class StudentInterface {
                     String campNameToEnquire = CAMSApp.scanner.nextLine();
                     System.out.print("Enter the content of the enquiry: ") ;
                     String content = CAMSApp.scanner.nextLine() ;
+                    content = Utility.replaceCommaWithSemicolon(content);
 
                     try {
                         loggedInStudent.submitEnquiry(campNameToEnquire, content);
@@ -175,6 +178,7 @@ public class StudentInterface {
 
                     System.out.print ("Enter the new content of this enquiry: ") ;
                     String newContent = CAMSApp.scanner.nextLine() ;
+                    newContent = Utility.replaceCommaWithSemicolon(newContent);
 
                     try {
                         enquiries.get(enquiryChoice - 1).editEnquiry(loggedInStudent,newContent) ;

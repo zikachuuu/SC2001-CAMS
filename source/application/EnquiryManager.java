@@ -22,8 +22,24 @@ public class EnquiryManager {
     }
 
 
+    protected static ArrayList<Enquiry> findAllEnquiry() {
+        ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
+        
+        for (Camp camp : CAMSApp.camps) {
+            if (! camp.getActive()) continue ;
+
+            for (Enquiry enquiry : camp.getEnquiries()) {
+                if(enquiry.getActive()) {
+                    enquiries.add(enquiry) ;
+                }
+            }
+        }
+        return enquiries ;
+    }
+
+
     /**
-     * FInd all enquiries that a student has submitted.
+     * Find all enquiries that a student has submitted.
      * @param student The student who submitted the enquiry.
      * @return ArrayList of enquiries.
      */
