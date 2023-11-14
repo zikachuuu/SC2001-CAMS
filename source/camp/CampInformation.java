@@ -9,7 +9,7 @@ import source.user.Staff;
  * Represents the information regarding a camp. A camp information is part of a camp (composition).
  * No logic is implemented within this class. All this class does is to store the information and provide get and set methods.
  * Implement logic within camp class.
- * @author Le Yanzhi
+ * @author Le Yanzhi, Florian Goering
  * @version beta 5(Overwrote toString() method to support functionalities in Staff class)
  * @since 2023-11-15
  */
