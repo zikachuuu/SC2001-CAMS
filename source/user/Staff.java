@@ -13,6 +13,7 @@ import source.camp.CampInformation;
  * Represents a staff. A staff is a user (inheritance).
  * @author Florian Goering, Le Yanzhi
  * @version beta 3 (added in a new attribute allCamps, so that whenever viewAllCamps is called, no need to generate data from csv all the time)
+ * Methods are created for csv updates.
  * @since 2023-11-15
  */
 public class Staff extends User{
