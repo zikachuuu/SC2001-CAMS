@@ -79,6 +79,11 @@ public class Camp {
     public ArrayList<Enquiry> getEnquiries() {return enquiries ;}
     public ArrayList<Suggestion> getSuggestions() {return suggestions ;}
     public boolean getVisible() {return visible ;}
+
+    
+    /**
+     * @return True if camp is still active, false if camp has been deleted.
+     */
     public boolean getActive () {return active ;}
 
 
@@ -140,6 +145,16 @@ public class Camp {
         participants.remove(student) ;
         withdrawnParticipants.add(student) ;
         numAttendees-- ;
+    }
+
+
+    /**
+     * Add a enquiry. This method is only called by EnquiryManager.addEnquiryToCamp()
+     * @param student
+     * @param enquiry
+     */
+    public void addEnquiry (Student student, Enquiry enquiry) {
+        enquiries.add(enquiry) ;
     }
 
 

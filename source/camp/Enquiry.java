@@ -71,6 +71,29 @@ public class Enquiry {
     public String getReplies() {return replies ;}
 
 
+    /**
+     * Check if the given student is the creator of this enquiry.
+     * @param other The student to check.
+     * @return True if student is creator, false otherwise.
+     */
+    public boolean isSubmittedBy(Student other) {
+        return this.student.equals(other) ;
+    }
+
+
+    /**
+     * Print out the content of this enquiry.
+     */
+    public void viewEnquiry() {
+        System.out.println("Camp: " + camp.getCampInfo().getCampName()) ;
+        System.out.println("Submitted by: " + student.getUserName());
+        System.out.println("Enquiry: " + content);
+        if (replied) {
+            System.out.println ("Replied by: " + repliedBy.getUserName()) ;
+            System.out.println("Reply: " + replies);
+        }
+    }
+
 
     /** 
      * Edit the content of the enquiry.

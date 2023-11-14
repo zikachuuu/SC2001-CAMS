@@ -247,6 +247,18 @@ public class FileProcessing {
         
     }
 
+    private static void writeStaffsToFile() {
+
+    }
+
+    private static void writeCampsToFile() {
+
+    }
+
+    private static void writeStudentsToFile() {
+
+    }
+
     /**
      * Extract out the userId from the email provided. UserId is the part before '@' 
      * @param email The email to extract from.
@@ -260,6 +272,4 @@ public class FileProcessing {
             return email;
         }
     }
-
-
 }

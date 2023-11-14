@@ -3,8 +3,10 @@ package source.application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Iterator;
 
 import source.camp.Camp;
+import source.camp.Enquiry;
 import source.exception.CampFullException;
 import source.exception.CampNotFoundException;
 import source.exception.DateClashException;
@@ -92,13 +94,6 @@ public class StudentInterface {
                     offerReturnToMenuOption();
                     break;
 
-                // does the same thing as case 1, which can also display remaining slots of each camp
-                // case "4":
-                //     // View remaining slots of each camp
-                //     viewRemainingSlots(loggedInStudent, camps);
-                //     offerReturnToMenuOption(scanner);
-                //     break;
-
                 case "4":
                     // View camps you've registered for
                     loggedInStudent.viewRegisteredCamps();
@@ -128,24 +123,66 @@ public class StudentInterface {
                 case "6":
                     System.out.print("Enter the name of the camp you want to submit an enquiry for: ");
                     String campNameToEnquire = CAMSApp.scanner.nextLine();
-                    Camp campToEnquire = Utility.findCampByName(campNameToEnquire);
+                    System.out.print("Enter the content of the enquiry: ") ;
+                    String content = CAMSApp.scanner.nextLine() ;
 
-                    //todo
-                    System.out.println("U/C");
+                    try {
+                        loggedInStudent.submitEnquiry(campNameToEnquire, content);
+                    } catch (CampNotFoundException cnfe) {
+                        System.out.println ("Sorry, the camp you entered does not exist.") ;
+                    } catch (Exception e) {
+                        System.out.println("How tf you got here");
+                    }
 
                     offerReturnToMenuOption();
                     break;
 
                 case "7":
-                    //todo
-                    System.out.println("U/C");
-
+                    loggedInStudent.viewSubmittedEnquiries() ;
                     offerReturnToMenuOption();
                     break;
 
                 case "8":
-                    //todo
-                    System.out.println("U/C");
+                    ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStudent) ;
+                    boolean have = false ;
+                    int count = 1 ;
+
+                    Iterator<Enquiry> itr = enquiries.iterator() ;
+                    while (itr.hasNext()) {
+                        Enquiry en = itr.next() ;
+                        if (en.getReplied() || ! en.getActive()) {
+                            itr.remove();
+                        }
+                    }
+
+                    for (Enquiry enquiry : enquiries) {
+                        System.out.println("Enquiry " + count + ": ");
+                        System.out.println("Camp: " + enquiry.getCamp().getCampInfo().getCampName());
+                        System.out.println("Content: " + enquiry.getContent()) ;
+                        System.out.println();
+                        count++ ;
+                        have = true ;
+                    }
+
+                    if (! have) {
+                        System.out.println("You do have any enquiries that you can edit.");
+                        break ;
+                    }
+
+                    System.out.print("Choose an enquiry that you wish to edit: ") ;
+                    int enquiryChoice = CAMSApp.scanner.nextInt() ;
+                    CAMSApp.scanner.nextLine() ; // clear buffer
+
+                    System.out.print ("Enter the new content of this enquiry: ") ;
+                    String newContent = CAMSApp.scanner.nextLine() ;
+
+                    try {
+                        enquiries.get(enquiryChoice - 1).editEnquiry(loggedInStudent,newContent) ;
+                        System.out.println("Enquiry successfully updated!") ;
+                    } catch (IndexOutOfBoundsException ioobe) {
+                        System.out.println("Invalid choice");
+                    }
+
                     offerReturnToMenuOption();
                     break;
 

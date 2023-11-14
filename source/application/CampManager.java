@@ -18,7 +18,7 @@ import source.user.Student;
  * One not very oop thing in previous versions is how easy it was for student objects to access camp objects, by simply using the Utility.getCampFromName() method.
  * CampsManager intends to fix that by serving as a proxy between students and camps; students only know the camp name and need to go through here to actually access the camp objects.
  */
-public class CampsManager {
+public class CampManager {
 
     /**
      * Check if student belongs to the camp user group.
