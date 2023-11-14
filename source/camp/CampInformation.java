@@ -10,8 +10,8 @@ import source.user.Staff;
  * No logic is implemented within this class. All this class does is to store the information and provide get and set methods.
  * Implement logic within camp class.
  * @author Le Yanzhi
- * @version beta 4
- * @since 2023-11-13
+ * @version beta 5(Overwrote toString() method to support functionalities in Staff class)
+ * @since 2023-11-15
  */
 public class CampInformation {
 
@@ -72,5 +72,11 @@ public class CampInformation {
         System.out.printf("Camp Committee Slots (max 10): %d \n", campCommitteeSlots);
         System.out.printf("Description: %s \n", description);
         System.out.printf("Staff in charge: %s \n", staffInCharge.getUserName());
+    }
+
+    public String toString() {
+        return campName + ", " + startDate + ", " + endDate + ", " + registrationClosingDate + ", " +
+                userGroup + ", " + location + ", " + totalSlots + ", " + campCommitteeSlots + ", " +
+                description + ", " + staffInCharge;
     }
 }
