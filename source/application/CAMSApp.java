@@ -79,7 +79,7 @@ public class CAMSApp {
                 if (loggedInStaff != null) {
                     System.out.println("Staff Login successful!");
                     Utility.redirectingPage();
-                    StaffInterface.handleStaffFunctionalities(loggedInStaff, staffs, camps, students);
+                    StaffInterface.handleStaffFunctionalities(loggedInStaff);
                     break; 
                 } else {
                     System.out.println("Invalid staff credentials. Login failed.");

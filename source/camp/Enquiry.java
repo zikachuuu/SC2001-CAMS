@@ -62,7 +62,7 @@ public class Enquiry {
 
 
 
-    public boolean getActive() {return active ;}
+    public boolean isActive() {return active ;}
     public Camp getCamp() {return camp ;}
     public Student getStudent() {return student ;}
     public String getContent() {return content ;}

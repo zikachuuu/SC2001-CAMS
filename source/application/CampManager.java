@@ -169,4 +169,13 @@ public class CampManager {
             System.out.println("Sorry, no camps are open to you.");
         }
     }
+
+    
+    /**
+     * After a staff create a new camp, call this method to record the camp in the static camps ArrayList
+     * @param camp
+     */
+    public static void recordNewCamp(Camp camp) {
+        CAMSApp.camps.add(camp) ;
+    }   
 }

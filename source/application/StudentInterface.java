@@ -1,9 +1,6 @@
 package source.application;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Iterator;
 
 import source.camp.Camp;
 import source.camp.Enquiry;
@@ -131,6 +128,7 @@ public class StudentInterface {
 
                     try {
                         loggedInStudent.submitEnquiry(campNameToEnquire, content);
+                        System.out.println("Your enquiry has been successfully submitted!");
                     } catch (CampNotFoundException cnfe) {
                         System.out.println ("Sorry, the camp you entered does not exist.") ;
                     } catch (Exception e) {
@@ -146,53 +144,72 @@ public class StudentInterface {
                     break;
 
                 case "8":
-                    ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStudent) ;
-                    boolean have = false ;
-                    int count = 1 ;
+                    ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStudent , true) ;
 
-                    Iterator<Enquiry> itr = enquiries.iterator() ;
-                    while (itr.hasNext()) {
-                        Enquiry en = itr.next() ;
-                        if (en.getReplied() || ! en.getActive()) {
-                            itr.remove();
-                        }
-                    }
-
-                    for (Enquiry enquiry : enquiries) {
-                        System.out.println("Enquiry " + count + ": ");
-                        System.out.println("Camp: " + enquiry.getCamp().getCampInfo().getCampName());
-                        System.out.println("Content: " + enquiry.getContent()) ;
-                        System.out.println();
-                        count++ ;
-                        have = true ;
-                    }
-
-                    if (! have) {
+                    if (enquiries.size() == 0) {
                         System.out.println("You do have any enquiries that you can edit.");
+                        offerReturnToMenuOption();
                         break ;
                     }
 
+                    for (int i = 0 ; i < enquiries.size() ; i++) {
+                        System.out.println("Enquiry " + (i + 1) + ": ");
+                        System.out.println("Camp: " + enquiries.get(i).getCamp().getCampInfo().getCampName());
+                        System.out.println("Content: " + enquiries.get(i).getContent()) ;
+                        System.out.println();
+                    }
+
                     System.out.print("Choose an enquiry that you wish to edit: ") ;
-                    int enquiryChoice = CAMSApp.scanner.nextInt() ;
-                    CAMSApp.scanner.nextLine() ; // clear buffer
+                    String enquiryChoice = CAMSApp.scanner.nextLine() ;
 
                     System.out.print ("Enter the new content of this enquiry: ") ;
                     String newContent = CAMSApp.scanner.nextLine() ;
                     newContent = Utility.replaceCommaWithSemicolon(newContent);
 
                     try {
-                        enquiries.get(enquiryChoice - 1).editEnquiry(loggedInStudent,newContent) ;
+                        enquiries.get(Integer.parseInt(enquiryChoice) - 1).editEnquiry(loggedInStudent,newContent) ;
                         System.out.println("Enquiry successfully updated!") ;
-                    } catch (IndexOutOfBoundsException ioobe) {
-                        System.out.println("Invalid choice");
+                    } 
+                    catch (NumberFormatException | IndexOutOfBoundsException ee) {
+                        System.out.println("Invalid enquiry choice.");
+                    }
+                    catch (Exception e) {
+                        System.out.println("How tf u got here");
                     }
 
                     offerReturnToMenuOption();
                     break;
 
                 case "9":
-                    //todo
-                    System.out.println("U/C");
+                    ArrayList<Enquiry> enquiries2 = EnquiryManager.findAllEnquiry(loggedInStudent , true) ;
+
+                    if (enquiries2.size() == 0) {
+                        System.out.println("You do have any enquiries that you can delete.");
+                        offerReturnToMenuOption();
+                        break ;
+                    }
+
+                    for (int i = 0 ; i < enquiries2.size() ; i++) {
+                        System.out.println("Enquiry " + (i + 1) + ": ");
+                        System.out.println("Camp: " + enquiries2.get(i).getCamp().getCampInfo().getCampName());
+                        System.out.println("Content: " + enquiries2.get(i).getContent()) ;
+                        System.out.println();
+                    }
+
+                    System.out.print("Choose an enquiry that you wish to delete: ") ;
+                    String enquiryChoice2 = CAMSApp.scanner.nextLine() ;
+
+                    try {
+                        enquiries2.get(Integer.parseInt(enquiryChoice2) - 1).deleteEnquiry(loggedInStudent) ;
+                        System.out.println("Enquiry successfully deleted!") ;
+                    } 
+                    catch (NumberFormatException | IndexOutOfBoundsException ee) {
+                        System.out.println("Invalid enquiry choice.");
+                    }
+                    catch (Exception e) {
+                        System.out.println("How tf u got here");
+                    }
+
                     offerReturnToMenuOption();
                     break;
 
@@ -218,11 +235,11 @@ public class StudentInterface {
         boolean innermenu = true;
         while (innermenu) {
             System.out.println("Viewing " + loggedInStudent.getUserName() + "'s camp comittee role.");
+            System.out.println ("You currently have " + loggedInStudent.getCampCommittee().getPoints() + " points.") ;
             System.out.println("Press 1 to view details of the camp you've registered for");
             System.out.println("Press 2 to submit suggestions");
             System.out.println("Press 3 to view and reply to student enquiries");
-            System.out.println("Press 4 to view students registered");
-            System.out.println("Press 5 to generate reports");
+            System.out.println("Press 4 to generate reports");
             System.out.println("Press any other key to exit commitee menu");
             System.out.print ("Enter your choice: ") ;
 
@@ -242,37 +259,60 @@ public class StudentInterface {
                     break;
 
                 case "3":
-                    //todo
+                    ArrayList<Enquiry> enquiries = camp.getEnquiries() ;
+
+                    if (enquiries.size() == 0) {
+                        System.out.println("There are currently no anwsered enquiries regarding this camp.");
+                        offerReturnToMenuOption();
+                        break ;
+                    }
+
+                    for (int i = 0 ; i < enquiries.size() ; i++) {
+                        System.out.println("Enquiry " + (i + 1) + ": ");
+                        System.out.println("Camp: " + enquiries.get(i).getCamp().getCampInfo().getCampName());
+                        System.out.println("Content: " + enquiries.get(i).getContent()) ;
+                        System.out.println();
+                    }
+
+                    System.out.print("Choose an enquiry that you wish to reply: ") ;
+                    String enquiryChoice = CAMSApp.scanner.nextLine() ;
+
+                    System.out.print ("Enter your reply here: ") ;
+                    String reply = CAMSApp.scanner.nextLine() ;
+                    reply = Utility.replaceCommaWithSemicolon(reply);
+
+                    try {
+                        enquiries.get(Integer.parseInt(enquiryChoice) - 1).replyEnquriy(loggedInStudent, reply) ;
+                        System.out.println("Enquiry has been successfully replied!") ;
+                    } 
+                    catch (NumberFormatException | IndexOutOfBoundsException ee) {
+                        System.out.println("Invalid enquiry choice.");
+                    }
+                    catch (Exception e) {
+                        System.out.println("How tf u got here");
+                    }
+
                     offerReturnToInnerMenuOption();
                     break;
 
                 case "4":
-                    //todo
-                    offerReturnToInnerMenuOption();
-                    break;
+                    System.out.println("Press 1 to generate committee members report");
+                    System.out.println("Press 2 to generate attendee members report");
+                    System.out.println("Press any other key to return to the main menu");
+                    String reportChoice = CAMSApp.scanner.nextLine();
+                    switch (reportChoice) {
+                        case "1":
+                            // Generate committee members report
+                            //todo
+                            break;
 
-                case "5":
-                    boolean reportMenu = true;
-                    while (reportMenu) {
-                        System.out.println("Press 1 to generate committee members report");
-                        System.out.println("Press 2 to generate attendee members report");
-                        System.out.println("Press any other key to return to the main menu");
-                        String reportChoice = CAMSApp.scanner.nextLine();
-                        switch (reportChoice) {
-                            case "1":
-                                // Generate committee members report
-                                //todo
-                                break;
+                        case "2":
+                            //attendee reports
+                            //todo
+                            break;  
 
-                            case "2":
-                                //attendee reports
-                                //todo
-                                break;  
-
-                            default:
-                                reportMenu = false;
-                                break;
-                        }
+                        default:
+                            break;
                     }
                     offerReturnToInnerMenuOption();
                     break;
@@ -293,6 +333,7 @@ public class StudentInterface {
             exit = true;
         }
     }
+    
 
     private static void offerReturnToInnerMenuOption() {
         System.out.print("Press any key to continue...");

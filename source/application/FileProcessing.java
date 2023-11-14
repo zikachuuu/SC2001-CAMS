@@ -325,7 +325,7 @@ public class FileProcessing {
     private static void writeEnquiriesToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.ENQUIRIES_FILE_PATH , false))) {
             writer.write("Camp,Student,EnquiryText,Processed,ProcessedBy,Replies\r\n");
-            ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry() ;
+            ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(false) ;
 
             for (Enquiry enquiry : enquiries) {
                 writer.write(

@@ -88,7 +88,7 @@ public class Camp {
 
 
     /**
-     * Print out the information of this camp. This can only be done by the commmittee of this camp or any staff.
+     * Print out the detailed information of this camp. This can only be done by the commmittee of this camp or any staff.
      * @param user The user who attempts to view.
      * @throws NoAccessException If user does not have access to the information.
      */
@@ -104,6 +104,32 @@ public class Camp {
         System.out.println();
         System.out.println("Current number of committees: " + numCommittees);
         System.out.println("Current number of attendees: " + numAttendees);
+
+        if (numCommittees != 0) {
+            System.err.print("Current committee members: ") ;
+            for (Student participant : participants) {
+                if (participant.isCampCommittee(this)) System.out.print (participant.getUserName() + ", ") ;
+            }
+        }
+        if (numAttendees != 0){
+            System.err.print("Current atttendee members: ") ;
+            for (Student participant : participants) {
+                if (participant.isCampAttendee(this)) System.out.print (participant.getUserName() + ", ") ;
+            }
+        }
+    }
+
+
+    /**
+     * Delete this camp by setting active as false. Inactive camp will not be written back to csv.
+     * @param staffInCharge The staff who attempts to delete.
+     * @throws NoAccessException If staff is not the owner of this camp, or if this camp has already been deleted.
+     */
+    public void deleteCamp(Staff staffInCharge) {
+        if (! staffInCharge.equals(campInfo.getStaffInCharge())) throw new NoAccessException("Only the creator of this camp can toggle visibility!") ;
+        if (! active) throw new NoAccessException("Camp has already been deleted!") ;
+
+        active = false ;
     }
 
 

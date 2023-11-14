@@ -3,9 +3,11 @@ package source.user;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import source.application.CampManager;
 import source.application.Utility;
 import source.camp.Camp;
 import source.camp.CampInformation;
+import source.exception.NoAccessException;
 
 public class Staff extends User{
 
@@ -35,25 +37,21 @@ public class Staff extends User{
         
         if (Utility.campExists(campName)) return false ;
         CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this) ;
-        createdCamps.add(new Camp(campInfo));
+        Camp camp = new Camp(campInfo) ;
+        createdCamps.add(camp);
+        CampManager.recordNewCamp(camp);
         return true;
     }
 
 
     /**
-     * (todo) Must also remove the references to this camp in each of the students objects.<p>
-     * Iterate through the list of camps and get the name of the current camp accessed.
-     * If the campName is the same as the one that user entered, remove the camp from createdCamps list.
-     * If the camp is not found at all in the list of createdCamps, failure to delete.
+     * Delete the camp.
+     * @param campName
+     * @throws NoAccessException If staff is not the owner of this camp, or if students have already signed up for this camp. 
      */
-    public boolean deleteCamp (String campName) {
-        for(int i = 0; i < createdCamps.size(); i++) {
-            if(createdCamps.get(i).getCampInfo().getCampName() == campName) {
-                createdCamps.remove(i);
-                return true;
-            }
-        }
-        return false;
+    public void deleteCamp (String campName) {
+        Camp camp = Utility.findCampByName(campName) ;
+        camp.deleteCamp(this);
     }
 
 

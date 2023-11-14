@@ -1,7 +1,6 @@
 package source.user;
 import java.util.ArrayList ;
 
-import source.application.CAMSApp;
 import source.application.CampManager;
 import source.application.EnquiryManager;
 import source.application.Utility;
@@ -224,11 +223,6 @@ public class Student extends User {
      */
     public void viewSubmittedEnquiries() {
         EnquiryManager.viewEnquiry(this);
-    }
-
-
-    public void editEnquiry() {
-
     }
 
 
