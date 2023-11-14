@@ -21,17 +21,21 @@ public class EnquiryManager {
         camp.addEnquiry(student, new Enquiry(camp, student, content));
     }
 
-
-    protected static ArrayList<Enquiry> findAllEnquiry() {
+    
+    /**
+     * FInd all enquries that all students have submitted.
+     * @param notReplied True to only find those that have not replied, False to find all.
+     * @return ArrayList of enquiries.
+     */
+    protected static ArrayList<Enquiry> findAllEnquiry(boolean notReplied) {
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
         
         for (Camp camp : CAMSApp.camps) {
             if (! camp.getActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
-                if(enquiry.getActive()) {
-                    enquiries.add(enquiry) ;
-                }
+                if(! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
+                enquiries.add(enquiry) ;
             }
         }
         return enquiries ;
@@ -41,9 +45,10 @@ public class EnquiryManager {
     /**
      * Find all enquiries that a student has submitted.
      * @param student The student who submitted the enquiry.
+     * @param notReplied True to only find those that have not replied, False to find all.
      * @return ArrayList of enquiries.
      */
-    protected static ArrayList<Enquiry> findAllEnquiry (Student student) {
+    protected static ArrayList<Enquiry> findAllEnquiry (Student student, boolean notReplied) {
 
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
         
@@ -51,18 +56,18 @@ public class EnquiryManager {
             if (! camp.getActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
-                if(enquiry.isSubmittedBy(student) && enquiry.getActive()) {
-                    enquiries.add(enquiry) ;
-                }
+                if (! enquiry.isSubmittedBy(student) || ! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
+                enquiries.add(enquiry) ;
             }
         }
         return enquiries ;
     }
 
 
+
     public static void viewEnquiry (Student student) {
         System.out.println("List of enquiries that you have submitted:\n");
-        ArrayList<Enquiry> enquiries = findAllEnquiry(student) ;
+        ArrayList<Enquiry> enquiries = findAllEnquiry(student , false) ;
 
         if (enquiries.size() == 0) {
             System.out.println("You have not submitted any enquiries.") ;
