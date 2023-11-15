@@ -40,6 +40,7 @@ I mean if you run the code can tell that most of the stuff is working already. S
 1) suggestions is mostly undone (cant ask or answer suggestion also)<br>
 2) staff and staffInterface has one or two methods that that need to be done (minus suggestion) but they can be done real quick.<br>
 3) Not one generate report has been done. This one will prob take the most time. I heard you can have alot of choices with the report, like can filter based on camps or faculty, or sort by camp name or date. Bascially alot of shit need to be done for this one.<br>
+
 Other than that the rest should be working fine I hope. Didnt test it extensively but from what i have tested the program dont break.<br>
 
 
