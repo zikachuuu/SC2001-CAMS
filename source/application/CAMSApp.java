@@ -98,7 +98,13 @@ public class CAMSApp {
         }
         if (loginAttempts == 3) System.out.println("Maximum login attempts reached. Exiting.") ;
         else {
-            System.out.println ("Thank you for using the CAMS system.") ;
+            System.out.println("Please wait, uploading changes to server. Do not close the program...");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println ("Your changes has been saved. Thank you for using the CAMS system.") ;
             FileProcessing.writeDataToFile(); 
         }
         scanner.close();

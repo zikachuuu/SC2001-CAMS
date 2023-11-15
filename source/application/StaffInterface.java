@@ -28,9 +28,9 @@ public class StaffInterface extends UserInterface {
             System.out.println("Press 12 to view and respond to enquiries");
             System.out.println("Press any other key to exit");
             System.out.print("Enter your choice: ");
-
             String choice = CAMSApp.scanner.nextLine() ;
 
+            System.out.println();
             switch (choice) {
                 case "1":
                     // Change password
@@ -57,28 +57,32 @@ public class StaffInterface extends UserInterface {
                         String registrationClosingDateStr = CAMSApp.scanner.nextLine();
                         LocalDate registrationClosingDate = Utility.convertStringToLocalDate(registrationClosingDateStr) ;
 
-                        System.out.println("Which group of students is this camp open to? (Enter a faculty acryonym or'NTU' for all students): ");
+                        System.out.print("Which group of students is this camp open to? (Enter a faculty acryonym or'NTU' for all students): ");
                         String userGroupStr = CAMSApp.scanner.nextLine();
                         Faculty userGroup = Faculty.valueOf(userGroupStr) ;
 
-                        System.out.println("Enter camp location: ");
+                        System.out.print("Enter camp location: ");
                         String location = CAMSApp.scanner.nextLine();
                         location = Utility.replaceCommaWithSemicolon(location) ;
 
-                        System.out.println("Enter total slots (including committee and attendee): ");
+                        System.out.print("Enter total slots (including committee and attendee): ");
                         int totalSlots = CAMSApp.scanner.nextInt();
 
-                        System.out.println("Camp committee slots(max 10)");
+                        System.out.print("Enter camp committee slots (max 10): ");
                         int campCommitteeSlots = CAMSApp.scanner.nextInt();
 
                         CAMSApp.scanner.nextLine(); // clear buffer
-                        System.out.println("Description");
+                        System.out.print("Enter camp description: ");
                         String description = CAMSApp.scanner.nextLine();
                         description = Utility.replaceCommaWithSemicolon(description) ;
 
-                        loggedInStaff.createCamp(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description) ;
-                        System.out.println("Camp successfully created!") ;
-
+                        if (loggedInStaff.createCamp(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description)){
+                            System.out.println("Camp successfully created!") ;
+                        } 
+                        else {
+                            System.out.println("Sorry, there is already a camp with the same name.") ;
+                        }
+                        
                     } catch (DateTimeException dte) {
                         System.out.println("Sorry, unsupported date format. Use yyyy-mm-dd") ;
                     } catch (IllegalArgumentException iae) {
