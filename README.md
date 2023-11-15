@@ -14,7 +14,7 @@ lets say for example student want to register for a camp, so he has the camp nam
 
 Of course not every method has to go though the manager classes. For example if a staff want to view his created camps, he dont have to go though the manager class as he has a arraylist of created camps as attribute, so he can just access that instead. But if he want to view all camps for example, he has to go though the manager class instead of you know like direclty accessing the big camps arraylist.<br>
 
-UserInterface, StudentInterface, StaffInterface:<br>
+<h5>UserInterface, StudentInterface, StaffInterface:</h5>
 They handle the input and output. They ask user for input, call the methods by providing the input as arguments, then print to screen based on the output/exception thrown by the methods. The methods themselves dont do the input and output. The only exception are methods start with "view~". Then these methods will do printing and return nothing, as you can see in student class or staff class etc.<br>
 
 <h5>Utility:</h5>
