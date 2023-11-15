@@ -177,12 +177,14 @@ public class Camp {
             for (Student participant : participants) {
                 if (participant.isCampCommittee(this)) System.out.print (participant.getUserName() + ", ") ;
             }
+            System.out.println() ;
         }
         if (numAttendees != 0){
             System.err.print("Current atttendee members: ") ;
             for (Student participant : participants) {
                 if (participant.isCampAttendee(this)) System.out.print (participant.getUserName() + ", ") ;
             }
+            System.out.println() ;
         }
     }
 
