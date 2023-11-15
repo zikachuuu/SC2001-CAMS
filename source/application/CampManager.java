@@ -11,6 +11,7 @@ import source.exception.InvalidUserGroupException;
 import source.exception.WithdrawnException;
 import source.user.CampAttendee;
 import source.user.Faculty;
+import source.user.Staff;
 import source.user.Student;
 
 
@@ -19,6 +20,37 @@ import source.user.Student;
  * CampsManager intends to fix that by serving as a proxy between students and camps; students only know the camp name and need to go through here to actually access the camp objects.
  */
 public class CampManager {
+
+    /**
+     * Find the camp object using the camp name provided.
+     * @param campName The name of the camp.
+     * @return Camp object.
+     * @throws CampNotFoundException If camp not found for the provided name.
+     */
+    protected static Camp findCampByName(String campName) {
+
+        for (Camp camp : CAMSApp.camps) {
+            if (camp.getCampInfo().getCampName().equals(campName) && camp.isActive())
+                return camp;
+        }
+        throw new CampNotFoundException("Camp not found for " + campName);
+    }
+
+
+    /**
+     * Check if the camp with the provided name already exists.
+     * @param campName The name of the camp.
+     * @return True if camp already exists, false otherwise.
+     */
+    public static boolean campExists(String campName) {
+        try {
+            findCampByName(campName);
+            return true;
+        } catch (CampNotFoundException e) {
+            return false;
+        }
+    }
+
 
     /**
      * Check if student belongs to the camp user group.
@@ -112,7 +144,7 @@ public class CampManager {
      * @throws WithdrawnException 
      */
     public static void addParticipantToCamp (Student student , String campName, boolean committeeRole) {
-        Camp camp = Utility.findCampByName(campName);
+        Camp camp = findCampByName(campName);
 
         if (! checkFaculty(student, camp)) throw new InvalidUserGroupException() ;
         if (checkClashInDate(student, camp)) throw new DateClashException();
@@ -135,7 +167,7 @@ public class CampManager {
      */
 
     public static boolean removeParticipantFromCamp(Student student, String campName) {
-        Camp camp = Utility.findCampByName(campName);
+        Camp camp = findCampByName(campName);
 
         if (! student.isCampAttendee(camp)) return false ;
         camp.withdrawParticipant(student);
@@ -151,15 +183,15 @@ public class CampManager {
      * 1) camp's user group is NTU or matches student's faculty.<p>
      * 2) camp's visibility is set to on.<p>
      * 3) camp is active (not deleted).
-     * @param student
+     * @param student The student who wish to view the open camps.
      */
     public static void viewOpenCamps(Student student) {
         System.out.println("List of camps that are open to you:\n");
         boolean have = false ;
 
         for (Camp camp : CAMSApp.camps) {
-            if (camp.getActive() && checkFaculty(student, camp) && camp.getVisible()) {
-                camp.getCampInfo().printCampInfo();
+            if (camp.isActive() && checkFaculty(student, camp) && camp.isVisible()) {
+                camp.viewCampInfo() ;
                 System.out.println();
                 have = true ;
             }
@@ -172,10 +204,33 @@ public class CampManager {
 
     
     /**
-     * After a staff create a new camp, call this method to record the camp in the static camps ArrayList
-     * @param camp
+     * Print out a list of all camps (detailed camp info).
+     * @param staff The staff who wish to view all the camps.
      */
-    public static void recordNewCamp(Camp camp) {
+    public static void viewAllCamps(Staff staff) {
+        System.out.println("List of all camps avaliable:\n");
+        boolean have = false ;
+
+        for (Camp camp : CAMSApp.camps) {
+            if (camp.isActive()) {
+                camp.viewDetailedCampInfo(staff);
+                System.out.println();
+                have = true ;
+            }
+        }
+
+        if (! have){
+            System.out.println("Sorry, no camps are avaliable yet.");
+        }
+    }
+
+    
+    /**
+     * After a staff create a new camp, call this method to record the camp in the static camps ArrayList
+     * @param staff The staff who wish to record the camp after creating it.
+     * @param camp The newly created camp to record.
+     */
+    public static void recordNewCamp(Staff staff, Camp camp) {
         CAMSApp.camps.add(camp) ;
     }   
 }

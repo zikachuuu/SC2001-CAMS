@@ -78,21 +78,88 @@ public class Camp {
     public ArrayList<Student> getWithdrawnParticipants() {return withdrawnParticipants ;}
     public ArrayList<Enquiry> getEnquiries() {return enquiries ;}
     public ArrayList<Suggestion> getSuggestions() {return suggestions ;}
-    public boolean getVisible() {return visible ;}
+    public boolean isVisible() {return visible ;}
+    public boolean isActive () {return active ;}
 
-    
+
     /**
-     * @return True if camp is still active, false if camp has been deleted.
+     * Add a participant to the camp. This will increment the corresponding counter.
+     * @param student The student to be added into the camp.
+     * @param committeeRole True for camp committee, false for camp attendee.
      */
-    public boolean getActive () {return active ;}
+    public void addParticipant (Student student , boolean committeeRole) {
+        
+        participants.add(student) ;
+        if (committeeRole) numCommittees++ ;
+        else numAttendees++ ;
+    }
 
 
     /**
-     * Print out the detailed information of this camp. This can only be done by the commmittee of this camp or any staff.
+     * Add a participant to the withdrawn list of the camp. <p>
+     * Unlike withdrawParticipant(), this method neither remove the student from the participant list nor decrement the numAttendees counter.
+     * @param student The attendee to be added into the withdrawn list.
+     */
+    public void addWithdrawnParticipant(Student student) {
+        withdrawnParticipants.add(student) ;
+    }
+
+
+    /**
+     * Withdraw an participant from the camp. <p>
+     * Unlike addWithdrawnParticipant(), this method remove the student from the participant list and decrement the numAttendees counter.
+     * @param attendee The attendee to withdraw.
+     */
+    public void withdrawParticipant (Student student) {
+
+        participants.remove(student) ;
+        withdrawnParticipants.add(student) ;
+        numAttendees-- ;
+    }
+
+
+    /**
+     * Add an enquiry to the camp.
+     * @param enquiry
+     */
+    public void addEnquiry (Enquiry enquiry) {
+        enquiries.add(enquiry) ;
+    }
+
+
+    /**
+     * Add a suggestion to the camp.
+     * @param suggestion
+     */
+    public void addSuggestion (Suggestion suggestion) {
+        suggestions.add(suggestion) ;
+    }
+
+
+    /**
+     * Print out the basic information of this camp, which can be done by any user.
+     */
+    public void viewCampInfo() {
+        System.out.printf("Camp Name: %s \n", campInfo.getCampName());
+        System.out.printf("Dates: %s to %s \n", campInfo.getStartDate().toString() , campInfo.getEndDate().toString());
+        System.out.printf("Registration closing date: %s \n", campInfo.getRegistrationClosingDate().toString());
+        System.out.printf("Opened to: %s \n", campInfo.getUserGroup().toString());
+        System.out.printf("Location: %s \n", campInfo.getLocation());
+        System.out.printf("Total slots: %d \n", campInfo.getTotalSlots());
+        System.out.printf("Camp Committee Slots (max 10): %d \n", campInfo.getCampCommitteeSlots());
+        System.out.printf("Description: %s \n", campInfo.getDescription());
+        System.out.printf("Staff in charge: %s \n", campInfo.getStaffInCharge().getUserName());
+
+    }
+
+
+    /**
+     * Print out the detailed information of this camp, which includes the current committee members and attendees. <p>
+     * This can only be done by the commmittee of this camp or any staff.
      * @param user The user who attempts to view.
      * @throws NoAccessException If user does not have access to the information.
      */
-    public void viewCampDetails(User user) {
+    public void viewDetailedCampInfo(User user) {
         if (user instanceof Student)
         {
             Student student = (Student) user ;
@@ -100,7 +167,7 @@ public class Camp {
         }
 
         //print camp details
-        campInfo.printCampInfo();
+        viewCampInfo();
         System.out.println();
         System.out.println("Current number of committees: " + numCommittees);
         System.out.println("Current number of attendees: " + numAttendees);
@@ -150,76 +217,21 @@ public class Camp {
 
 
     /**
-     * Add a participant to the camp. This method is only called by CampManager.addParticipantToCamp().
-     * @param student The student to be added into the camp.
-     * @param committeeRole True for camp committee, false for camp attendee.
-     */
-    public void addParticipant (Student student , boolean committeeRole) {
-        
-        participants.add(student) ;
-        if (committeeRole) numCommittees++ ;
-        else numAttendees++ ;
-    }
-
-
-    /**
-     * Withdraw an participant. This method is only called by CampManager.removeParticipantFromCamp()
-     * @param attendee The attendee to withdraw.
-     */
-    public void withdrawParticipant (Student student) {
-
-        participants.remove(student) ;
-        withdrawnParticipants.add(student) ;
-        numAttendees-- ;
-    }
-
-
-    /**
-     * Add a enquiry. This method is only called by EnquiryManager.addEnquiryToCamp()
-     * @param student
-     * @param enquiry
-     */
-    public void addEnquiry (Student student, Enquiry enquiry) {
-        enquiries.add(enquiry) ;
-    }
-
-
-    /**
-     * Restore a student participant from csv. <p>
-     * @param student
-     * @param active False for withdrawn.
-     */
-    public void restoreParticipant (Student student, boolean active) {
-
-        if (active) participants.add(student) ;
-        else withdrawnParticipants.add(student) ;
-    }
-
-
-    /**
-     * Restore an enquiry from csv.
-     * @param enquiry
-     */
-    public void restoreEnquiry (Enquiry enquiry) {
-        enquiries.add (enquiry) ;
-    }
-
-
-    /**
-     * Restore an suggestion from csv.
-     * @param suggestion
-     */
-    public void restoreSuggestion (Suggestion suggestion) {
-        suggestions.add (suggestion) ;
-    }
-
-
-    /**
-     * Check if 2 camps are the same, using their campName (campName is unique!).
+     * Check if 2 camps are the same, using their campName.
      * @param other The camp to compare with.
      * @return True if same, false otherwise.
      */
     public boolean equals (Camp other) {
-        return campInfo.getCampName() == other.getCampInfo().getCampName() ;
-    }        
+        return campInfo.getCampName().equals(other.getCampInfo().getCampName()) ;
+    }   
+    
+    
+    /**
+     * Check if the camp has the provided campName.
+     * @param campName The camp name to check.
+     * @return True if same, false otherwise.
+     */
+    public boolean equals (String campName) {
+        return campInfo.getCampName().equals(campName) ;
+    }
 }

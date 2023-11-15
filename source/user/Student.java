@@ -63,7 +63,7 @@ public class Student extends User {
      * @return True if student is attending the camp, false otherwise.
      */
     public boolean isAttendingCamp (Camp camp) {
-        return isCampAttendee(camp) || isCampAttendee(camp) ;
+        return isCampAttendee(camp) || isCampCommittee(camp) ;
     }
 
 
@@ -72,7 +72,7 @@ public class Student extends User {
      * @return True if student is a camp committee, false otherwise.
      */
     public boolean isCampCommittee() {
-        return campCommittee != null && campCommittee.getCamp().getActive() ;
+        return campCommittee != null && campCommittee.getCamp().isActive() ;
     }
 
 
@@ -84,7 +84,7 @@ public class Student extends User {
     public boolean isCampCommittee (Camp camp) {
         if (campCommittee == null 
             || ! campCommittee.getCamp().equals(camp) 
-            || ! campCommittee.getCamp().getActive()
+            || ! campCommittee.getCamp().isActive()
         ) return false ;
         return true ;
     }
@@ -97,7 +97,7 @@ public class Student extends User {
      */
     public boolean isCampAttendee (Camp camp) {
         for (CampAttendee attendee : campAttendees) {
-            if (attendee.getCamp().equals(camp) && attendee.getCamp().getActive()) return true ;
+            if (attendee.getCamp().equals(camp) && attendee.getCamp().isActive()) return true ;
         }
         return false ;
     }
@@ -121,7 +121,7 @@ public class Student extends User {
         if (campCommittee != null) {
             System.out.println ("Registered as camp committee: ") ;
             System.out.println();
-            campCommittee.getCamp().getCampInfo().printCampInfo();
+            campCommittee.getCamp().viewCampInfo();
         }
         else {
             System.out.println ("No camps registered as camp committee") ;
@@ -132,7 +132,7 @@ public class Student extends User {
             System.out.println ("Registered as camp attendee: ") ;
             System.out.println();
             for (CampAttendee attendee : campAttendees) {
-                attendee.getCamp().getCampInfo().printCampInfo();
+                attendee.getCamp().viewCampInfo();
                 System.out.println();
             }
         }
@@ -224,20 +224,4 @@ public class Student extends User {
     public void viewSubmittedEnquiries() {
         EnquiryManager.viewEnquiry(this);
     }
-
-
-    /**
-     * Restore the role of a student from csv. <p>
-     * User registerForCamp instead when student want to register for a camp.
-     * @param campName Name of the camp.
-     * @param committeeRole True for committee, false for attendee.
-     * @param points Points (for committee).
-     */
-    public void restoreCampRole (String campName , boolean committeeRole , boolean active, int points) {
-        Camp camp = Utility.findCampByName(campName) ;
-        camp.restoreParticipant(this, active);
-        if (committeeRole) addCampCommittee(camp , 0) ;
-        else if (active) addCampAttendee(camp); 
-    }
-
 }

@@ -17,8 +17,8 @@ public class EnquiryManager {
      * @throws CampNotFoundException
      */
     public static void addEnquiryToCamp(String campName, String content, Student student) {
-        Camp camp = Utility.findCampByName(campName) ;
-        camp.addEnquiry(student, new Enquiry(camp, student, content));
+        Camp camp = CampManager.findCampByName(campName) ;
+        camp.addEnquiry(new Enquiry(camp, student, content));
     }
 
     
@@ -31,7 +31,7 @@ public class EnquiryManager {
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
         
         for (Camp camp : CAMSApp.camps) {
-            if (! camp.getActive()) continue ;
+            if (! camp.isActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
                 if(! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
@@ -53,7 +53,7 @@ public class EnquiryManager {
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
         
         for (Camp camp : CAMSApp.camps) {
-            if (! camp.getActive()) continue ;
+            if (! camp.isActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
                 if (! enquiry.isSubmittedBy(student) || ! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
@@ -64,7 +64,10 @@ public class EnquiryManager {
     }
 
 
-
+    /**
+     * Print out a list of all enquiries that student has submitted (including replied enquiries).
+     * @param student
+     */
     public static void viewEnquiry (Student student) {
         System.out.println("List of enquiries that you have submitted:\n");
         ArrayList<Enquiry> enquiries = findAllEnquiry(student , false) ;

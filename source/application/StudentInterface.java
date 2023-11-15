@@ -13,9 +13,7 @@ import source.exception.MultipleCommitteeRoleException;
 import source.exception.WithdrawnException;
 import source.user.Student;
 
-public class StudentInterface {
-
-    private static boolean exit = false ;
+public class StudentInterface extends UserInterface {
 
     protected static void handleStudentFunctionalities(Student loggedInStudent) {
 
@@ -41,17 +39,7 @@ public class StudentInterface {
             System.out.println();
             switch (choice) {
                 case "1":
-                    System.out.println("Enter your current password:");
-                    String currentPassword = CAMSApp.scanner.nextLine();
-                    System.out.println("Enter a new password:");
-                    String newPassword = CAMSApp.scanner.nextLine();
-                    newPassword = Utility.replaceCommaWithSemicolon(newPassword);
-
-                    if (loggedInStudent.changePassword(currentPassword, newPassword)) {
-                        System.out.println("Password changed successfully");
-                    } else {
-                        System.out.println("Incorrect current password entered. Password unchanged.");
-                    }
+                    handlePasswordChange(loggedInStudent);
                     offerReturnToMenuOption();
                     break;
 
@@ -248,7 +236,7 @@ public class StudentInterface {
             switch (choice) {
                 case "1":
                     System.out.println("\nViewing details of the camp you've registered for as a committee member\n");
-                    camp.viewCampDetails(loggedInStudent);
+                    camp.viewDetailedCampInfo(loggedInStudent);
                     System.out.println();
                     offerReturnToInnerMenuOption();
                     break;
@@ -322,15 +310,6 @@ public class StudentInterface {
                     break;
             }
             Utility.redirectingPage() ;
-        }
-    }
-
-
-    private static void offerReturnToMenuOption () {
-        System.out.print("Press 'M' to go back to the menu or any other key to exit: ");
-        String backChoice = CAMSApp.scanner.nextLine();
-        if (!"M".equalsIgnoreCase(backChoice)) {
-            exit = true;
         }
     }
     

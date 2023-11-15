@@ -1,16 +1,18 @@
 package source.application;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import source.camp.Camp;
+import source.exception.CampNotFoundException;
+import source.exception.NoAccessException;
 import source.user.Faculty;
 import source.user.Staff;
 import source.user.Student;
 
-public class StaffInterface {
-
-    private static boolean exit = false ;
+public class StaffInterface extends UserInterface {
 
     protected static void handleStaffFunctionalities(Staff loggedInStaff) {
 
@@ -35,67 +37,69 @@ public class StaffInterface {
             switch (choice) {
                 case "1":
                     // Change password
-                    System.out.println("Enter your current password:");
-                    String currentPassword = CAMSApp.scanner.nextLine();
-                    System.out.println("Enter a new password:");
-                    String newPassword = CAMSApp.scanner.nextLine();
-                    newPassword = Utility.replaceCommaWithSemicolon(newPassword);
-
-                    if (loggedInStaff.changePassword(currentPassword, newPassword)) {
-                        System.out.println("Password changed successfully");
-                    } else {
-                        System.out.println("Incorrect current password entered. Password unchanged.");
-                    }
+                    handlePasswordChange(loggedInStaff);
                     offerReturnToMenuOption();
                     break;
 
                 case "2":
                     // Add a new camp
-                    System.out.print("Enter camp name:");
-                    String campName = CAMSApp.scanner.nextLine();
+                    try{
+                        System.out.print("Enter camp name:");
+                        String campName = CAMSApp.scanner.nextLine();
+                        campName = Utility.replaceCommaWithSemicolon(campName) ;
 
-                    System.out.print("Enter start date:");
-                    String startDateStr = CAMSApp.scanner.nextLine();
-                    LocalDate startDate = Utility.convertStringToLocalDate(startDateStr) ;
+                        System.out.print("Enter start date (yyyy-mm-dd):");
+                        String startDateStr = CAMSApp.scanner.nextLine();
+                        LocalDate startDate = Utility.convertStringToLocalDate(startDateStr) ;
 
-                    System.out.print("Enter end date:");
-                    String endDateStr = CAMSApp.scanner.nextLine();
-                    LocalDate endDate = Utility.convertStringToLocalDate(endDateStr) ;
+                        System.out.print("Enter end date (yyyy-mm-dd):");
+                        String endDateStr = CAMSApp.scanner.nextLine();
+                        LocalDate endDate = Utility.convertStringToLocalDate(endDateStr) ;
 
-                    System.out.print("Enter registration closing date:");
-                    String registrationClosingDateStr = CAMSApp.scanner.nextLine();
-                    LocalDate registrationClosingDate = Utility.convertStringToLocalDate(registrationClosingDateStr) ;
+                        System.out.print("Enter registration closing date (yyyy-mm-dd):");
+                        String registrationClosingDateStr = CAMSApp.scanner.nextLine();
+                        LocalDate registrationClosingDate = Utility.convertStringToLocalDate(registrationClosingDateStr) ;
 
-                    System.out.println("Which group of students is this camp open to? (Enter a school acryonym or'NTU' for all students): ");
-                    String userGroupStr = CAMSApp.scanner.nextLine();
-                    Faculty userGroup = Faculty.valueOf(userGroupStr) ;
+                        System.out.println("Which group of students is this camp open to? (Enter a faculty acryonym or'NTU' for all students): ");
+                        String userGroupStr = CAMSApp.scanner.nextLine();
+                        Faculty userGroup = Faculty.valueOf(userGroupStr) ;
 
-                    //todo
+                        System.out.println("Enter camp location: ");
+                        String location = CAMSApp.scanner.nextLine();
+                        location = Utility.replaceCommaWithSemicolon(location) ;
 
-                    // System.out.println("Camp location");
-                    // String location = scanner.nextLine();
+                        System.out.println("Enter total slots (including committee and attendee): ");
+                        int totalSlots = CAMSApp.scanner.nextInt();
 
-                    // System.out.println("Total slots");
-                    // int totalSlots = scanner.nextInt();
+                        System.out.println("Camp committee slots(max 10)");
+                        int campCommitteeSlots = CAMSApp.scanner.nextInt();
 
-                    // System.out.println("Camp committee slots(max 10)");
-                    // int campCommitteeSlots = scanner.nextInt();
-                    // scanner.nextLine();
-                    // System.out.println("Description");
-                    // String description = scanner.nextLine();
+                        CAMSApp.scanner.nextLine(); // clear buffer
+                        System.out.println("Description");
+                        String description = CAMSApp.scanner.nextLine();
+                        description = Utility.replaceCommaWithSemicolon(description) ;
+
+                        loggedInStaff.createCamp(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description) ;
+                        System.out.println("Camp successfully created!") ;
+
+                    } catch (DateTimeException dte) {
+                        System.out.println("Sorry, unsupported date format. Use yyyy-mm-dd") ;
+                    } catch (IllegalArgumentException iae) {
+                        System.out.println("Sorry, the entered faculty cannot be found. Try 'SCSE', 'SPMS', 'NTU', etc.");
+                    } catch (InputMismatchException ipe) {
+                        System.out.println("Sorry, you did not enter a integer value for slots input.");
+                    }
 
                     offerReturnToMenuOption();
                     break;
 
                 case "3":
-                    // View all camps
-
+                    loggedInStaff.viewAllCamps();
                     offerReturnToMenuOption();
                     break;
 
                 case "4":
-                    // View your camps
-
+                    loggedInStaff.viewCreatedCamps();
                     offerReturnToMenuOption();
                     break;
 
@@ -106,13 +110,34 @@ public class StaffInterface {
                     break;
 
                 case "6":
-                    // Toggle visibility
+                    System.out.print("Enter the name of the camp you wish to toggle visibility (visible <-> unvisible): ") ;
+                    String campName = CAMSApp.scanner.nextLine() ;
 
+                    try {
+                        boolean newVisibility = loggedInStaff.toggleVisibility(campName) ;
+                        System.out.printf("Camp's visibility has been set from %s to %s.\n" , 
+                            (newVisibility ? "unvisible" : "visible") ,
+                            (newVisibility ? "visible" : "unvisible")
+                        );
+
+                    } catch (CampNotFoundException cnfe) {
+                        System.out.println("Sorry, the camp you entered does not exist.");
+                    } catch (NoAccessException nae) {
+                        System.out.println("Sorry, you cannot toggle the visibility of camps that already have students signed up.");
+                    }
                     offerReturnToMenuOption();
                     break;
-                case "7":
-                    // Delete a camp
 
+                case "7":
+                    System.out.print("Enter the name of the camp you wish to delete: ") ;
+                    String campName2 = CAMSApp.scanner.nextLine() ;
+
+                    try {
+                        loggedInStaff.deleteCamp(campName2);
+                        System.out.println("Camp successfully deleted!");
+                    } catch (CampNotFoundException cnfe) {
+                        System.out.println("Sorry, the camp you entered does not exist.");
+                    }
                     offerReturnToMenuOption();
                     break;
 
@@ -148,14 +173,5 @@ public class StaffInterface {
             Utility.redirectingPage();
         }
     }
-
-    private static void offerReturnToMenuOption() {
-        System.out.print("Press 'M' to go back to the menu or any other key to exit: ");
-        String backChoice = CAMSApp.scanner.nextLine();
-        if (!"M".equalsIgnoreCase(backChoice)) {
-            exit = true;
-        }
-    }
-
 
 }

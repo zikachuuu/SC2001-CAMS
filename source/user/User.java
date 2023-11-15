@@ -44,6 +44,16 @@ public class User {
      * @return True if same user, false otherwise.
      */
     public boolean equals (User other) {
-        return this.userId == other.getUserId() ;
+        return this.userId.equals(other.getUserId()) ;
+    }
+
+
+    /**
+     * Check if the user has the provided UserId.
+     * @param userId
+     * @return True if same user, false otherwise.
+     */
+    public boolean equals (String userId) {
+        return this.userId.equals(userId) ;
     }
 }

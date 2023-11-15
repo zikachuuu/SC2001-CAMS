@@ -3,8 +3,6 @@ package source.application;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-import source.camp.Camp;
-import source.exception.CampNotFoundException;
 import source.exception.UserNotFoundException;
 import source.user.Staff;
 import source.user.Student;
@@ -38,36 +36,6 @@ public class Utility {
             e.printStackTrace();
         }
         clearConsole() ;
-    }
-    
-
-    /**
-     * Find the camp object using the camp name provided.
-     * @param campName The name of the camp.
-     * @return Camp object.
-     * @throws CampNotFoundException If camp not found for the provided name.
-     */
-    public static Camp findCampByName(String campName) {
-
-        for (Camp camp : CAMSApp.camps) {
-            if (camp.getCampInfo().getCampName().equals (campName) && camp.getActive()) return camp ;
-        }
-        throw new CampNotFoundException("Camp not found for " + campName) ;
-    }
-
-    
-    /**
-     * Check if the camp with the provided name already exists.
-     * @param campName The name of the camp.
-     * @return True if camp already exists, false otherwise.
-     */
-    public static boolean campExists (String campName) {
-        try {
-            findCampByName(campName) ;
-            return true ;
-        } catch (CampNotFoundException e) {
-            return false ;
-        }
     }
 
 

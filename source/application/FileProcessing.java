@@ -20,7 +20,6 @@ import source.user.User;
 
 public class FileProcessing {
 
-
     public static void readDataFromFile () {
         readStaffsFromFile() ;
         readCampsFromFile() ;
@@ -28,6 +27,7 @@ public class FileProcessing {
         readEnquiriesFromFile() ;
         readSuggestionsFromFile() ;
     }
+
 
     /**
      * Read from CAMSApp.STAFF_FILE_PATH to generate the staff arrayList. <p> 
@@ -97,8 +97,8 @@ public class FileProcessing {
                     String location = data[5].trim();
                     int totalSlots = Integer.parseInt(data[6].trim());
                     int campCommitteeSlots = Integer.parseInt(data[7].trim());
-                    int numAttendees = Integer.parseInt(data[8].trim());
-                    int numCommittees = Integer.parseInt(data[9].trim()) ;
+                    int numAttendees = 0 ;
+                    int numCommittees = 0 ; // they will be incremented later by restoreParticipant()
                     String description = data[10].trim();
 
                     String staffInChargeUserId = data[11].trim();
@@ -111,7 +111,7 @@ public class FileProcessing {
                     CAMSApp.camps.add(camp) ;
                     
                     // Add the camp to the list of created camps in that staff
-                    staffInCharge.restoreCreatedCamp(camp);
+                    restoreCreatedCamp(staffInCharge, camp);
 
                 } else {
                     System.out.println("Invalid data format in the camp file: " + line);
@@ -172,7 +172,7 @@ public class FileProcessing {
                     int points = Integer.parseInt(data[4].trim());
 
                     Student student = Utility.findStudentByUserId(studentId) ;
-                    student.restoreCampRole(campName, isCommittee, active , points);
+                    restoreCampRole(student, CampManager.findCampByName(campName), isCommittee, active, points);
                     
                 } else {
                     System.out.println("Invalid data format in the file: " + line);
@@ -203,12 +203,12 @@ public class FileProcessing {
                     String processedBy = data[4].trim();
                     String replies = data[5].trim() ;
 
-                    Camp camp = Utility.findCampByName(campName) ;
+                    Camp camp = CampManager.findCampByName(campName) ;
                     Student student = Utility.findStudentByUserId(studentId) ;
                     User user ;
                     if (processed) user = Utility.findUserByUserId(processedBy) ;
                     else user = null ;
-                    camp.restoreEnquiry(new Enquiry(camp, student, enquiriesText , processed , user , replies));
+                    restoreEnquiry(camp , new Enquiry(camp, student, enquiriesText , processed , user , replies));
 
                 } else {
                     System.out.println("Invalid data format in the camp file: " + line);
@@ -236,15 +236,75 @@ public class FileProcessing {
                     String suggestionsText = data[2].trim();
                     boolean approvalState = Boolean.parseBoolean(data[3].trim());
 
-                    Camp camp = Utility.findCampByName(campName) ;
+                    Camp camp = CampManager.findCampByName(campName) ;
                     Student student = Utility.findStudentByUserId(studentId) ;
-                    camp.restoreSuggestion(new Suggestion(camp, student, suggestionsText, approvalState));
+                    restoreSuggestion(camp , new Suggestion(camp, student, suggestionsText, approvalState));
                 }
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     * Restore a previously created camps back to the staff's createdCamps ArrayList.
+     * @param staff
+     * @param camp
+     */
+    private static void restoreCreatedCamp (Staff staff , Camp camp) {
+        staff.addCreatedCamps(camp);
+    }
+
+
+    /**
+     * Restore a previous camp role of a student.
+     * @param student
+     * @param camp
+     * @param committeeRole True for committee, false for attendee.
+     * @param active True for active role, false for withdrawn role.
+     * @param points Points (for committee).
+     */
+    private static void restoreCampRole (Student student , Camp camp , boolean committeeRole , boolean active , int points) {
+        
+        restoreParticipant(camp, student, committeeRole, active);
+        if (committeeRole) student.addCampCommittee(camp , 0) ;
+        else if (active) student.addCampAttendee(camp); 
+    }
+
+
+    /**
+     * Restore a previous participant back into a camp.
+     * @param camp
+     * @param student
+     * @param committeeRole True for committee, false for attendee.
+     * @param active True if student is currently in camp, false if student has withdrawn.
+     */
+    private static void restoreParticipant(Camp camp, Student student, boolean committeeRole , boolean active) {
+        if (active) camp.addParticipant(student, committeeRole); 
+        else camp.addWithdrawnParticipant(student);
+    }
+
+
+    /**
+     * Restore a previous enquiry back to a camp.
+     * @param camp
+     * @param enquiry
+     */
+    private static void restoreEnquiry(Camp camp, Enquiry enquiry) {
+        camp.addEnquiry(enquiry);
+    }
+
+
+    /**
+     * Restore a previous suggestion back to a camp.
+     * @param camp
+     * @param suggestion
+     */
+    private static void restoreSuggestion(Camp camp, Suggestion suggestion) {
+        camp.addSuggestion(suggestion);
+    }
+
 
     protected static void writeDataToFile() {
         writeStaffsToFile() ;
@@ -253,6 +313,7 @@ public class FileProcessing {
         writeEnquiriesToFile();
         writeSuggestionsToFiles();
     }
+
 
     private static void writeStaffsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.STAFF_FILE_PATH, false))) {
@@ -273,6 +334,7 @@ public class FileProcessing {
 
     }
 
+
     private static void writeCampsToFile() {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.CAMP_FILE_PATH, false))) {
@@ -280,7 +342,7 @@ public class FileProcessing {
             
             for (Camp camp : CAMSApp.camps) {
                 // Write each camp's details to the file
-                if (! camp.getActive()) continue ;
+                if (! camp.isActive()) continue ;
 
                 writer.write(
                     camp.getCampInfo().getCampName() + "," + 
@@ -295,7 +357,7 @@ public class FileProcessing {
                     camp.getNumCommittees() + "," +
                     camp.getCampInfo().getDescription() + "," +
                     camp.getCampInfo().getStaffInCharge().getUserId()+ "," +
-                    (camp.getVisible() == true ? "visible" : "unvisible" )
+                    (camp.isVisible() == true ? "visible" : "unvisible" )
                 ) ;
                 writer.newLine();
             }
@@ -303,6 +365,7 @@ public class FileProcessing {
             e.printStackTrace();
         }
     }
+
 
     private static void writeStudentsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.STUDENT_FILE_PATH, false))) {
@@ -322,6 +385,7 @@ public class FileProcessing {
         }
     }
 
+    
     private static void writeEnquiriesToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.ENQUIRIES_FILE_PATH , false))) {
             writer.write("Camp,Student,EnquiryText,Processed,ProcessedBy,Replies\r\n");
@@ -344,6 +408,7 @@ public class FileProcessing {
         }
     }
 
+
     private static void writeSuggestionsToFiles() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.SUGGESTIONS_FILE_PATH , false))) {
             writer.write("Camp,Student,Suggestion,Approved\r\n");
@@ -363,6 +428,7 @@ public class FileProcessing {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Extract out the userId from the email provided. UserId is the part before '@' 

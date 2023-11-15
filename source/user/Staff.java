@@ -7,6 +7,7 @@ import source.application.CampManager;
 import source.application.Utility;
 import source.camp.Camp;
 import source.camp.CampInformation;
+import source.exception.CampNotFoundException;
 import source.exception.NoAccessException;
 
 public class Staff extends User{
@@ -18,6 +19,10 @@ public class Staff extends User{
         super (userId , userName , faculty, password) ;
         createdCamps = new ArrayList<Camp>() ;
     }
+
+
+    public ArrayList<Camp> getCreatedCamps() {return createdCamps ;}
+    public void addCreatedCamps(Camp camp) {createdCamps.add(camp) ;}
 
 
     /**
@@ -35,11 +40,11 @@ public class Staff extends User{
      */
     public boolean createCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
         
-        if (Utility.campExists(campName)) return false ;
+        if (CampManager.campExists(campName)) return false ;
         CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this) ;
         Camp camp = new Camp(campInfo) ;
         createdCamps.add(camp);
-        CampManager.recordNewCamp(camp);
+        CampManager.recordNewCamp(this, camp);
         return true;
     }
 
@@ -47,11 +52,17 @@ public class Staff extends User{
     /**
      * Delete the camp.
      * @param campName
-     * @throws NoAccessException If staff is not the owner of this camp, or if students have already signed up for this camp. 
+     * @throws CampNotFoundException If camp name is not found or camp has already been deleted.
      */
     public void deleteCamp (String campName) {
-        Camp camp = Utility.findCampByName(campName) ;
-        camp.deleteCamp(this);
+
+        for (Camp camp : createdCamps) {
+            if (camp.equals(campName) && camp.isActive()) {
+                camp.deleteCamp(this);
+                return ;
+            }
+        }
+        throw new CampNotFoundException() ;
     }
 
 
@@ -59,27 +70,43 @@ public class Staff extends User{
      * Iterate throught all the camps in createdCamps list, and display camp details to the command line interface.
      */
     public void viewCreatedCamps () {
+
+        System.out.println("List of camps that you have created:\n");
+
+        if (createdCamps.size() == 0) {
+            System.out.println("You have yet to create any camps.");
+            return ;
+        }
+
         for(int i = 0; i < createdCamps.size(); i++) {
-            createdCamps.get(i).viewCampDetails(this) ;
+            createdCamps.get(i).viewDetailedCampInfo(this) ;
             System.out.println();
         }
     }
 
     
     /**
-     * (Todo) View all camps (including those created by other staffs)
+     * Print out a list of all active camps (including those created by other staffs)
      */
     public void viewAllCamps() {
-
+        CampManager.viewAllCamps(this);
     }
 
-
+    
     /**
-     * Restore a previously created camp from csv. <p>
-     * Use createCamp() instead when the staff want to create a new camp.
-     * @param camp
+     * Toggle the visibility of the camp (visible <-> not visible).
+     * @param campName
+     * @return The new visibility of the camp.
+     * @throws CampNotFoundException If no active camp found for the given camp name.
+     * @throws NoAccessException If students have already signed up for this camp.
      */
-    public void restoreCreatedCamp (Camp camp) {
-        createdCamps.add(camp) ;
+    public boolean toggleVisibility (String campName) {
+        for (Camp camp : createdCamps) {
+            if (! camp.equals(campName)) continue ;
+            
+            if (! camp.isActive()) throw new CampNotFoundException() ;
+            return camp.toggleVisibility(this) ;
+        }
+        throw new CampNotFoundException() ;
     }
 }
