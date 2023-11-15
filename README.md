@@ -1,7 +1,7 @@
 # SC2001-CAMS
 
 updated 15/11/23 <br>
-some design considerations: <br>
+some design considerations: (I did the latest changes on my yanzhi branch cos theres new codes on main branch that i dw to overwrite yet) <br>
 
 <h5>CAMSApp:</h5>
 This is where the entire program starts. The most important thing here is the 3 arraylist: staffs, camps, students. They are set to protected so only other classes in application package can access them. This means that outside classes such as staff and students cant directly access them. Youll see later how they can be accessed. Anyway at the start of the program CAMSApp calls FileProcessing.readDataFromFile() to populate the above 3 arraylist with objects, and end the end of the program these objects will be recorded back to the csv via FileProcessing.writeDataToFile().<br>
