@@ -3,11 +3,6 @@ package source.application;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-import source.exception.UserNotFoundException;
-import source.user.Staff;
-import source.user.Student;
-import source.user.User;
-
 
 /**
  * Utility class to provide commonly used static methods for all other classes. 
