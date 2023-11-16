@@ -168,7 +168,6 @@ public class Camp {
 
         //print camp details
         viewCampInfo();
-        System.out.println();
         System.out.println("Current number of committees: " + numCommittees);
         System.out.println("Current number of attendees: " + numAttendees);
 

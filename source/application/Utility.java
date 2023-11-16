@@ -96,9 +96,13 @@ public class Utility {
      * @throws DateTimeException If string date provided is of the wrong format.
      */
     public static LocalDate convertStringToLocalDate(String date) {
-        String[] dateSplitted = date.split("-") ;
-        LocalDate newDate = LocalDate.of (Integer.valueOf(dateSplitted[0]) , Integer.valueOf(dateSplitted[1]) , Integer.valueOf(dateSplitted[2])) ;
-        return newDate ;
+        try {
+            String[] dateSplitted = date.split("-") ;
+            LocalDate newDate = LocalDate.of (Integer.valueOf(dateSplitted[0].length() == 4 ? dateSplitted[0] : "-1") , Integer.valueOf(dateSplitted[1]) , Integer.valueOf(dateSplitted[2])) ;
+            return newDate ;
+        } catch (Exception e) {
+            throw new DateTimeException(date) ;
+        }
     }
 
 

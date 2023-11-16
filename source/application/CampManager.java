@@ -25,7 +25,7 @@ public class CampManager {
      * Find the camp object using the camp name provided.
      * @param campName The name of the camp.
      * @return Camp object.
-     * @throws CampNotFoundException If camp not found for the provided name.
+     * @throws CampNotFoundException If camp not found for the provided name (for example camp is deleted).
      */
     protected static Camp findCampByName(String campName) {
 
@@ -128,15 +128,16 @@ public class CampManager {
     /**
      * Add student to a camp, and create the corresponding role under student. <p>
      * This method checks: <p>
-     * 1) student's faculty belongs to the user group of the camp <p>
-     * 2) student has no clash in dates (as well as not already signed up for this camp) <p>
-     * 3) registration deadline has not pass yet <p>
-     * 4) camp still has slots left <p>
-     * 5) student did not withdraw from this camp before <p>
+     * 1) camp is set to visible <p>
+     * 2) student's faculty belongs to the user group of the camp <p>
+     * 3) student has no clash in dates (as well as not already signed up for this camp) <p>
+     * 4) registration deadline has not pass yet <p>
+     * 5) camp still has slots left <p>
+     * 6) student did not withdraw from this camp before <p>
      * Corresponding exception will be thrown if there is any error. No exceptions means student is sucessfully registered. <p>
      * @param campName Name of the camp.
      * @param committeeRole True for committee, false for attendee.
-     * @throws CampNotFoundException 
+     * @throws CampNotFoundException If camp name provided is invalid, camp is deleted, or camp is set to unvisible.
      * @throws InvalidUserGroupException
      * @throws DateClashException
      * @throws DeadlineOverException 
@@ -146,6 +147,7 @@ public class CampManager {
     public static void addParticipantToCamp (Student student , String campName, boolean committeeRole) {
         Camp camp = findCampByName(campName);
 
+        if (! camp.isVisible()) throw new CampNotFoundException() ;
         if (! checkFaculty(student, camp)) throw new InvalidUserGroupException() ;
         if (checkClashInDate(student, camp)) throw new DateClashException();
         if (checkDeadlinePassed(camp)) throw new DeadlineOverException() ;
