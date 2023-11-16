@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import source.application.CampManager;
-import source.application.Utility;
 import source.camp.Camp;
 import source.camp.CampInformation;
 import source.exception.CampNotFoundException;
@@ -37,6 +36,7 @@ public class Staff extends User{
      * @param campCommitteeSlots
      * @param description
      * @return True if successfully created, false if there is already a camp with the same camp name.
+     * @throws ExceedMaximumException
      */
     public boolean createCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
         
@@ -62,6 +62,32 @@ public class Staff extends User{
                 return ;
             }
         }
+        throw new CampNotFoundException() ;
+    }
+
+
+    /**
+     * Edit the details of a camp. <p>
+     * @param campName
+     * @param startDate
+     * @param endDate
+     * @param registrationClosingDate
+     * @param userGroup
+     * @param location
+     * @param totalSlots
+     * @param campCommitteeSlots
+     * @param description
+     * @throws ExceedMaximumException
+     * @throws CampNotFoundException If no camp with camp name can be found under this staff.
+     */
+    public void editCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
+        for (Camp camp : createdCamps) {
+            if (! camp.equals(campName)) continue ;
+
+            CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this) ;
+            camp.setCampInfo(this, campInfo);
+            return ;
+        }   
         throw new CampNotFoundException() ;
     }
 

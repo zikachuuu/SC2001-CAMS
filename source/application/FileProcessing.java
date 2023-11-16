@@ -102,7 +102,7 @@ public class FileProcessing {
                     String description = data[10].trim();
 
                     String staffInChargeUserId = data[11].trim();
-                    Staff staffInCharge = Utility.findStaffByUserId (staffInChargeUserId) ;
+                    Staff staffInCharge = UserManager.findStaffByUserId (staffInChargeUserId) ;
 
                     boolean visible = data[12].trim().equals("visible"); 
 
@@ -171,7 +171,7 @@ public class FileProcessing {
                     boolean active = data[3].trim().equalsIgnoreCase("active");
                     int points = Integer.parseInt(data[4].trim());
 
-                    Student student = Utility.findStudentByUserId(studentId) ;
+                    Student student = UserManager.findStudentByUserId(studentId) ;
                     restoreCampRole(student, CampManager.findCampByName(campName), isCommittee, active, points);
                     
                 } else {
@@ -204,9 +204,9 @@ public class FileProcessing {
                     String replies = data[5].trim() ;
 
                     Camp camp = CampManager.findCampByName(campName) ;
-                    Student student = Utility.findStudentByUserId(studentId) ;
+                    Student student = UserManager.findStudentByUserId(studentId) ;
                     User user ;
-                    if (processed) user = Utility.findUserByUserId(processedBy) ;
+                    if (processed) user = UserManager.findUserByUserId(processedBy) ;
                     else user = null ;
                     restoreEnquiry(camp , new Enquiry(camp, student, enquiriesText , processed , user , replies));
 
@@ -237,7 +237,7 @@ public class FileProcessing {
                     boolean approvalState = Boolean.parseBoolean(data[3].trim());
 
                     Camp camp = CampManager.findCampByName(campName) ;
-                    Student student = Utility.findStudentByUserId(studentId) ;
+                    Student student = UserManager.findStudentByUserId(studentId) ;
                     restoreSuggestion(camp , new Suggestion(camp, student, suggestionsText, approvalState));
                 }
             }

@@ -83,6 +83,18 @@ public class Camp {
 
 
     /**
+     * Update the camp information. This can only be done by the creator of this camp.
+     * @param staff The staff who attempts to updat the camp information.
+     * @param newCampInfo
+     * @throws NoAccessException If staff is not the creator of this camp.
+     */
+    public void setCampInfo(Staff staff, CampInformation newCampInfo) {
+        if (! campInfo.getStaffInCharge().equals(staff)) throw new NoAccessException() ;
+        this.campInfo = newCampInfo ;
+    }
+
+
+    /**
      * Add a participant to the camp. This will increment the corresponding counter.
      * @param student The student to be added into the camp.
      * @param committeeRole True for camp committee, false for camp attendee.

@@ -2,6 +2,8 @@ package source.camp;
 
 import java.time.LocalDate;
 
+import source.exception.DateAfterDateException;
+import source.exception.ExceedMaximumException;
 import source.user.Faculty ;
 import source.user.Staff;
 
@@ -27,7 +29,23 @@ public class CampInformation {
     private Staff staffInCharge ;
 
 
+    /**
+     * Create a new camp information object.
+     * @param campName
+     * @param startDate
+     * @param endDate
+     * @param registrationClosingDate
+     * @param userGroup
+     * @param location
+     * @param totalSlots
+     * @param campCommitteeSlots
+     * @param description
+     * @param staffInCharge
+     * @throws ExceedMaximumException If camp committee slots is larger than 10 or total slots.
+     */
     public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge) {
+
+        if (campCommitteeSlots > 10 || campCommitteeSlots > totalSlots) throw new ExceedMaximumException() ;
 
         this.campName = campName ;
         this.startDate = startDate ;
