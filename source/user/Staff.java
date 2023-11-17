@@ -1,9 +1,7 @@
 package source.user;
 
-import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import source.application.CampManager;
 import source.camp.Camp;
@@ -29,7 +27,7 @@ public class Staff extends User{
         createdCamps = new ArrayList<Camp>() ;
     }
 
-    
+
     /**
      * the vanilla methods, returned array list includes deleted cammps as well
      * @return
