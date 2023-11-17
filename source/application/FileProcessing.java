@@ -12,8 +12,6 @@ import source.camp.Camp;
 import source.camp.CampInformation;
 import source.camp.Enquiry;
 import source.camp.Suggestion;
-import source.user.CampAttendee;
-import source.user.CampCommittee;
 import source.user.Faculty;
 import source.user.Student;
 import source.user.Staff;
@@ -270,7 +268,7 @@ public class FileProcessing {
     private static void restoreCampRole (Student student , Camp camp , boolean committeeRole , boolean active , int points) {
         
         restoreParticipant(camp, student, committeeRole, active);
-        if (committeeRole) student.addCampCommittee(camp , 0) ;
+        if (committeeRole) student.addCampCommittee(camp , points) ;
         else if (active) student.addCampAttendee(camp); 
     }
 
