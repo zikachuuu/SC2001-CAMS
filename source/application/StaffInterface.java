@@ -1,16 +1,24 @@
 package source.application;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
 
 import source.camp.Camp;
 import source.camp.Enquiry;
 import source.camp.Suggestion;
 import source.exception.* ;
+import source.user.CampCommittee;
 import source.user.Faculty;
 import source.user.Staff;
+import source.user.Student;
+import source.application.UserManager;
 
 public class StaffInterface extends UserInterface {
 
@@ -74,7 +82,7 @@ public class StaffInterface extends UserInterface {
                     break;
 
                 case "8":
-
+                    generateCommitteeMembersReportAsStaff();
                     offerReturnToMenuOption();
                     break;
 
@@ -386,6 +394,45 @@ public class StaffInterface extends UserInterface {
         } 
         catch (NumberFormatException | IndexOutOfBoundsException ee) {
             System.out.println("Invalid enquiry choice.");
+        }
+    }
+
+    private static void generateCommitteeMembersReportAsStaff() {
+        //Scanner scanner = new Scanner(System.in);
+
+        //System.out.println("Enter the name of the camp for which you want to generate a committee members report:");
+        //String targetCampName = scanner.nextLine();
+
+        String filePath =  "report//committee_report.csv";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write("Student ID,Student Email,Student UserName, Points");
+            writer.newLine();
+
+            for (Camp camp : CAMSApp.camps) {
+                    String campName = camp.getCampInfo().getCampName();
+
+                    System.out.println("List of committee members registered for: " + campName);
+
+                    for (Student students: CAMSApp.students) {
+                        //if (students.getCampCommittee().getCamp().getCampInfo().getCampName().equalsIgnoreCase(campName) &&
+                        //        students.isCampCommittee()) {
+                            String studentId = students.getUserId();
+
+                            Student student = UserManager.findStudentByUserId(studentId);
+
+
+                                writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName()+ "," + student.getCampCommittee().getPoints());
+                                writer.newLine();
+
+                        }
+
+                }
+
+
+            System.out.println("Committee members report generated successfully. File: "+ filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
