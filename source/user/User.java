@@ -1,7 +1,5 @@
 package source.user;
 
-import source.exception.NoAccessException;
-
 /**
  * Represents a user. User is the parent class of Student and Staff (Inheritance).
  * @author Le Yanzhi, Florian Goering
