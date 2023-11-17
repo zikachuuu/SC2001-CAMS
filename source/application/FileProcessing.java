@@ -403,6 +403,7 @@ public class FileProcessing {
                         "active," +
                         (student.isCampCommittee(camp) ? student.getCampCommittee().getPoints() : "0") 
                     );
+                    writer.newLine();
                 }
 
                 for (Student student : camp.getWithdrawnParticipants()) {
@@ -413,8 +414,9 @@ public class FileProcessing {
                         "withdrawn," +
                         (student.isCampCommittee(camp) ? student.getCampCommittee().getPoints() : "0") 
                     );
+                    writer.newLine();
                 }
-                writer.newLine();
+
             }
         } catch (IOException e) {
             e.printStackTrace();
