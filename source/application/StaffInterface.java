@@ -78,7 +78,7 @@ public class StaffInterface extends UserInterface {
                     break;
 
                 case "8":
-                    generateCommitteeMembersReportAsStaff();
+                    committeePerformanceReport(loggedInStaff);
                     offerReturnToMenuOption();
                     break;
 
@@ -422,5 +422,41 @@ public class StaffInterface extends UserInterface {
             e.printStackTrace();
         }
     }
+
+       private static void committeePerformanceReport(Staff loggedInStaff)
+   {
+	   ArrayList<Camp> camps = loggedInStaff.getCreatedCamps();
+	   File file = new File("data//" + LocalDate.now() + "_PerformanceReport.csv");
+	   if (!file.exists())
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	   try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+           writer.write("CommitteeMemberName, StudentID, CampName, Points \r\n");
+           
+           for (Camp camp : camps) {
+               // Write each camp's details to the file
+               if (! camp.isActive()) continue ;
+               ArrayList<Student> students = camp.getParticipants();
+               for(Student student: students) {
+        	   // write only camp committee member's info
+            	   if(student.isCampCommittee()) { 
+               
+	            	   writer.write(
+	            		   student.getUserName() + "," +
+	            		   student.getUserId() + "," +
+	            		   camp.getCampInfo().getCampName() + "," +
+	            		   student.getCampCommittee().getPoints()
+	            		) ;
+            	   		writer.newLine();
+            	   }
+               }
+           }
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
 
 }
