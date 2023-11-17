@@ -1,4 +1,5 @@
 Name,CampName, Role, Status, Points
-YCHERN,SCSE 2023 Interstellar,Attendee,active,0
-YCHERN,AFA2023,Attendee,active,0
-DL007,AFA2023,Committee,active,0
+YCHERN,SCSE 2023 Interstellar,attendee,active,0
+YCHERN,AFA2023,attendee,active,0
+DL007,AFA2023,committee,active,0
+KOH1,ADM,committee,active,0
