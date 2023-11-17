@@ -10,7 +10,6 @@ import source.camp.Camp;
  */
 public class CampCommittee extends CampRole {
 
-
     private int points;
 
     /**

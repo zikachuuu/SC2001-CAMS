@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import source.camp.Camp;
 import source.camp.Enquiry;
 import source.exception.CampNotFoundException;
+import source.user.Staff;
 import source.user.Student;
 
 public class EnquiryManager {
@@ -17,8 +18,8 @@ public class EnquiryManager {
      * @throws CampNotFoundException
      */
     public static void addEnquiryToCamp(String campName, String content, Student student) {
-        Camp camp = Utility.findCampByName(campName) ;
-        camp.addEnquiry(student, new Enquiry(camp, student, content));
+        Camp camp = CampManager.findCampByName(campName) ;
+        camp.addEnquiry(new Enquiry(camp, student, content));
     }
 
     
@@ -31,10 +32,10 @@ public class EnquiryManager {
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
         
         for (Camp camp : CAMSApp.camps) {
-            if (! camp.getActive()) continue ;
+            if (! camp.isActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
-                if(! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
+                if(! enquiry.isActive() || (notReplied && enquiry.isReplied())) continue ;
                 enquiries.add(enquiry) ;
             }
         }
@@ -53,10 +54,10 @@ public class EnquiryManager {
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
         
         for (Camp camp : CAMSApp.camps) {
-            if (! camp.getActive()) continue ;
+            if (! camp.isActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
-                if (! enquiry.isSubmittedBy(student) || ! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
+                if (! enquiry.isSubmittedBy(student) || ! enquiry.isActive() || (notReplied && enquiry.isReplied())) continue ;
                 enquiries.add(enquiry) ;
             }
         }
@@ -64,7 +65,32 @@ public class EnquiryManager {
     }
 
 
+    /**
+     * Find all enquiries regarding camps under the provided staff.
+     * @param staff
+     * @param notReplied True to only find enquiries that have not been replied, false to find all.
+     * @return ArrayList of enquiries.
+     */
+    protected static ArrayList<Enquiry> findAllEnquiry (Staff staff, boolean notReplied) {
+        ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
 
+        for (Camp camp : staff.getCreatedCamps()) {
+            if (! camp.isActive()) continue ;
+
+            for (Enquiry enquiry : camp.getEnquiries()) {
+                if (! enquiry.isActive() || (notReplied && enquiry.isReplied())) continue ;
+                enquiries.add(enquiry) ;
+            }
+        }
+
+        return enquiries ;
+    }
+
+
+    /**
+     * Print out a list of all enquiries that student has submitted (including replied enquiries).
+     * @param student
+     */
     public static void viewEnquiry (Student student) {
         System.out.println("List of enquiries that you have submitted:\n");
         ArrayList<Enquiry> enquiries = findAllEnquiry(student , false) ;

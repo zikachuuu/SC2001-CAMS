@@ -21,8 +21,8 @@ public class Suggestion {
     private Camp camp;
     private Student student;
     private String content;
-
     private boolean approved;
+
 
     /**
      * Creates a new suggestion from the camp committee.
@@ -39,7 +39,6 @@ public class Suggestion {
     }
 
 
-
     /**
      * Creates a suggestion from the database with all the information provided.
      * Active is default to true as deleted suggestions should not be inside the database.
@@ -54,13 +53,11 @@ public class Suggestion {
     }
 
 
-
-    public boolean getActive() {return active ;}
+    public boolean isActive() {return active ;}
     public Camp getCamp() {return camp ;}
     public Student getStudent() {return student ;}
     public String getContent() {return content ;}
-    public boolean getApproved() {return approved ;}
-
+    public boolean isApproved() {return approved ;}
 
 
     /**
@@ -80,7 +77,6 @@ public class Suggestion {
     }
 
 
-
     /**
      * Delete this suggestion by marking active as false. 
      * Application class should use this attribute to know which suggestion should be deleted from the database.
@@ -97,17 +93,26 @@ public class Suggestion {
     }
 
 
-
     /**
-     * Approve this suggestion by a staff.
-     * For now this do not check whether the staff is actually the creator of this camp. May be added in future versions.
+     * Approve this suggestion by the staff who created the camp.
      * @param staff The staff who attempts to approve this suggestion.
      * @return True if suggestion is successfully approved, false if suggestion has already been deleted / approved.
+     * @throws NoAccessException
      */
     public boolean approveSuggestion (Staff staff) {
+        if (! camp.getCampInfo().getStaffInCharge().equals(staff)) throw new NoAccessException() ;
+
         if (! active || approved) return false ;
-        
         this.approved = true ;
+        student.getCampCommittee().addPoint();
         return true ;
+    }
+
+
+    public void viewSuggestion() {
+        System.out.println("Camp: " + camp.getCampInfo().getCampName());
+        System.out.println("Submitted by: " + student.getUserName());
+        System.out.println("Suggestion: " + content);
+        System.out.println("Status: " + (approved ? "Approved" : "Not approved"));
     }
 }

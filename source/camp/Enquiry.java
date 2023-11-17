@@ -66,7 +66,7 @@ public class Enquiry {
     public Camp getCamp() {return camp ;}
     public Student getStudent() {return student ;}
     public String getContent() {return content ;}
-    public boolean getReplied() {return replied ;}
+    public boolean isReplied() {return replied ;}
     public User getRepliedBy() {return repliedBy ;}
     public String getReplies() {return replies ;}
 

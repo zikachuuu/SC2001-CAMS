@@ -2,6 +2,7 @@ package source.camp;
 
 import java.time.LocalDate;
 
+import source.exception.ExceedMaximumException;
 import source.user.Faculty ;
 import source.user.Staff;
 
@@ -27,7 +28,23 @@ public class CampInformation {
     private Staff staffInCharge ;
 
 
+    /**
+     * Create a new camp information object.
+     * @param campName
+     * @param startDate
+     * @param endDate
+     * @param registrationClosingDate
+     * @param userGroup
+     * @param location
+     * @param totalSlots
+     * @param campCommitteeSlots
+     * @param description
+     * @param staffInCharge
+     * @throws ExceedMaximumException If camp committee slots is larger than 10 or total slots.
+     */
     public CampInformation (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description, Staff staffInCharge) {
+
+        if (campCommitteeSlots > 10 || campCommitteeSlots > totalSlots) throw new ExceedMaximumException() ;
 
         this.campName = campName ;
         this.startDate = startDate ;
@@ -60,23 +77,4 @@ public class CampInformation {
     public String getDescription() {return description ;}
     public void setDescription(String description) {this.description = description ;}
     public Staff getStaffInCharge() {return staffInCharge ;}
-
-    public void printCampInfo()
-    {
-        System.out.printf("Camp Name: %s \n", campName);
-        System.out.printf("Dates: %s to %s \n", startDate.toString() , endDate.toString());
-        System.out.printf("Registration closing date: %s \n", registrationClosingDate.toString());
-        System.out.printf("Opened to: %s \n", userGroup.toString());
-        System.out.printf("Location: %s \n", location);
-        System.out.printf("Total slots: %d \n", totalSlots);
-        System.out.printf("Camp Committee Slots (max 10): %d \n", campCommitteeSlots);
-        System.out.printf("Description: %s \n", description);
-        System.out.printf("Staff in charge: %s \n", staffInCharge.getUserName());
-    }
-
-    public String toString() {
-        return campName + ", " + startDate + ", " + endDate + ", " + registrationClosingDate + ", " +
-                userGroup + ", " + location + ", " + totalSlots + ", " + campCommitteeSlots + ", " +
-                description + ", " + staffInCharge;
-    }
 }

@@ -9,14 +9,17 @@ import source.user.Staff;
 import source.user.Student;
 
 
+/**
+ * The entry point to the Camp Application and Management System (CAMS).
+ */
 public class CAMSApp {
 
-    protected static final String STUDENT_FILE_PATH = "data\\student_list.csv";
-    protected static final String STAFF_FILE_PATH = "data\\staff_list.csv";
-    protected static final String CAMP_FILE_PATH = "data\\camps_list.csv";
-    protected static final String CAMP_MEMBERS_FILE_PATH = "data\\camp_members.csv";
-    protected static final String ENQUIRIES_FILE_PATH = "data\\enquiries.csv";
-    protected static final String SUGGESTIONS_FILE_PATH = "data\\suggestions.csv";
+    protected static final String STUDENT_FILE_PATH = "data//student_list.csv";
+    protected static final String STAFF_FILE_PATH = "data//staff_list.csv";
+    protected static final String CAMP_FILE_PATH = "data//camps_list.csv";
+    protected static final String CAMP_MEMBERS_FILE_PATH = "data//camp_members.csv";
+    protected static final String ENQUIRIES_FILE_PATH = "data//enquiries.csv";
+    protected static final String SUGGESTIONS_FILE_PATH = "data//suggestions.csv";
 
     protected static ArrayList<Staff> staffs = new ArrayList<Staff>();
     protected static ArrayList<Camp> camps = new ArrayList<Camp>();
@@ -26,82 +29,99 @@ public class CAMSApp {
 
     public static void main(String[] args) {
 
-        FileProcessing.readDataFromFile();
+        try {
 
-        scanner = new Scanner(System.in);
-        int loginAttempts = 0;
-        
-        while (loginAttempts < 3) {
-            Utility.clearConsole();
-            System.out.println("Welcome to CAMS!") ;
-            System.out.println("LOGIN AS:");
-            System.out.println("1. Student");
-            System.out.println("2. Staff");
+            FileProcessing.readDataFromFile();
 
-            int userTypeChoice = 0 ;
-            while (true) {
-                System.out.print ("Enter your choice: ") ;
-                try {
-                    userTypeChoice = scanner.nextInt();
-                    if (userTypeChoice != 1 && userTypeChoice != 2) throw new InputMismatchException() ;
-                    break ;
-                }
-                catch (InputMismatchException e) {
-                    System.out.println ("\nInvalid login type choice. Try again.") ;
-                    scanner.nextLine();
-                }
-            }
-
-            System.out.println();
-            scanner.nextLine();
-
-            System.out.print("Enter User ID: ");
-            String enteredUserId = scanner.nextLine();
-            System.out.print("Enter Password: ");
-            String enteredPassword = scanner.nextLine();   
-            System.out.println() ; 
+            scanner = new Scanner(System.in);
+            int loginAttempts = 0;
             
-            if (userTypeChoice == 1) {
-                Student loggedInStudent = authenticateStudent (enteredUserId, enteredPassword);
+            while (loginAttempts < 3) {
+                Utility.clearConsole();
+                System.out.println("Welcome to CAMS!") ;
+                System.out.println("LOGIN AS:");
+                System.out.println("1. Student");
+                System.out.println("2. Staff");
 
-                if (loggedInStudent != null) {
-                    System.out.println("Student Login successful!");
-                    Utility.redirectingPage();
-                    StudentInterface.handleStudentFunctionalities(loggedInStudent);
-                    break; 
-                } else {
-                    System.out.println("Invalid student credentials. Login failed.");
+                int userTypeChoice = 0 ;
+                while (true) {
+                    System.out.print ("Enter your choice: ") ;
+                    try {
+                        userTypeChoice = scanner.nextInt();
+                        if (userTypeChoice != 1 && userTypeChoice != 2) throw new InputMismatchException() ;
+                        break ;
+                    }
+                    catch (InputMismatchException e) {
+                        System.out.println ("\nInvalid login type choice. Try again.") ;
+                        scanner.nextLine();
+                    }
                 }
 
-            } else if (userTypeChoice == 2) {
-                Staff loggedInStaff = authenticateStaff(enteredUserId, enteredPassword);
+                System.out.println();
+                scanner.nextLine();
 
-                if (loggedInStaff != null) {
-                    System.out.println("Staff Login successful!");
-                    Utility.redirectingPage();
-                    StaffInterface.handleStaffFunctionalities(loggedInStaff);
-                    break; 
-                } else {
-                    System.out.println("Invalid staff credentials. Login failed.");
+                System.out.print("Enter User ID: ");
+                String enteredUserId = scanner.nextLine();
+                System.out.print("Enter Password: ");
+                String enteredPassword = scanner.nextLine();   
+                System.out.println() ; 
+                
+                if (userTypeChoice == 1) {
+                    Student loggedInStudent = authenticateStudent (enteredUserId, enteredPassword);
+
+                    if (loggedInStudent != null) {
+                        System.out.println("Student Login successful!");
+                        Utility.redirectingPage();
+                        StudentInterface.handleStudentFunctionalities(loggedInStudent);
+                        break; 
+                    } else {
+                        System.out.println("Invalid student credentials. Login failed.");
+                    }
+
+                } else if (userTypeChoice == 2) {
+                    Staff loggedInStaff = authenticateStaff(enteredUserId, enteredPassword);
+
+                    if (loggedInStaff != null) {
+                        System.out.println("Staff Login successful!");
+                        Utility.redirectingPage();
+                        StaffInterface.handleStaffFunctionalities(loggedInStaff);
+                        break; 
+                    } else {
+                        System.out.println("Invalid staff credentials. Login failed.");
+                    }
                 }
-            }
 
-            loginAttempts++;
-            if (loginAttempts < 3) {
-                System.out.println("You have " + (3 - loginAttempts) + " attempts remaining.");
-                Utility.redirectingPage();
+                loginAttempts++;
+                if (loginAttempts < 3) {
+                    System.out.println("You have " + (3 - loginAttempts) + " attempts remaining.");
+                    Utility.redirectingPage();
+                }
+                else {
+                break ;
+                }
+                
             }
+            if (loginAttempts == 3) System.out.println("Maximum login attempts reached. Exiting.") ;
             else {
-               break ;
+                System.out.println("Please wait, uploading changes to server. Do not close the program...");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println ("Your changes has been saved. Thank you for using the CAMS system.") ;
+                FileProcessing.writeDataToFile(); 
             }
+            scanner.close();
             
         }
-        if (loginAttempts == 3) System.out.println("Maximum login attempts reached. Exiting.") ;
-        else {
-            System.out.println ("Thank you for using the CAMS system.") ;
-            FileProcessing.writeDataToFile(); 
+        catch (Exception e) {
+            System.out.println(":(") ;
+            System.out.println("Sorry, something went wrong on our ends.");
+            System.out.println("We are unable to upload the changes you have made.");
+            System.out.println("Error message:");
+            e.printStackTrace();
         }
-        scanner.close();
     }
 
     private static Student authenticateStudent(String userId, String password) {

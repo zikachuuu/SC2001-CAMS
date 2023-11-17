@@ -1,5 +1,7 @@
 package source.user;
 
+import source.exception.NoAccessException;
+
 /**
  * Represents a user. User is the parent class of Student and Staff (Inheritance).
  * @author Le Yanzhi, Florian Goering
@@ -24,6 +26,10 @@ public class User {
     public Faculty getFaculty() {return faculty ;}
     public String getPassword() {return password ;}
 
+    public boolean isDefaultPassword() {
+        return password.equals("password") ;
+    }
+
 
     /**
      * Change password (duh).
@@ -44,6 +50,16 @@ public class User {
      * @return True if same user, false otherwise.
      */
     public boolean equals (User other) {
-        return this.userId == other.getUserId() ;
+        return this.userId.equals(other.getUserId()) ;
+    }
+
+
+    /**
+     * Check if the user has the provided UserId.
+     * @param userId
+     * @return True if same user, false otherwise.
+     */
+    public boolean equals (String userId) {
+        return this.userId.equals(userId) ;
     }
 }

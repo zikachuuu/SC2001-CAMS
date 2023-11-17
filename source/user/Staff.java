@@ -5,9 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import source.application.Utility;
+import source.application.CampManager;
 import source.camp.Camp;
 import source.camp.CampInformation;
+import source.exception.CampNotFoundException;
+import source.exception.NoAccessException;
+
 
 /**
  * Represents a staff. A staff is a user (inheritance).
@@ -77,6 +80,14 @@ public class Staff extends User{
         createdCamps = new ArrayList<Camp>() ;
     }
 
+    /**
+     * the vanilla methods, returned array list includes deleted cammps as well
+     * @return
+     */
+    public ArrayList<Camp> getCreatedCamps() {return createdCamps ;}
+
+    public void addCreatedCamps(Camp camp) {createdCamps.add(camp) ;}
+
 
     /**
      * Create a new camp by the staff.<p>
@@ -93,65 +104,103 @@ public class Staff extends User{
      * Update the allCamps list for successful creation.
      * Update the csv file for successful creation.
      * @return True if successfully created, false if there is already a camp with the same camp name.
+     * @throws ExceedMaximumException
      */
     public boolean createCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
         
-        if (Utility.campExists(campName)) return false ;
+        if (CampManager.campExists(campName)) return false ;
         CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this) ;
-        Camp newCamp = new Camp(campInfo);
-        createdCamps.add(newCamp);
-        allCamps.add(newCamp);
-        String filePath = "data\\camps_list.csv";
-        String data = newCamp.toString();
-        appendData(filePath, data);
+        Camp camp = new Camp(campInfo) ;
+        createdCamps.add(camp);
+        CampManager.recordNewCamp(this, camp);
+
         return true;
     }
 
 
     /**
-     * Iterate through the list of camps and get the name of the current camp accessed.
-     * If the campName is the same as the one that user entered, remove the camp from createdCamps list.
-     * If successfully deleted, update both allCamps and csv file camps_list.
-     * If the camp is not found at all in the list of createdCamps, failure to delete.
+     * Delete the camp.
+     * @param campName
+     * @throws CampNotFoundException If camp name is not found or camp has already been deleted.
      */
-    public boolean deleteCamp (String campName) {
-        for (int i = 0; i < createdCamps.size(); i++) {
-            if (Objects.equals(createdCamps.get(i).getCampInfo().getCampName(), campName)) {
-                createdCamps.remove(i);
-                int rowToRemove  = removeCampFromAllCamps(campName);
-                String filePath = "data\\camps_list.csv";
-                deleteRow(filePath, rowToRemove);
-                return true;
+    public void deleteCamp (String campName) {
+
+        for (Camp camp : createdCamps) {
+            if (camp.equals(campName) && camp.isActive()) {
+                camp.deleteCamp(this);
+                return ;
             }
         }
-        return false;
+        throw new CampNotFoundException() ;
+    }
+
+
+    /**
+     * Edit the details of a camp. <p>
+     * @param campName
+     * @param startDate
+     * @param endDate
+     * @param registrationClosingDate
+     * @param userGroup
+     * @param location
+     * @param totalSlots
+     * @param campCommitteeSlots
+     * @param description
+     * @throws ExceedMaximumException
+     * @throws CampNotFoundException If no camp with camp name can be found under this staff.
+     */
+    public void editCamp (String campName , LocalDate startDate , LocalDate endDate , LocalDate registrationClosingDate , Faculty userGroup , String location , int totalSlots , int campCommitteeSlots , String description) {
+        for (Camp camp : createdCamps) {
+            if (! camp.equals(campName)) continue ;
+
+            CampInformation campInfo = new CampInformation(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description, this) ;
+            camp.setCampInfo(this, campInfo);
+            return ;
+        }   
+        throw new CampNotFoundException() ;
     }
 
     /**
      * Iterate through all the camps in createdCamps list, and display camp details to the command line interface.
      */
     public void viewCreatedCamps () {
-        for(Camp camp : allCamps)
-            camp.getCampInfo().printCampInfo();
+
+        System.out.println("List of camps that you have created:\n");
+
+        if (createdCamps.size() == 0) {
+            System.out.println("You have yet to create any camps.");
+            return ;
+        }
+
+        for(int i = 0; i < createdCamps.size(); i++) {
+            createdCamps.get(i).viewDetailedCampInfo(this) ;
+            System.out.println();
+        }
     }
 
     
     /**
-     * Iterate through all the camps created by every staff.
-     * Print out the camp information of every camp each in a line.
+     * Print out a list of all active camps (including those created by other staffs)
      */
     public void viewAllCamps() {
-        for(Camp camp : allCamps)
-            camp.getCampInfo().printCampInfo();
+        CampManager.viewAllCamps(this);
     }
 
-
+    
     /**
-     * Restore a previously created camp from csv. <p>
-     * Use createCamp() instead when the staff want to create a new camp.
-     * @param camp
+     * Toggle the visibility of the camp (visible <-> not visible).
+     * @param campName
+     * @return The new visibility of the camp.
+     * @throws CampNotFoundException If no active camp found for the given camp name.
+     * @throws NoAccessException If students have already signed up for this camp.
      */
-    public void restoreCreatedCamp (Camp camp) {
-        createdCamps.add(camp) ;
+    public boolean toggleVisibility (String campName) {
+        for (Camp camp : createdCamps) {
+            if (! camp.equals(campName)) continue ;
+            
+            if (! camp.isActive()) throw new CampNotFoundException() ;
+            return camp.toggleVisibility(this) ;
+        }
+        throw new CampNotFoundException() ;
     }
 }
