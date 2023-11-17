@@ -12,6 +12,8 @@ import source.camp.Camp;
 import source.camp.CampInformation;
 import source.camp.Enquiry;
 import source.camp.Suggestion;
+import source.user.CampAttendee;
+import source.user.CampCommittee;
 import source.user.Faculty;
 import source.user.Student;
 import source.user.Staff;
@@ -310,6 +312,7 @@ public class FileProcessing {
         writeStaffsToFile() ;
         writeCampsToFile() ;
         writeStudentsToFile();
+        writeCampMembersToFile();
         writeEnquiriesToFile();
         writeSuggestionsToFiles();
     }
@@ -378,6 +381,39 @@ public class FileProcessing {
                     student.getFaculty().toString() + "," + 
                     student.getPassword()
                 );
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void writeCampMembersToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.CAMP_MEMBERS_FILE_PATH, false))) {
+            writer.write ("Name,CampName, Role, Status, Points\r\n") ;
+
+            for (Camp camp : CAMSApp.camps) {
+
+                for (Student student : camp.getParticipants()) {
+                    writer.write(
+                        student.getUserId() + "," +
+                        camp.getCampInfo().getCampName() + "," +
+                        (student.isCampCommittee(camp) ? "committee" : "attendee") + "," +
+                        "active," +
+                        (student.isCampCommittee(camp) ? student.getCampCommittee().getPoints() : "0") 
+                    );
+                }
+
+                for (Student student : camp.getWithdrawnParticipants()) {
+                    writer.write(
+                        student.getUserId() + "," +
+                        camp.getCampInfo().getCampName() + "," +
+                        (student.isCampCommittee(camp) ? "committee" : "attendee") + "," +
+                        "withdrawn," +
+                        (student.isCampCommittee(camp) ? student.getCampCommittee().getPoints() : "0") 
+                    );
+                }
                 writer.newLine();
             }
         } catch (IOException e) {
