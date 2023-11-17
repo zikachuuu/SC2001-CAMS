@@ -50,8 +50,8 @@ public class Camp {
      * @param campInfo
      * @param numCommittees
      * @param numAttendees
-     * @param enquiries
-     * @param suggestions
+     //* @param enquiries
+     //* @param suggestions
      */
     public Camp (CampInformation campInfo , int numCommittees , int numAttendees, boolean visible) {
         this.campInfo = campInfo ;
@@ -135,7 +135,7 @@ public class Camp {
     /**
      * Withdraw an participant from the camp. <p>
      * Unlike addWithdrawnParticipant(), this method remove the student from the participant list and decrement the numAttendees counter.
-     * @param attendee The attendee to withdraw.
+     //* @param attendee The attendee to withdraw.
      */
     public void withdrawParticipant (Student student) {
 
@@ -236,7 +236,7 @@ public class Camp {
      * Delete this camp by setting active as false. Inactive camp will not be written back to csv.
      * @param staffInCharge The staff who attempts to delete.
      * @throws NoAccessException If staff is not the owner of this camp
-     * @throws CampNotFoundExceptions If this camp has already been deleted.
+     //* @throws CampNotFoundExceptions If this camp has already been deleted.
      */
     public void deleteCamp(Staff staffInCharge) {
         if (! staffInCharge.equals(campInfo.getStaffInCharge())) throw new NoAccessException("Only the creator of this camp can toggle visibility!") ;
