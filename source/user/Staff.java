@@ -19,8 +19,12 @@ public class Staff extends User{
         createdCamps = new ArrayList<Camp>() ;
     }
 
-
+    /**
+     * the vanilla methods, returned array list includes deleted cammps as well
+     * @return
+     */
     public ArrayList<Camp> getCreatedCamps() {return createdCamps ;}
+
     public void addCreatedCamps(Camp camp) {createdCamps.add(camp) ;}
 
 

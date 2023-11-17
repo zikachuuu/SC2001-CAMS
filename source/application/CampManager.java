@@ -71,12 +71,12 @@ public class CampManager {
      */
     private static boolean checkClashInDate(Student student, Camp camp) {
 
-        if (student.getCampCommittee() != null) {
+        if (student.isCampCommittee()) {
             if (student.getCampCommittee().getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
                 student.getCampCommittee().getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return true ;
         }
 
-        if (student.getCampAttendees() != null){
+        if (student.isCampAttendee()){
             for (CampAttendee attendee : student.getCampAttendees()) {
                 if (attendee.getCamp().getCampInfo().getStartDate().isBefore(camp.getCampInfo().getEndDate()) &&
                 attendee.getCamp().getCampInfo().getEndDate().isAfter(camp.getCampInfo().getStartDate())) return true ;

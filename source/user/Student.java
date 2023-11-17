@@ -90,6 +90,18 @@ public class Student extends User {
 
 
     /**
+     * Check if student is a camp attendee of some camp.
+     * @return True if student is a camp attendee, false otherwise.
+     */
+    public boolean isCampAttendee () {
+        for (CampAttendee attendee : campAttendees) {
+            if (attendee.getCamp().isActive()) return true ;
+        }
+        return false ;
+    }
+
+
+    /**
      * Check if the student is a camp attendee of the given camp.
      * @param camp
      * @return True if student is a camp attendee, false otherwise.

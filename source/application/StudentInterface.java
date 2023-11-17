@@ -225,8 +225,8 @@ public class StudentInterface extends UserInterface {
 
     private static void handleCampCommiteeFunctionalities(Student loggedInStudent, Camp camp) {
 
-        boolean innermenu = true;
-        while (innermenu) {
+        boolean innerMenu = true;
+        while (innerMenu) {
             System.out.println("Viewing " + loggedInStudent.getUserName() + "'s camp comittee role.");
             System.out.println ("You currently have " + loggedInStudent.getCampCommittee().getPoints() + " points.") ;
             System.out.println("Press 1 to view details of the camp you've registered for");
@@ -247,12 +247,7 @@ public class StudentInterface extends UserInterface {
                     break;
 
                 case "2":
-                    System.out.print ("Enter the suggestion you would like to make: ") ;
-                    String suggestionContent = CAMSApp.scanner.nextLine() ;
-                    suggestionContent = Utility.replaceCommaWithSemicolon(suggestionContent) ;
-                    loggedInStudent.submitSuggestion(suggestionContent) ;
-                    System.out.println("Your suggestion has been successfully submitted!");
-  
+                    handleSuggestionAdd(loggedInStudent, camp);
                     offerReturnToInnerMenuOption();
                     break;
 
@@ -288,11 +283,20 @@ public class StudentInterface extends UserInterface {
                     break;
 
                 default:
-                    innermenu = false;
+                    innerMenu = false;
                     break;
             }
             Utility.redirectingPage() ;
         }
+    }
+
+
+    private static void handleSuggestionAdd (Student loggedInStudent , Camp camp) {
+        System.out.print ("Enter the suggestion you would like to make: ") ;
+        String suggestionContent = CAMSApp.scanner.nextLine() ;
+        suggestionContent = Utility.replaceCommaWithSemicolon(suggestionContent) ;
+        loggedInStudent.submitSuggestion(suggestionContent) ;
+        System.out.println("Your suggestion has been successfully submitted!");
     }
 
 
