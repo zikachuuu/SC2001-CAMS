@@ -1,7 +1,16 @@
 # SC2001-CAMS
 
-updated 15/11/23 <br>
-some design considerations: (I did the latest changes on my yanzhi branch cos theres new codes on main branch that i dw to overwrite yet) <br>
+updated 17/11/23 <br>
+
+TBD: <br>
+1. finish up all generate report<br>
+2. add more interface and abstract methods<br>
+3. test out the codes more<br>
+4. Clean up the codes<br>
+5. add javadoc<br>
+<br>
+
+some design considerations: <br>
 
 <h5>CAMSApp:</h5>
 This is where the entire program starts. The most important thing here is the 3 arraylist: staffs, camps, students. They are set to protected so only other classes in application package can access them. This means that outside classes such as staff and students cant directly access them. Youll see later how they can be accessed. Anyway at the start of the program CAMSApp calls FileProcessing.readDataFromFile() to populate the above 3 arraylist with objects, and end the end of the program these objects will be recorded back to the csv via FileProcessing.writeDataToFile().<br>
@@ -35,12 +44,5 @@ CampInformation is also part of camp (Composition) (yes this one the code is als
 
 There is absoultey no interface here which means very bad SOLID design, but I cant see any place that can fit a interface in can someone enlighten me pls.<br>
 
-<h5>Progress:</h5>
-I mean if you run the code can tell that most of the stuff is working already. Some stuff that need to be done:<br>
-1) suggestions is mostly undone (cant ask or answer suggestion also)<br>
-2) staff and staffInterface has one or two methods that that need to be done (minus suggestion) but they can be done real quick.<br>
-3) Not one generate report has been done. This one will prob take the most time. I heard you can have alot of choices with the report, like can filter based on camps or faculty, or sort by camp name or date. Bascially alot of shit need to be done for this one.<br>
-
-Other than that the rest should be working fine I hope. Didnt test it extensively but from what i have tested the program dont break.<br>
 
 
