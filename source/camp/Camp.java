@@ -189,6 +189,7 @@ public class Camp {
         System.out.printf("Opened to: %s \n", campInfo.getUserGroup().toString());
         System.out.printf("Location: %s \n", campInfo.getLocation());
         System.out.printf("Total slots: %d \n", campInfo.getTotalSlots());
+        System.out.printf("Remaining Slots: %d \n", campInfo.getTotalSlots() - this.getNumAttendees() - this.getNumCommittees());
         System.out.printf("Camp Committee Slots (max 10): %d \n", campInfo.getCampCommitteeSlots());
         System.out.printf("Description: %s \n", campInfo.getDescription());
         System.out.printf("Staff in charge: %s \n", campInfo.getStaffInCharge().getUserName());
