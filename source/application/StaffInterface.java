@@ -31,7 +31,7 @@ public class StaffInterface extends UserInterface {
             System.out.println("Press 5 to edit your camps");
             System.out.println("Press 6 to toggle a camp's visibility");
             System.out.println("Press 7 to delete a camp");
-            System.out.println("(todo) Press 8 to generate camp commitee report");
+            System.out.println("Press 8 to generate camp committee report");
             System.out.println("(todo) Press 9 to generate camp attendee report");
             System.out.println("(todo) Press 10 to generate enquiries report") ;
             System.out.println("Press 11 to view and approve camp suggestions");
@@ -394,10 +394,6 @@ public class StaffInterface extends UserInterface {
     }
 
     private static void generateCommitteeMembersReportAsStaff() {
-        //Scanner scanner = new Scanner(System.in);
-
-        //System.out.println("Enter the name of the camp for which you want to generate a committee members report:");
-        //String targetCampName = scanner.nextLine();
 
         String filePath =  "report//committee_report.csv";
 
@@ -405,25 +401,20 @@ public class StaffInterface extends UserInterface {
             writer.write("Student ID,Student Email,Student UserName, Points");
             writer.newLine();
 
-            for (Camp camp : CAMSApp.camps) {
-                    String campName = camp.getCampInfo().getCampName();
-
-                    System.out.println("List of committee members registered for: " + campName);
 
                     for (Student students: CAMSApp.students) {
-                        //if (students.getCampCommittee().getCamp().getCampInfo().getCampName().equalsIgnoreCase(campName) &&
-                        //        students.isCampCommittee()) {
+
                             String studentId = students.getUserId();
 
                             Student student = UserManager.findStudentByUserId(studentId);
 
-
-                                writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName()+ "," + student.getCampCommittee().getPoints());
+                            if(student.isCampCommittee()) {
+                                writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName() + "," + student.getCampCommittee().getPoints());
                                 writer.newLine();
-
+                            }
                         }
 
-                }
+
 
 
             System.out.println("Committee members report generated successfully. File: "+ filePath);
