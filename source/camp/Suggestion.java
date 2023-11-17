@@ -106,4 +106,12 @@ public class Suggestion {
         this.approved = true ;
         return true ;
     }
+
+
+    public void viewSuggestion() {
+        System.out.println("Camp: " + camp.getCampInfo().getCampName());
+        System.out.println("Submitted by: " + student.getUserName());
+        System.out.println("Suggestion: " + content);
+        System.out.println("Status: " + (approved ? "Approved" : "Not approved"));
+    }
 }

@@ -68,7 +68,7 @@ public class EnquiryManager {
     /**
      * Find all enquiries regarding camps under the provided staff.
      * @param staff
-     * @param notReplied
+     * @param notReplied True to only find enquiries that have not been replied, false to find all.
      * @return ArrayList of enquiries.
      */
     protected static ArrayList<Enquiry> findAllEnquiry (Staff staff, boolean notReplied) {

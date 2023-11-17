@@ -7,6 +7,7 @@ import java.util.InputMismatchException;
 
 import source.camp.Camp;
 import source.camp.Enquiry;
+import source.camp.Suggestion;
 import source.exception.* ;
 import source.user.Faculty;
 import source.user.Staff;
@@ -29,7 +30,7 @@ public class StaffInterface extends UserInterface {
             System.out.println("(todo) Press 8 to generate camp commitee report");
             System.out.println("(todo) Press 9 to generate camp attendee report");
             System.out.println("(todo) Press 10 to generate enquiries report") ;
-            System.out.println("(todo) Press 11 to view and approve camp suggestions");
+            System.out.println("Press 11 to view and approve camp suggestions");
             System.out.println("Press 12 to view and reply enquiries");
             System.out.println("Press any other key to exit");
             System.out.print("Enter your choice: ");
@@ -88,7 +89,7 @@ public class StaffInterface extends UserInterface {
                     break ;
 
                 case "11":
-
+                    handleSuggestionViewApprove(loggedInStaff) ;
                     offerReturnToMenuOption();
                     break;
 
@@ -332,6 +333,32 @@ public class StaffInterface extends UserInterface {
     }
 
 
+    private static void handleSuggestionViewApprove (Staff loggedInStaff) {
+        ArrayList<Suggestion> suggestions = SuggestionManager.findAllSuggestions(loggedInStaff , true) ;
+        if (suggestions.size() == 0) {
+            System.out.println("There are currently no unapproved suggestions regarding this camp.");
+            return ;
+        }
+
+        for (int i = 0 ; i < suggestions.size() ; i++) {
+            System.out.println("Suggestions " + (i + 1) + ": ");
+            suggestions.get(i).viewSuggestion();
+            System.out.println();
+        }
+
+        System.out.print("Choose an suggestion that you wish to approve: ") ;
+        String suggestionChoice = CAMSApp.scanner.nextLine() ;
+
+        try {
+            suggestions.get (Integer.parseInt(suggestionChoice) - 1).approveSuggestion(loggedInStaff) ;
+            System.out.println("Suggestion has been successfully approved!") ;
+        } 
+        catch (NumberFormatException | IndexOutOfBoundsException ee) {
+            System.out.println("Invalid suggestion choice.");
+        }
+    }
+
+
     private static void handleEnquiryViewReply(Staff loggedInStaff) {
         ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, true) ;
 
@@ -360,7 +387,6 @@ public class StaffInterface extends UserInterface {
         catch (NumberFormatException | IndexOutOfBoundsException ee) {
             System.out.println("Invalid enquiry choice.");
         }
-
     }
 
 }

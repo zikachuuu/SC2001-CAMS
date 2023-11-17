@@ -107,7 +107,7 @@ public class StudentInterface extends UserInterface {
         System.out.print ("Enter the name of the camp you wish to register: ") ;
         String campNameToRegister = CAMSApp.scanner.nextLine();
         System.out.print ("Register as 1.attendee 2.committee: ") ;
-        boolean committeeRole = CAMSApp.scanner.nextLine().equals("1") ;
+        boolean committeeRole = CAMSApp.scanner.nextLine().equals("2") ;
 
         try {
             loggedInStudent.registerForCamp(campNameToRegister , committeeRole) ;
