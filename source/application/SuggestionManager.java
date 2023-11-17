@@ -41,7 +41,7 @@ public class SuggestionManager {
             if (! camp.isActive()) continue ;
 
             for (Suggestion suggestion : camp.getSuggestions()) {
-                if(suggestion.isActive() || (notApproved && suggestion.isApproved())) continue ; 
+                if(! suggestion.isActive() || (notApproved && suggestion.isApproved())) continue ; 
                 suggestions.add(suggestion) ;
             }
         }
