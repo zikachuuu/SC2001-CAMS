@@ -104,6 +104,7 @@ public class Suggestion {
 
         if (! active || approved) return false ;
         this.approved = true ;
+        student.getCampCommittee().addPoint();
         return true ;
     }
 
