@@ -37,7 +37,7 @@ public class StaffInterface extends UserInterface {
             System.out.println("Press 6 to toggle a camp's visibility");
             System.out.println("Press 7 to delete a camp");
             System.out.println("Press 8 to generate camp performance report");
-            System.out.println("(todo) Press 9 to generate camp attendee report");
+            System.out.println("Press 9 to generate camp attendee report");
             System.out.println("(todo) Press 10 to generate enquiries report") ;
             System.out.println("Press 11 to view and approve camp suggestions");
             System.out.println("Press 12 to view and reply enquiries");
