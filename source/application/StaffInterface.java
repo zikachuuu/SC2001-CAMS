@@ -342,8 +342,7 @@ public class StaffInterface extends UserInterface {
 
         for (int i = 0 ; i < enquiries.size() ; i++) {
             System.out.println("Enquiry " + (i + 1) + ": ");
-            System.out.println("Camp: " + enquiries.get(i).getCamp().getCampInfo().getCampName());
-            System.out.println("Content: " + enquiries.get(i).getContent()) ;
+            enquiries.get(i).viewEnquiry();
             System.out.println();
         }
 
