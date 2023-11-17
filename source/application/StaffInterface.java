@@ -7,18 +7,14 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
 
 import source.camp.Camp;
 import source.camp.Enquiry;
 import source.camp.Suggestion;
 import source.exception.* ;
-import source.user.CampCommittee;
 import source.user.Faculty;
 import source.user.Staff;
 import source.user.Student;
-import source.application.UserManager;
 
 public class StaffInterface extends UserInterface {
 
