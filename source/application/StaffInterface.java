@@ -2,9 +2,11 @@ package source.application;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import source.camp.Camp;
+import source.camp.Enquiry;
 import source.exception.* ;
 import source.user.Faculty;
 import source.user.Staff;
@@ -13,7 +15,7 @@ public class StaffInterface extends UserInterface {
 
     protected static void handleStaffFunctionalities(Staff loggedInStaff) {
 
-        if (loggedInStaff.getPassword().equals("password")) handleDefaultPasswordChange(loggedInStaff);
+        if (loggedInStaff.isDefaultPassword()) handleDefaultPasswordChange(loggedInStaff);
 
         while (!exit) {
             System.out.println ("Welcome, " + loggedInStaff.getUserName() + " (staff id: " + loggedInStaff.getUserId() + ")") ;
@@ -28,7 +30,7 @@ public class StaffInterface extends UserInterface {
             System.out.println("(todo) Press 9 to generate camp attendee report");
             System.out.println("(todo) Press 10 to generate enquiries report") ;
             System.out.println("(todo) Press 11 to view and approve camp suggestions");
-            System.out.println("(todo) Press 12 to view and respond to enquiries");
+            System.out.println("Press 12 to view and reply enquiries");
             System.out.println("Press any other key to exit");
             System.out.print("Enter your choice: ");
             String choice = CAMSApp.scanner.nextLine() ;
@@ -91,7 +93,7 @@ public class StaffInterface extends UserInterface {
                     break;
 
                 case "12":
-
+                    handleEnquiryViewReply(loggedInStaff);
                     offerReturnToMenuOption();
                     break;
 
@@ -319,6 +321,39 @@ public class StaffInterface extends UserInterface {
         } catch (CampNotFoundException cnfe) {
             System.out.println("Sorry, the camp you entered does not exist.");
         }
+    }
+
+
+    private static void handleEnquiryViewReply(Staff loggedInStaff) {
+        ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, true) ;
+
+        if (enquiries.size() == 0) {
+            System.out.println("There are currently no unanswered enquiries regarding this camp.");
+            return ;
+        }
+
+        for (int i = 0 ; i < enquiries.size() ; i++) {
+            System.out.println("Enquiry " + (i + 1) + ": ");
+            System.out.println("Camp: " + enquiries.get(i).getCamp().getCampInfo().getCampName());
+            System.out.println("Content: " + enquiries.get(i).getContent()) ;
+            System.out.println();
+        }
+
+        System.out.print("Choose an enquiry that you wish to reply: ") ;
+        String enquiryChoice = CAMSApp.scanner.nextLine() ;
+
+        System.out.print ("Enter your reply here: ") ;
+        String reply = CAMSApp.scanner.nextLine() ;
+        reply = Utility.replaceCommaWithSemicolon(reply);
+
+        try {
+            enquiries.get(Integer.parseInt(enquiryChoice) - 1).replyEnquriy(loggedInStaff, reply) ;
+            System.out.println("Enquiry has been successfully replied!") ;
+        } 
+        catch (NumberFormatException | IndexOutOfBoundsException ee) {
+            System.out.println("Invalid enquiry choice.");
+        }
+
     }
 
 }

@@ -9,6 +9,9 @@ import source.user.Staff;
 import source.user.Student;
 
 
+/**
+ * The entry point to the Camp Application and Management System (CAMS).
+ */
 public class CAMSApp {
 
     protected static final String STUDENT_FILE_PATH = "data\\student_list.csv";

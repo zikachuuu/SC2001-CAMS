@@ -24,6 +24,10 @@ public class User {
     public Faculty getFaculty() {return faculty ;}
     public String getPassword() {return password ;}
 
+    public boolean isDefaultPassword() {
+        return password.equals("password") ;
+    }
+
 
     /**
      * Change password (duh).

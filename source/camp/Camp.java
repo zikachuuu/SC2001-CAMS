@@ -1,14 +1,9 @@
 package source.camp;
 
-import java.time.LocalDate;
 import java.util.ArrayList ;
 
-import source.exception.CampFullException;
-import source.exception.DeadlineOverException;
+import source.exception.CampNotFoundException;
 import source.exception.NoAccessException;
-import source.exception.WithdrawnException;
-import source.user.CampAttendee;
-import source.user.CampCommittee;
 import source.user.Staff;
 import source.user.Student;
 import source.user.User;
@@ -81,6 +76,26 @@ public class Camp {
     public boolean isVisible() {return visible ;}
     public boolean isActive () {return active ;}
 
+    
+    /**
+     * get a arrayList of filtered enquiries regarding this camp.
+     * @param active True for only active enquiries, false for both active and deleted enquiries.
+     * @param notReplied True for only not replied enquiries, false for both replied and not replied enquiries.
+     * @return ArrayList of filtered enquiries.
+     */
+    public ArrayList<Enquiry> getEnquiries(boolean active, boolean notReplied) {
+        if (! active && ! notReplied) return getEnquiries() ;
+
+        ArrayList<Enquiry> filteredEnquiries = new ArrayList<Enquiry>() ;
+
+        for (Enquiry enquiry : enquiries) {
+            if ((active && ! enquiry.isActive()) || (notReplied && enquiry.isReplied())) continue ;
+            filteredEnquiries.add(enquiry) ;
+        }
+
+        return filteredEnquiries ;
+    }
+
 
     /**
      * Update the camp information. This can only be done by the creator of this camp.
@@ -133,8 +148,10 @@ public class Camp {
     /**
      * Add an enquiry to the camp.
      * @param enquiry
+     * @throws CampNotFoundException If camp is deleted (not active).
      */
     public void addEnquiry (Enquiry enquiry) {
+        if (! active) throw new CampNotFoundException() ;
         enquiries.add(enquiry) ;
     }
 
@@ -142,9 +159,23 @@ public class Camp {
     /**
      * Add a suggestion to the camp.
      * @param suggestion
+     * @throws CampNotFoundException If camp is deleted (not active).
      */
     public void addSuggestion (Suggestion suggestion) {
+        if (! active) throw new CampNotFoundException() ;
         suggestions.add(suggestion) ;
+    }
+
+
+    /**
+     * Add a suggestion to the camp.
+     * @param student
+     * @param suggestionContent
+     * @throws CampNotFoundException If camp is deleted (not active).
+     */
+    public void addSuggestion (Student student, String suggestionContent) {
+        if (! active) throw new CampNotFoundException() ;
+        suggestions.add(new Suggestion(this, student, suggestionContent)) ;
     }
 
 
@@ -203,11 +234,12 @@ public class Camp {
     /**
      * Delete this camp by setting active as false. Inactive camp will not be written back to csv.
      * @param staffInCharge The staff who attempts to delete.
-     * @throws NoAccessException If staff is not the owner of this camp, or if this camp has already been deleted.
+     * @throws NoAccessException If staff is not the owner of this camp
+     * @throws CampNotFoundExceptions If this camp has already been deleted.
      */
     public void deleteCamp(Staff staffInCharge) {
         if (! staffInCharge.equals(campInfo.getStaffInCharge())) throw new NoAccessException("Only the creator of this camp can toggle visibility!") ;
-        if (! active) throw new NoAccessException("Camp has already been deleted!") ;
+        if (! active) throw new CampNotFoundException("Camp has already been deleted!") ;
 
         active = false ;
     }

@@ -209,11 +209,11 @@ public class Student extends User {
     /**
      * Submit a enquiry regarding a camp.
      * @param campName
-     * @param Enquiry
+     * @param enquiry
      * @throws CampNotFoundException
      */
-    public void submitEnquiry(String campName, String Enquiry) {
-        EnquiryManager.addEnquiryToCamp(campName, Enquiry, this);
+    public void submitEnquiry(String campName, String enquiry) {
+        EnquiryManager.addEnquiryToCamp(campName, enquiry, this);
     }
 
 
@@ -222,5 +222,19 @@ public class Student extends User {
      */
     public void viewSubmittedEnquiries() {
         EnquiryManager.viewEnquiry(this);
+    }
+
+
+    /**
+     * Submit a suggestion regarding the camp that student has signed up as committee in. The commmittee member will be awarded 1 point.
+     * @param campName
+     * @param suggestion
+     * @throws NoAccessException If student does not have an active committe role.
+     * @throws CampNotFoundException If the camp that student has signed up is deleted.
+     */
+    public void submitSuggestion (String suggestion) {
+        if (campCommittee == null) throw new NoAccessException() ;
+        campCommittee.getCamp().addSuggestion(this, suggestion);
+        campCommittee.addPoint();
     }
 }

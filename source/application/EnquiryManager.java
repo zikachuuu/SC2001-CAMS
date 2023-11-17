@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import source.camp.Camp;
 import source.camp.Enquiry;
 import source.exception.CampNotFoundException;
+import source.user.Staff;
 import source.user.Student;
 
 public class EnquiryManager {
@@ -34,7 +35,7 @@ public class EnquiryManager {
             if (! camp.isActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
-                if(! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
+                if(! enquiry.isActive() || (notReplied && enquiry.isReplied())) continue ;
                 enquiries.add(enquiry) ;
             }
         }
@@ -56,10 +57,32 @@ public class EnquiryManager {
             if (! camp.isActive()) continue ;
 
             for (Enquiry enquiry : camp.getEnquiries()) {
-                if (! enquiry.isSubmittedBy(student) || ! enquiry.isActive() || (notReplied && enquiry.getReplied())) continue ;
+                if (! enquiry.isSubmittedBy(student) || ! enquiry.isActive() || (notReplied && enquiry.isReplied())) continue ;
                 enquiries.add(enquiry) ;
             }
         }
+        return enquiries ;
+    }
+
+
+    /**
+     * Find all enquiries regarding camps under the provided staff.
+     * @param staff
+     * @param notReplied
+     * @return ArrayList of enquiries.
+     */
+    protected static ArrayList<Enquiry> findAllEnquiry (Staff staff, boolean notReplied) {
+        ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
+
+        for (Camp camp : staff.getCreatedCamps()) {
+            if (! camp.isActive()) continue ;
+
+            for (Enquiry enquiry : camp.getEnquiries()) {
+                if (! enquiry.isActive() || (notReplied && enquiry.isReplied())) continue ;
+                enquiries.add(enquiry) ;
+            }
+        }
+
         return enquiries ;
     }
 

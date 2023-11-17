@@ -396,8 +396,8 @@ public class FileProcessing {
                     enquiry.getCamp().getCampInfo().getCampName() + "," + 
                     enquiry.getStudent().getUserId() + "," + 
                     enquiry.getContent() + "," + 
-                    Boolean.toString(enquiry.getReplied())  + "," + 
-                    (enquiry.getReplied() ? enquiry.getRepliedBy().getUserId() : "null") + "," +
+                    Boolean.toString(enquiry.isReplied())  + "," + 
+                    (enquiry.isReplied() ? enquiry.getRepliedBy().getUserId() : "null") + "," +
                     enquiry.getReplies()
                 );
                 writer.newLine();
@@ -419,7 +419,7 @@ public class FileProcessing {
                     suggestion.getCamp().getCampInfo().getCampName() + "," +
                     suggestion.getStudent().getUserId() + "," +
                     suggestion.getContent() + "," +
-                    Boolean.toString(suggestion.getApproved()) 
+                    Boolean.toString(suggestion.isApproved()) 
                 );
                 writer.newLine();
             }

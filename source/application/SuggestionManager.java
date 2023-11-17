@@ -19,7 +19,7 @@ public class SuggestionManager {
             if (! camp.isActive()) continue ;
 
             for (Suggestion suggestion : camp.getSuggestions()) {
-                if(suggestion.getActive()) {
+                if(suggestion.isActive()) {
                     suggestions.add(suggestion) ;
                 }
             }
