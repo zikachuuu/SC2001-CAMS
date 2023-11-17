@@ -1,6 +1,7 @@
 package source.application;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.DateTimeException;
@@ -393,6 +394,7 @@ public class StaffInterface extends UserInterface {
         }
     }
 
+
     private static void generateCommitteeMembersReportAsStaff() {
 
         String filePath =  "report//committee_report.csv";
@@ -401,30 +403,24 @@ public class StaffInterface extends UserInterface {
             writer.write("Student ID,Student Email,Student UserName, Points");
             writer.newLine();
 
+            for (Student students: CAMSApp.students) {
+                String studentId = students.getUserId();
 
-                    for (Student students: CAMSApp.students) {
+                Student student = UserManager.findStudentByUserId(studentId);
 
-                            String studentId = students.getUserId();
-
-                            Student student = UserManager.findStudentByUserId(studentId);
-
-                            if(student.isCampCommittee()) {
-                                writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName() + "," + student.getCampCommittee().getPoints());
-                                writer.newLine();
-                            }
-                        }
-
-
-
-
+                if(student.isCampCommittee()) {
+                    writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName() + "," + student.getCampCommittee().getPoints());
+                    writer.newLine();
+                }
+            }
             System.out.println("Committee members report generated successfully. File: "+ filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-       private static void committeePerformanceReport(Staff loggedInStaff)
-   {
+
+    private static void committeePerformanceReport(Staff loggedInStaff) {
 	   ArrayList<Camp> camps = loggedInStaff.getCreatedCamps();
 	   File file = new File("data//" + LocalDate.now() + "_PerformanceReport.csv");
 	   if (!file.exists())
@@ -434,29 +430,30 @@ public class StaffInterface extends UserInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	   try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
-           writer.write("CommitteeMemberName, StudentID, CampName, Points \r\n");
-           
-           for (Camp camp : camps) {
-               // Write each camp's details to the file
-               if (! camp.isActive()) continue ;
-               ArrayList<Student> students = camp.getParticipants();
-               for(Student student: students) {
-        	   // write only camp committee member's info
-            	   if(student.isCampCommittee()) { 
-               
-	            	   writer.write(
-	            		   student.getUserName() + "," +
-	            		   student.getUserId() + "," +
-	            		   camp.getCampInfo().getCampName() + "," +
-	            		   student.getCampCommittee().getPoints()
-	            		) ;
-            	   		writer.newLine();
-            	   }
-               }
-           }
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+            writer.write("CommitteeMemberName, StudentID, CampName, Points \r\n");
+            
+            for (Camp camp : camps) {
+                // Write each camp's details to the file
+                if (! camp.isActive()) continue ;
+                ArrayList<Student> students = camp.getParticipants();
+                for(Student student: students) {
+                // write only camp committee member's info
+                    if(student.isCampCommittee()) { 
+                
+                        writer.write(
+                            student.getUserName() + "," +
+                            student.getUserId() + "," +
+                            camp.getCampInfo().getCampName() + "," +
+                            student.getCampCommittee().getPoints()
+                        ) ;
+                        writer.newLine();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
