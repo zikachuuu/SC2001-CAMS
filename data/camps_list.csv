@@ -1,1 +1,2 @@
 CampName, StartDate, EndDate, RegistrationClosingDate,UserGroup, Location,TotalSlots, CampCommitteeSlots, NumAttendees, NumCommittees, Description, StaffInCharge,Visibility
+SPMS,2023-11-17,2024-01-18,2023-11-01,NTU,SPMS,10,1,0,0,Math,ARVI,visible

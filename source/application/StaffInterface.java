@@ -177,10 +177,17 @@ public class StaffInterface extends UserInterface {
 
         try {
             camp = CampManager.findCampByName(campNameToEdit) ;
+            if(!camp.getCampInfo().getStaffInCharge().equals(loggedInStaff)) {
+                throw new NoAccessException("You are not the staff in charge");
+            }
         } catch (CampNotFoundException cnfe) {
             System.out.println("Sorry, the camp you entered does not exist.");
             return ;
+        } catch (NoAccessException nae) {
+            System.out.println("Sorry, you have no access");
+            return;
         }
+
 
         System.out.println("1. Start date");
         System.out.println("2. End date");
@@ -194,6 +201,7 @@ public class StaffInterface extends UserInterface {
         String option = CAMSApp.scanner.nextLine() ;
 
         try {
+
             switch (option) {
                 case "1" :
                     System.out.print("Enter new start date (yyyy-mm-dd): ");
