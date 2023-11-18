@@ -23,7 +23,7 @@ import source.user.Staff;
 import source.user.Student;
 import source.user.User;
 
-public class StaffInterface extends UserInterface implements IReportInterface {
+public class StaffInterface extends UserInterface implements IStaffReportInterface, ICampAdminInterface , IEnquiryAdminInterface , ISuggestionAdminInterface {
 
     public void handleStaffFunctionalities(Staff loggedInStaff) throws IOException {
 
@@ -85,7 +85,7 @@ public class StaffInterface extends UserInterface implements IReportInterface {
                     break;
 
                 case "8":
-                    generateCommitteeReport(loggedInStaff);
+                    generatePerformanceReport(loggedInStaff);
                     offerReturnToMenuOption();
                     break;
 
@@ -118,7 +118,29 @@ public class StaffInterface extends UserInterface implements IReportInterface {
     }
 
 
-    private void handleCampAdd(Staff loggedInStaff) {
+    protected void handleDefaultPasswordChange (User user) {
+        
+        System.out.println ("You are using the default password. Please change your password before proceeding.") ;
+        System.out.println() ;
+
+        while (! handlePasswordChange (user)) {
+            System.out.print ("Press 'M' to try again or any other key to exit: ") ;
+
+            String backChoice = CAMSApp.scanner.nextLine();
+            if (!"M".equalsIgnoreCase(backChoice)) {
+                exit = true;
+                return ;
+            }
+            System.out.println();
+        }
+        Utility.redirectingPage();
+    }
+
+
+    public void handleCampAdd(User loggedInUser) {
+
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
         try{
             System.out.print("Enter camp name: ");
             String campName = CAMSApp.scanner.nextLine();
@@ -182,7 +204,9 @@ public class StaffInterface extends UserInterface implements IReportInterface {
     }
     
 
-    private void handleCampEdit(Staff loggedInStaff) {
+    public void handleCampEdit(User loggedInUser) {
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
         System.out.print("Enter the name of the camp you wish to edit: ") ;
         String campNameToEdit = CAMSApp.scanner.nextLine() ;
         Camp camp ;
@@ -312,7 +336,9 @@ public class StaffInterface extends UserInterface implements IReportInterface {
     }
 
 
-    private void handleCampToggle (Staff loggedInStaff) {
+    public void handleCampToggle (User loggedInUser) {
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
         System.out.print("Enter the name of the camp you wish to toggle visibility (visible <-> unvisible): ") ;
         String campNameToToggle = CAMSApp.scanner.nextLine() ;
 
@@ -331,7 +357,9 @@ public class StaffInterface extends UserInterface implements IReportInterface {
     }
 
 
-    private void handleCampDelete(Staff loggedInStaff) {
+    public void handleCampDelete(User loggedInUser) {
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
         System.out.print("Enter the name of the camp you wish to delete: ") ;
         String campNameToDelete = CAMSApp.scanner.nextLine() ;
 
@@ -344,7 +372,9 @@ public class StaffInterface extends UserInterface implements IReportInterface {
     }
 
 
-    private void handleSuggestionViewApprove (Staff loggedInStaff) {
+    public void handleSuggestionViewApprove (User loggedInUser) {
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
         ArrayList<Suggestion> suggestions = SuggestionManager.findAllSuggestions(loggedInStaff , true) ;
         if (suggestions.size() == 0) {
             System.out.println("There are currently no unapproved suggestions regarding this camp.");
@@ -370,7 +400,9 @@ public class StaffInterface extends UserInterface implements IReportInterface {
     }
 
 
-    private void handleEnquiryViewReply(Staff loggedInStaff) {
+    public void handleEnquiryViewReply(User loggedInUser) {
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
         ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, true) ;
 
         if (enquiries.size() == 0) {
@@ -426,7 +458,7 @@ public class StaffInterface extends UserInterface implements IReportInterface {
     // }
 
 
-    public void generateCommitteeReport(User loggedInUser) {
+    public void generatePerformanceReport(User loggedInUser) {
 
         Staff loggedInStaff = (Staff) loggedInUser ;
 

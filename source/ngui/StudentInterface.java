@@ -14,8 +14,9 @@ import source.exception.InvalidUserGroupException;
 import source.exception.MultipleCommitteeRoleException;
 import source.exception.WithdrawnException;
 import source.user.Student;
+import source.user.User;
 
-public class StudentInterface extends UserInterface {
+public class StudentInterface extends UserInterface implements IEnquirySubmitterInterface, ICampParticipantInterface {
 
     CommitteeInterface committeeInterface ;
 
@@ -111,7 +112,28 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private void handleCampRegister (Student loggedInStudent) {
+    protected void handleDefaultPasswordChange (User user) {
+        
+        System.out.println ("You are using the default password. Please change your password before proceeding.") ;
+        System.out.println() ;
+
+        while (! handlePasswordChange (user)) {
+            System.out.print ("Press 'M' to try again or any other key to exit: ") ;
+
+            String backChoice = CAMSApp.scanner.nextLine();
+            if (!"M".equalsIgnoreCase(backChoice)) {
+                exit = true;
+                return ;
+            }
+            System.out.println();
+        }
+        Utility.redirectingPage();
+    }
+
+
+    public void handleCampRegister (User user) {
+        Student loggedInStudent = (Student) user ;
+
         System.out.print ("Enter the name of the camp you wish to register: ") ;
         String campNameToRegister = CAMSApp.scanner.nextLine();
         System.out.print ("Register as 1.attendee 2.committee: ") ;
@@ -139,7 +161,9 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private void handleCampWithdraw(Student loggedInStudent) {
+    public void handleCampWithdraw(User user) {
+        Student loggedInStudent = (Student) user ;
+
         System.out.print("Enter the name of the camp you want to withdraw from: ");
         String campNameToWithdraw = CAMSApp.scanner.nextLine();
 
@@ -155,7 +179,9 @@ public class StudentInterface extends UserInterface {
     }
 
     
-    private void handleSubmitEnquiry(Student loggedInStudent) {
+    public void handleSubmitEnquiry(User loggedInUser) {
+        Student loggedInStudent = (Student) loggedInUser ;
+
         System.out.print("Enter the name of the camp you want to submit an enquiry for: ");
         String campNameToEnquire = CAMSApp.scanner.nextLine();
         System.out.print("Enter the content of the enquiry: ") ;
@@ -171,7 +197,9 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private void handleEditEnquiry (Student loggedInStudent) {
+    public void handleEditEnquiry (User loggedInUser) {
+        Student loggedInStudent = (Student) loggedInUser ;        
+        
         ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStudent , true) ;
 
         if (enquiries.size() == 0) {
@@ -203,7 +231,9 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private void handleDeleteEnquiry(Student loggedInStudent) {
+    public void handleDeleteEnquiry(User loggedInUser) {
+        Student loggedInStudent = (Student) loggedInUser ;
+
         ArrayList<Enquiry> enquiries2 = EnquiryManager.findAllEnquiry(loggedInStudent , true) ;
 
         if (enquiries2.size() == 0) {

@@ -19,11 +19,13 @@ public abstract class User {
         this.password = password ;
     }
 
+    
     public String getUserName() {return userName ;}
     public String getUserId() {return userId ;}
     public Faculty getFaculty() {return faculty ;}
     public String getPassword() {return password ;}
     protected void setPassword(String newPassword) {this.password = newPassword ;}
+
 
     public abstract boolean isDefaultPassword() ;
     public abstract boolean changePassword (String oldPassword, String newPassword) ;

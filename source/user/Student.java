@@ -14,7 +14,7 @@ import java.lang.String ;
  * @version beta 2 (Some methods have yet to be implemented; no methods here update the csv, csv update is done in main)
  * @since 2023-11-10
  */
-public class Student extends User {
+public class Student extends User implements ICampParticipant{
 
     private CampCommittee campCommittee ;
     private ArrayList<CampAttendee> campAttendees ;

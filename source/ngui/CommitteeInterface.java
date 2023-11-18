@@ -15,7 +15,7 @@ import source.camp.Enquiry;
 import source.user.Student;
 import source.user.User;
 
-public class CommitteeInterface extends UserInterface implements IReportInterface{
+public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterface, ISuggestionSubmitterInterface{
 
     public void handleCampCommiteeFunctionalities(Student loggedInStudent, Camp camp) {
 
@@ -26,9 +26,8 @@ public class CommitteeInterface extends UserInterface implements IReportInterfac
             System.out.println("Press 1 to view details of the camp you've registered for");
             System.out.println("Press 2 to submit suggestions") ;
             System.out.println("Press 3 to view and reply to student enquiries");
-            System.out.println("Press 4 to generate camp committee report");
-            System.out.println("Press 5 to generate camp participant report");
-            System.out.println("Press 6 to generate enquiries report");
+            System.out.println("Press 4 to generate camp participant report");
+            System.out.println("Press 5 to generate enquiries report");
             System.out.println("Press any other key to exit commitee menu");
             System.out.print ("Enter your choice: ") ;
             String choice = CAMSApp.scanner.nextLine();
@@ -43,25 +42,20 @@ public class CommitteeInterface extends UserInterface implements IReportInterfac
                     break;
 
                 case "2":
-                    handleSuggestionAdd(loggedInStudent, camp);
+                    handleSuggestionAdd(loggedInStudent);
                     offerReturnToInnerMenuOption();
                     break;
 
                 case "3":
-                    handleEnquiryViewReply(loggedInStudent , camp) ;
+                    handleEnquiryViewReply(loggedInStudent) ;
                     offerReturnToInnerMenuOption();
                     break;
 
-                case "4":
-                    generateCommitteeReport(loggedInStudent);
-                    offerReturnToInnerMenuOption();
-                    break;
-
-                case "5" :
+                case "4" :
                     generateParticipantsReport(loggedInStudent) ;
                     offerReturnToInnerMenuOption();
 
-                case "6" :
+                case "5" :
                     generateEnquiryReport(loggedInStudent);
                     offerReturnToInnerMenuOption();
 
@@ -74,7 +68,9 @@ public class CommitteeInterface extends UserInterface implements IReportInterfac
     }
 
 
-    private void handleSuggestionAdd (Student loggedInStudent , Camp camp) {
+    public void handleSuggestionAdd (User user) {
+        Student loggedInStudent = (Student) user ;
+
         System.out.print ("Enter the suggestion you would like to make: ") ;
         String suggestionContent = CAMSApp.scanner.nextLine() ;
         suggestionContent = Utility.replaceCommaWithSemicolon(suggestionContent) ;
@@ -83,7 +79,10 @@ public class CommitteeInterface extends UserInterface implements IReportInterfac
     }
 
 
-    private void handleEnquiryViewReply(Student loggedInStudent , Camp camp) {
+    public void handleEnquiryViewReply(User loggedInUser) { 
+        Student loggedInStudent = (Student) loggedInUser ;
+        Camp camp = loggedInStudent.getCampCommittee().getCamp() ;
+
         ArrayList<Enquiry> enquiries = camp.getEnquiries(true, true) ;
 
         if (enquiries.size() == 0) {
@@ -111,43 +110,6 @@ public class CommitteeInterface extends UserInterface implements IReportInterfac
         } 
         catch (NumberFormatException | IndexOutOfBoundsException ee) {
             System.out.println("Invalid enquiry choice.");
-        }
-    }
-
-
-    public void generateCommitteeReport(User loggedInUser) {
-        Student loggedInStudent = (Student) loggedInUser ;
-
-        Camp camp = loggedInStudent.getCampCommittee().getCamp() ;
-
-        File file = new File("report//" + LocalDate.now() + "_CommitteeReport.csv");
-        if (!file.exists()){
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
-            writer.write("CommitteeMemberName, StudentID, CampName, Points \r\n");
-
-            for(Student student: camp.getParticipants()) {
-            // write only camp committee member's info
-                if(student.isCampCommittee()) { 
-            
-                    writer.write(
-                        student.getUserName() + "," +
-                        student.getUserId() + "," +
-                        camp.getCampInfo().getCampName() + "," +
-                        student.getCampCommittee().getPoints()
-                    ) ;
-                    writer.newLine();
-                }
-            }
-    
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

@@ -18,7 +18,7 @@ import source.exception.NoAccessException;
  * Methods are created for csv updates.
  * @since 2023-11-15
  */
-public class Staff extends User{
+public class Staff extends User implements ICampAdmin {
 
     private ArrayList<Camp> createdCamps;
 
@@ -109,21 +109,24 @@ public class Staff extends User{
         throw new CampNotFoundException() ;
     }
 
+    
     /**
      * Iterate through all the camps in createdCamps list, and display camp details to the command line interface.
      */
     public void viewCreatedCamps () {
 
+        boolean have = false ;
         System.out.println("List of camps that you have created:\n");
 
-        if (createdCamps.size() == 0) {
-            System.out.println("You have yet to create any camps.");
-            return ;
+        for(Camp camp : createdCamps) {
+            if (! camp.isActive()) continue ;
+            camp.viewDetailedCampInfo(this) ;
+            System.out.println();
+            have = true ;
         }
 
-        for(int i = 0; i < createdCamps.size(); i++) {
-            createdCamps.get(i).viewDetailedCampInfo(this) ;
-            System.out.println();
+        if (! have) {
+            System.out.println("You have yet to create any camps.");
         }
     }
 

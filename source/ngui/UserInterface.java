@@ -4,7 +4,7 @@ import source.application.CAMSApp;
 import source.application.Utility;
 import source.user.User;
 
-public class UserInterface {
+public abstract class UserInterface {
 
     protected boolean exit = false ;
     
@@ -40,21 +40,5 @@ public class UserInterface {
     }
 
     
-    protected void handleDefaultPasswordChange (User user) {
-        
-        System.out.println ("You are using the default password. Please change your password before proceeding.") ;
-        System.out.println() ;
-
-        while (! handlePasswordChange (user)) {
-            System.out.print ("Press 'M' to try again or any other key to exit: ") ;
-
-            String backChoice = CAMSApp.scanner.nextLine();
-            if (!"M".equalsIgnoreCase(backChoice)) {
-                exit = true;
-                return ;
-            }
-            System.out.println();
-        }
-        Utility.redirectingPage();
-    }
+    abstract protected void handleDefaultPasswordChange (User user) ;
 }
