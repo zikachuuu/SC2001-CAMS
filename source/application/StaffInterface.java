@@ -4,10 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.time.DateTimeException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Objects;
+import java.util.Scanner;
 
 import source.camp.Camp;
 import source.camp.Enquiry;
@@ -32,8 +36,8 @@ public class StaffInterface extends UserInterface {
             System.out.println("Press 5 to edit your camps");
             System.out.println("Press 6 to toggle a camp's visibility");
             System.out.println("Press 7 to delete a camp");
-            System.out.println("Press 8 to generate camp committee report");
-            System.out.println("(todo) Press 9 to generate camp attendee report");
+            System.out.println("Press 8 to generate camp performance report");
+            System.out.println("Press 9 to generate camp attendee report");
             System.out.println("(todo) Press 10 to generate enquiries report") ;
             System.out.println("Press 11 to view and approve camp suggestions");
             System.out.println("Press 12 to view and reply enquiries");
@@ -84,7 +88,7 @@ public class StaffInterface extends UserInterface {
                     break;
 
                 case "9":
-
+                    generateParticipantsReport(loggedInStaff);
                     offerReturnToMenuOption();
                     break;
 
@@ -422,7 +426,7 @@ public class StaffInterface extends UserInterface {
 
     private static void committeePerformanceReport(Staff loggedInStaff) {
 	   ArrayList<Camp> camps = loggedInStaff.getCreatedCamps();
-	   File file = new File("data//" + LocalDate.now() + "_PerformanceReport.csv");
+	   File file = new File("report//" + LocalDate.now() + "_PerformanceReport.csv");
 	   if (!file.exists())
 		try {
 			file.createNewFile();
@@ -451,6 +455,63 @@ public class StaffInterface extends UserInterface {
                     }
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+   private static void generateParticipantsReport(Staff loggedInStaff) {
+        ArrayList<Camp> camps = loggedInStaff.getCreatedCamps();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the name of the camp you want the report to be generated");
+        String campName = scanner.nextLine();
+        try {
+            for (Camp camp : camps)
+                if (Objects.equals(camp.getCampInfo().getCampName(), campName))
+                    break;
+        } catch (CampNotFoundException cnfe) {
+            System.out.println("The camp does not exist");
+        }
+        String filePath = "report//" + LocalDate.now() + "_for_camp_" + campName + "_participantsReport.csv";
+        File file = new File(filePath);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+            writer.write("CampInfo: ");
+            Camp camp = CampManager.findCampByName(campName);
+            ArrayList<Student> currentCampParticipants = camp.getParticipants();
+            writer.write(camp.getCampInfo().toString());
+            writer.newLine();
+            System.out.println("Select a way to generate the report");
+            System.out.println("Press 1 for camp attendee only report.");
+            System.out.println("Press 2 for camp committee only report.");
+            System.out.println("Enter any other keys to generate report for all members");
+            String filter = scanner.nextLine();
+            switch (filter) {
+                case "1":
+                    for(Student student : currentCampParticipants)
+                        if (student.isCampAttendee(camp) && !student.isCampCommittee(camp))
+                            writer.write(student.getUserId() + "," + "attendee" + '\n');
+                    break;
+                case "2":
+                    for(Student student : currentCampParticipants)
+                        if (student.isCampCommittee(camp))
+                            writer.write(student.getUserId() + "," + "committee" + '\n');
+                    break;
+                default:
+                    for(Student student : currentCampParticipants) {
+                        if (student.isCampCommittee(camp))
+                            writer.write(student.getUserId() + "," + "committee" + '\n');
+                        else if (student.isCampAttendee(camp))
+                            writer.write(student.getUserId() + "," + "attendee" + '\n');
+                    }
+                    break;
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

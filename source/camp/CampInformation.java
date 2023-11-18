@@ -77,4 +77,9 @@ public class CampInformation {
     public String getDescription() {return description ;}
     public void setDescription(String description) {this.description = description ;}
     public Staff getStaffInCharge() {return staffInCharge ;}
+    public String toString() {
+        return campName + " " + startDate + " " + endDate + " " + registrationClosingDate + " " +
+                                    userGroup + " " + location + " " + totalSlots + " " + campCommitteeSlots + " " +
+                                    description + " " + staffInCharge.getUserName();
+    }
 }
