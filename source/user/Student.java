@@ -249,4 +249,23 @@ public class Student extends User {
         campCommittee.getCamp().addSuggestion(this, suggestion);
         campCommittee.addPoint();
     }
+
+    public boolean isDefaultPassword() {
+        return super.getPassword().equals("password") ;
+    }
+
+
+    /**
+     * Change password (duh).
+     * 
+     * @param oldPassword The old password (to verify).
+     * @param newPassword The new password.
+     * @return True if successfully changed, false if oldPassword does not match.
+     */
+    public boolean changePassword(String oldPassword, String newPassword) {
+        if (!oldPassword.equals(super.getPassword()))
+            return false;
+        setPassword(newPassword);
+        return true;
+    }
 }

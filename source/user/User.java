@@ -6,7 +6,7 @@ package source.user;
  * @version beta 3 (nah we do not need log in, log in will be handled by main)
  * @since 2023-11-11
  */
-public class User {
+public abstract class User {
     private String userId ;
     private String userName ;
     private Faculty faculty ;
@@ -23,23 +23,10 @@ public class User {
     public String getUserId() {return userId ;}
     public Faculty getFaculty() {return faculty ;}
     public String getPassword() {return password ;}
+    protected void setPassword(String newPassword) {this.password = newPassword ;}
 
-    public boolean isDefaultPassword() {
-        return password.equals("password") ;
-    }
-
-
-    /**
-     * Change password (duh).
-     * @param oldPassword The old password (to verify).
-     * @param newPassword The new password.
-     * @return True if successfully changed, false if oldPassword does not match.
-     */
-    public boolean changePassword (String oldPassword, String newPassword) {
-        if (! oldPassword.equals(password)) return false ;
-        password = newPassword ;
-        return true ;
-    }
+    public abstract boolean isDefaultPassword() ;
+    public abstract boolean changePassword (String oldPassword, String newPassword) ;
 
 
     /**

@@ -427,7 +427,6 @@ public class StaffInterface extends UserInterface {
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {

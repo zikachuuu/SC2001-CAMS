@@ -7,6 +7,7 @@ import source.application.CampManager;
 import source.camp.Camp;
 import source.camp.CampInformation;
 import source.exception.CampNotFoundException;
+import source.exception.ExceedMaximumException;
 import source.exception.NoAccessException;
 
 
@@ -151,4 +152,17 @@ public class Staff extends User{
         }
         throw new CampNotFoundException() ;
     }
+
+    public boolean isDefaultPassword() {
+        return super.getPassword().equals("password") ;
+    }
+
+
+    public boolean changePassword(String oldPassword, String newPassword) {
+        if (!oldPassword.equals(super.getPassword()))
+            return false;
+        setPassword(newPassword);
+        return true;
+    }
+
 }
