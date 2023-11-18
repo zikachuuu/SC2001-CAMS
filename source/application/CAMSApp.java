@@ -14,12 +14,12 @@ import source.user.Student;
  */
 public class CAMSApp {
 
-    protected static final String STUDENT_FILE_PATH = "data\\student_list.csv";
-    protected static final String STAFF_FILE_PATH = "data\\staff_list.csv";
-    protected static final String CAMP_FILE_PATH = "data\\camps_list.csv";
-    protected static final String CAMP_MEMBERS_FILE_PATH = "data\\camp_members.csv";
-    protected static final String ENQUIRIES_FILE_PATH = "data\\enquiries.csv";
-    protected static final String SUGGESTIONS_FILE_PATH = "data\\suggestions.csv";
+    protected static final String STUDENT_FILE_PATH = "data//student_list.csv";
+    protected static final String STAFF_FILE_PATH = "data//staff_list.csv";
+    protected static final String CAMP_FILE_PATH = "data//camps_list.csv";
+    protected static final String CAMP_MEMBERS_FILE_PATH = "data//camp_members.csv";
+    protected static final String ENQUIRIES_FILE_PATH = "data//enquiries.csv";
+    protected static final String SUGGESTIONS_FILE_PATH = "data//suggestions.csv";
 
     protected static ArrayList<Staff> staffs = new ArrayList<Staff>();
     protected static ArrayList<Camp> camps = new ArrayList<Camp>();
