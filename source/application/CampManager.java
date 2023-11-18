@@ -27,7 +27,7 @@ public class CampManager {
      * @return Camp object.
      * @throws CampNotFoundException If camp not found for the provided name (for example camp is deleted).
      */
-    protected static Camp findCampByName(String campName) {
+    public static Camp findCampByName(String campName) {
 
         for (Camp camp : CAMSApp.camps) {
             if (camp.getCampInfo().getCampName().equals(campName) && camp.isActive())

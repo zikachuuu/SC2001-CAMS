@@ -1,18 +1,19 @@
-package source.application;
+package source.ngui;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.time.DateTimeException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.Objects;
-import java.util.Scanner;
 
+import source.application.CAMSApp;
+import source.application.CampManager;
+import source.application.EnquiryManager;
+import source.application.SuggestionManager;
+import source.application.Utility;
 import source.camp.Camp;
 import source.camp.Enquiry;
 import source.camp.Suggestion;
@@ -20,10 +21,11 @@ import source.exception.* ;
 import source.user.Faculty;
 import source.user.Staff;
 import source.user.Student;
+import source.user.User;
 
-public class StaffInterface extends UserInterface {
+public class StaffInterface extends UserInterface implements IReportInterface {
 
-    protected static void handleStaffFunctionalities(Staff loggedInStaff) throws IOException {
+    public void handleStaffFunctionalities(Staff loggedInStaff) throws IOException {
 
         if (loggedInStaff.isDefaultPassword()) handleDefaultPasswordChange(loggedInStaff);
 
@@ -36,8 +38,8 @@ public class StaffInterface extends UserInterface {
             System.out.println("Press 5 to edit your camps");
             System.out.println("Press 6 to toggle a camp's visibility");
             System.out.println("Press 7 to delete a camp");
-            System.out.println("Press 8 to generate camp performance report");
-            System.out.println("Press 9 to generate camp attendee report");
+            System.out.println("Press 8 to generate camp committee performance report");
+            System.out.println("Press 9 to generate camp participant report");
             System.out.println("Press 10 to generate enquiries report") ;
             System.out.println("Press 11 to view and approve camp suggestions");
             System.out.println("Press 12 to view and reply enquiries");
@@ -83,7 +85,7 @@ public class StaffInterface extends UserInterface {
                     break;
 
                 case "8":
-                    committeePerformanceReport(loggedInStaff);
+                    generateCommitteeReport(loggedInStaff);
                     offerReturnToMenuOption();
                     break;
 
@@ -116,7 +118,7 @@ public class StaffInterface extends UserInterface {
     }
 
 
-    private static void handleCampAdd(Staff loggedInStaff) {
+    private void handleCampAdd(Staff loggedInStaff) {
         try{
             System.out.print("Enter camp name: ");
             String campName = CAMSApp.scanner.nextLine();
@@ -180,7 +182,7 @@ public class StaffInterface extends UserInterface {
     }
     
 
-    private static void handleCampEdit(Staff loggedInStaff) {
+    private void handleCampEdit(Staff loggedInStaff) {
         System.out.print("Enter the name of the camp you wish to edit: ") ;
         String campNameToEdit = CAMSApp.scanner.nextLine() ;
         Camp camp ;
@@ -310,7 +312,7 @@ public class StaffInterface extends UserInterface {
     }
 
 
-    private static void handleCampToggle (Staff loggedInStaff) {
+    private void handleCampToggle (Staff loggedInStaff) {
         System.out.print("Enter the name of the camp you wish to toggle visibility (visible <-> unvisible): ") ;
         String campNameToToggle = CAMSApp.scanner.nextLine() ;
 
@@ -329,7 +331,7 @@ public class StaffInterface extends UserInterface {
     }
 
 
-    private static void handleCampDelete(Staff loggedInStaff) {
+    private void handleCampDelete(Staff loggedInStaff) {
         System.out.print("Enter the name of the camp you wish to delete: ") ;
         String campNameToDelete = CAMSApp.scanner.nextLine() ;
 
@@ -342,7 +344,7 @@ public class StaffInterface extends UserInterface {
     }
 
 
-    private static void handleSuggestionViewApprove (Staff loggedInStaff) {
+    private void handleSuggestionViewApprove (Staff loggedInStaff) {
         ArrayList<Suggestion> suggestions = SuggestionManager.findAllSuggestions(loggedInStaff , true) ;
         if (suggestions.size() == 0) {
             System.out.println("There are currently no unapproved suggestions regarding this camp.");
@@ -368,7 +370,7 @@ public class StaffInterface extends UserInterface {
     }
 
 
-    private static void handleEnquiryViewReply(Staff loggedInStaff) {
+    private void handleEnquiryViewReply(Staff loggedInStaff) {
         ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, true) ;
 
         if (enquiries.size() == 0) {
@@ -399,40 +401,46 @@ public class StaffInterface extends UserInterface {
     }
 
 
-    private static void generateCommitteeMembersReportAsStaff() {
+    // private static void generateCommitteeMembersReportAsStaff() {
 
-        String filePath =  "report//committee_report.csv";
+    //     String filePath =  "report//committee_report.csv";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write("Student ID,Student Email,Student UserName, Points");
-            writer.newLine();
+    //     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+    //         writer.write("Student ID,Student Email,Student UserName, Points");
+    //         writer.newLine();
 
-            for (Student students: CAMSApp.students) {
-                String studentId = students.getUserId();
+    //         for (Student students: CAMSApp.students) {
+    //             String studentId = students.getUserId();
 
-                Student student = UserManager.findStudentByUserId(studentId);
+    //             Student student = UserManager.findStudentByUserId(studentId);
 
-                if(student.isCampCommittee()) {
-                    writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName() + "," + student.getCampCommittee().getPoints());
-                    writer.newLine();
-                }
+    //             if(student.isCampCommittee()) {
+    //                 writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName() + "," + student.getCampCommittee().getPoints());
+    //                 writer.newLine();
+    //             }
+    //         }
+    //         System.out.println("Committee members report generated successfully. File: "+ filePath);
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+
+
+    public void generateCommitteeReport(User loggedInUser) {
+
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
+        ArrayList<Camp> camps = loggedInStaff.getCreatedCamps();
+        File file = new File("report//" + LocalDate.now() + "_PerformanceReport.csv");
+
+        if (!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            System.out.println("Committee members report generated successfully. File: "+ filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
-
-
-    private static void committeePerformanceReport(Staff loggedInStaff) {
-	   ArrayList<Camp> camps = loggedInStaff.getCreatedCamps();
-	   File file = new File("report//" + LocalDate.now() + "_PerformanceReport.csv");
-	   if (!file.exists())
-		try {
-			file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write("CommitteeMemberName, StudentID, CampName, Points \r\n");
             
@@ -460,28 +468,31 @@ public class StaffInterface extends UserInterface {
     }
 
 
-   private static void generateParticipantsReport(Staff loggedInStaff) {
-        ArrayList<Camp> camps = loggedInStaff.getCreatedCamps();
-        Scanner scanner = new Scanner(System.in);
+   public void generateParticipantsReport(User loggedInStaff) {
+
         System.out.println("Please enter the name of the camp you want the report to be generated");
-        String campName = scanner.nextLine();
+        String campName = CAMSApp.scanner.nextLine();
+        Camp camp ;
         try {
-            for (Camp camp : camps)
-                if (Objects.equals(camp.getCampInfo().getCampName(), campName))
-                    break;
-            throw new CampNotFoundException();
+            camp = CampManager.findCampByName(campName);
+            if (! camp.getCampInfo().getStaffInCharge().equals(loggedInStaff)) throw new CampNotFoundException() ;
         } catch (CampNotFoundException cnfe) {
+            System.out.println("Sorry, the camp you entered does not exist.");
+            return ;
         }
+
         String filePath = "report//" + LocalDate.now() + "_for_camp_" + campName + "_participantsReport.csv";
         File file = new File(filePath);
+
         try {
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write("CampInfo: ");
-            Camp camp = CampManager.findCampByName(campName);
+            
             ArrayList<Student> currentCampParticipants = camp.getParticipants();
             writer.write(camp.getCampInfo().toString());
             writer.newLine();
@@ -489,7 +500,7 @@ public class StaffInterface extends UserInterface {
             System.out.println("Press 1 for camp attendee only report.");
             System.out.println("Press 2 for camp committee only report.");
             System.out.println("Enter any other keys to generate report for all members");
-            String filter = scanner.nextLine();
+            String filter = CAMSApp.scanner.nextLine();
             switch (filter) {
                 case "1":
                     for(Student student : currentCampParticipants)
@@ -516,19 +527,23 @@ public class StaffInterface extends UserInterface {
         }
     }
 
-    private static void generateEnquiryReport(Staff loggedInStaff) throws IOException {
-        Scanner scanner = new Scanner(System.in);
+
+    public void generateEnquiryReport(User loggedInUser) {
+        Staff loggedInStaff = (Staff) loggedInUser ;
+
         System.out.println("Press 1 to view enquiries that have not been replied");
         System.out.println("Press any other keys to view all enquiries including those that have been replied");
-        String filter = scanner.nextLine();
+        String filter = CAMSApp.scanner.nextLine();
         ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, filter == "1"?true:false);
         String filePath = "report//" + LocalDate.now() + "_enquiry_report.csv";
         File file = new File(filePath);
+
         try {
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write("Enquiry Content, Active?, Replied?, Submitted by?, From which Camp?\r\n");
             for (Enquiry enquiry : enquiries) {

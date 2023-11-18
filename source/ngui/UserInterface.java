@@ -1,12 +1,14 @@
-package source.application;
+package source.ngui;
 
+import source.application.CAMSApp;
+import source.application.Utility;
 import source.user.User;
 
 public class UserInterface {
 
-    protected static boolean exit = false ;
+    protected boolean exit = false ;
     
-    protected static void offerReturnToMenuOption() {
+    protected void offerReturnToMenuOption() {
         System.out.print("Press 'M' to go back to the menu or any other key to exit: ");
         String backChoice = CAMSApp.scanner.nextLine();
         if (!"M".equalsIgnoreCase(backChoice)) {
@@ -14,7 +16,7 @@ public class UserInterface {
         }
     }
 
-    protected static boolean handlePasswordChange(User user) {
+    protected boolean handlePasswordChange(User user) {
         System.out.print("Enter your current password: ");
         String currentPassword = CAMSApp.scanner.nextLine();
 
@@ -37,7 +39,8 @@ public class UserInterface {
         }
     }
 
-    protected static void handleDefaultPasswordChange (User user) {
+    
+    protected void handleDefaultPasswordChange (User user) {
         
         System.out.println ("You are using the default password. Please change your password before proceeding.") ;
         System.out.println() ;

@@ -34,7 +34,7 @@ public class SuggestionManager {
      * @param notApproved True for not approved suggestions only, false for all suggestions.
      * @return Arraylist of suggestions
      */
-    protected static ArrayList<Suggestion> findAllSuggestions (Staff staff, boolean notApproved) {
+    public static ArrayList<Suggestion> findAllSuggestions (Staff staff, boolean notApproved) {
         ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>() ;
 
         for (Camp camp : staff.getCreatedCamps()) {

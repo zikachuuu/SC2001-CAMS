@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import source.camp.Camp;
 import source.camp.Enquiry;
 import source.exception.CampNotFoundException;
+import source.exception.NoAccessException;
 import source.user.Staff;
 import source.user.Student;
+import source.user.User;
 
 public class EnquiryManager {
 
@@ -49,7 +51,7 @@ public class EnquiryManager {
      * @param notReplied True to only find those that have not replied, False to find all.
      * @return ArrayList of enquiries.
      */
-    protected static ArrayList<Enquiry> findAllEnquiry (Student student, boolean notReplied) {
+    public static ArrayList<Enquiry> findAllEnquiry (Student student, boolean notReplied) {
 
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
         
@@ -71,7 +73,8 @@ public class EnquiryManager {
      * @param notReplied True to only find enquiries that have not been replied, false to find all.
      * @return ArrayList of enquiries.
      */
-    protected static ArrayList<Enquiry> findAllEnquiry (Staff staff, boolean notReplied) {
+    public static ArrayList<Enquiry> findAllEnquiry (Staff staff, boolean notReplied) {
+
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
 
         for (Camp camp : staff.getCreatedCamps()) {

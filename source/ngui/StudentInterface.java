@@ -1,7 +1,10 @@
-package source.application;
+package source.ngui;
 
 import java.util.ArrayList;
 
+import source.application.CAMSApp;
+import source.application.EnquiryManager;
+import source.application.Utility;
 import source.camp.Enquiry;
 import source.exception.CampFullException;
 import source.exception.CampNotFoundException;
@@ -14,7 +17,13 @@ import source.user.Student;
 
 public class StudentInterface extends UserInterface {
 
-    protected static void handleStudentFunctionalities(Student loggedInStudent) {
+    CommitteeInterface committeeInterface ;
+
+    public StudentInterface() {
+        committeeInterface = new CommitteeInterface() ;
+    }
+
+    public void handleStudentFunctionalities(Student loggedInStudent) {
 
         if (loggedInStudent.isDefaultPassword()) handleDefaultPasswordChange(loggedInStudent);
 
@@ -87,7 +96,7 @@ public class StudentInterface extends UserInterface {
                 case "10":
                     if (loggedInStudent.isCampCommittee()) {
                         Utility.redirectingPage() ;
-                        CommitteeInterface.handleCampCommiteeFunctionalities(loggedInStudent, loggedInStudent.getCampCommittee().getCamp());
+                        committeeInterface.handleCampCommiteeFunctionalities(loggedInStudent, loggedInStudent.getCampCommittee().getCamp());
                     } else {
                         System.out.println("You have no camp committee role.");
                     }
@@ -102,7 +111,7 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private static void handleCampRegister (Student loggedInStudent) {
+    private void handleCampRegister (Student loggedInStudent) {
         System.out.print ("Enter the name of the camp you wish to register: ") ;
         String campNameToRegister = CAMSApp.scanner.nextLine();
         System.out.print ("Register as 1.attendee 2.committee: ") ;
@@ -130,7 +139,7 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private static void handleCampWithdraw(Student loggedInStudent) {
+    private void handleCampWithdraw(Student loggedInStudent) {
         System.out.print("Enter the name of the camp you want to withdraw from: ");
         String campNameToWithdraw = CAMSApp.scanner.nextLine();
 
@@ -146,7 +155,7 @@ public class StudentInterface extends UserInterface {
     }
 
     
-    private static void handleSubmitEnquiry(Student loggedInStudent) {
+    private void handleSubmitEnquiry(Student loggedInStudent) {
         System.out.print("Enter the name of the camp you want to submit an enquiry for: ");
         String campNameToEnquire = CAMSApp.scanner.nextLine();
         System.out.print("Enter the content of the enquiry: ") ;
@@ -162,7 +171,7 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private static void handleEditEnquiry (Student loggedInStudent) {
+    private void handleEditEnquiry (Student loggedInStudent) {
         ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStudent , true) ;
 
         if (enquiries.size() == 0) {
@@ -194,7 +203,7 @@ public class StudentInterface extends UserInterface {
     }
 
 
-    private static void handleDeleteEnquiry(Student loggedInStudent) {
+    private void handleDeleteEnquiry(Student loggedInStudent) {
         ArrayList<Enquiry> enquiries2 = EnquiryManager.findAllEnquiry(loggedInStudent , true) ;
 
         if (enquiries2.size() == 0) {

@@ -5,6 +5,8 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import source.camp.Camp;
+import source.ngui.StaffInterface;
+import source.ngui.StudentInterface;
 import source.user.Staff;
 import source.user.Student;
 
@@ -28,6 +30,9 @@ public class CAMSApp {
     public static Scanner scanner ;
 
     public static void main(String[] args) {
+
+        StudentInterface studentInterface = new StudentInterface() ;
+        StaffInterface staffInterface = new StaffInterface() ;
 
         try {
 
@@ -72,7 +77,7 @@ public class CAMSApp {
                     if (loggedInStudent != null) {
                         System.out.println("Student Login successful!");
                         Utility.redirectingPage();
-                        StudentInterface.handleStudentFunctionalities(loggedInStudent);
+                        studentInterface.handleStudentFunctionalities(loggedInStudent);
                         break; 
                     } else {
                         System.out.println("Invalid student credentials. Login failed.");
@@ -84,7 +89,7 @@ public class CAMSApp {
                     if (loggedInStaff != null) {
                         System.out.println("Staff Login successful!");
                         Utility.redirectingPage();
-                        StaffInterface.handleStaffFunctionalities(loggedInStaff);
+                        staffInterface.handleStaffFunctionalities(loggedInStaff);
                         break; 
                     } else {
                         System.out.println("Invalid staff credentials. Login failed.");
