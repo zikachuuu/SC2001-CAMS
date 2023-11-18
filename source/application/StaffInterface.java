@@ -23,7 +23,7 @@ import source.user.Student;
 
 public class StaffInterface extends UserInterface {
 
-    protected static void handleStaffFunctionalities(Staff loggedInStaff) {
+    protected static void handleStaffFunctionalities(Staff loggedInStaff) throws IOException {
 
         if (loggedInStaff.isDefaultPassword()) handleDefaultPasswordChange(loggedInStaff);
 
@@ -38,7 +38,7 @@ public class StaffInterface extends UserInterface {
             System.out.println("Press 7 to delete a camp");
             System.out.println("Press 8 to generate camp performance report");
             System.out.println("Press 9 to generate camp attendee report");
-            System.out.println("(todo) Press 10 to generate enquiries report") ;
+            System.out.println("Press 10 to generate enquiries report") ;
             System.out.println("Press 11 to view and approve camp suggestions");
             System.out.println("Press 12 to view and reply enquiries");
             System.out.println("Press any other key to exit");
@@ -93,7 +93,7 @@ public class StaffInterface extends UserInterface {
                     break;
 
                 case "10" :
-
+                    generateEnquiryReport(loggedInStaff);
                     offerReturnToMenuOption();
                     break ;
 
@@ -470,8 +470,8 @@ public class StaffInterface extends UserInterface {
             for (Camp camp : camps)
                 if (Objects.equals(camp.getCampInfo().getCampName(), campName))
                     break;
+            throw new CampNotFoundException();
         } catch (CampNotFoundException cnfe) {
-            System.out.println("The camp does not exist");
         }
         String filePath = "report//" + LocalDate.now() + "_for_camp_" + campName + "_participantsReport.csv";
         File file = new File(filePath);
@@ -510,6 +510,33 @@ public class StaffInterface extends UserInterface {
                             writer.write(student.getUserId() + "," + "attendee" + '\n');
                     }
                     break;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void generateEnquiryReport(Staff loggedInStaff) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Press 1 to view enquiries that have not been replied");
+        System.out.println("Press any other keys to view all enquiries including those that have been replied");
+        String filter = scanner.nextLine();
+        ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, filter == "1"?true:false);
+        String filePath = "report//" + LocalDate.now() + "_enquiry_report.csv";
+        File file = new File(filePath);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+            writer.write("Enquiry Content, Active?, Replied?, Submitted by?, From which Camp?\r\n");
+            for (Enquiry enquiry : enquiries) {
+                writer.write(enquiry.getContent() + ", " +
+                        enquiry.isActive() + ", " + enquiry.isReplied() + ", " +
+                        enquiry.getStudent().getUserId() + ", " + enquiry.getCamp().getCampInfo().getCampName());
+                writer.newLine();
             }
 
         } catch (IOException e) {
