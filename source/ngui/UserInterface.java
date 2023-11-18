@@ -4,10 +4,19 @@ import source.application.CAMSApp;
 import source.application.Utility;
 import source.user.User;
 
+/**
+ * Represents the user interface that contains abstract methods for user class. 
+ * @author florian 
+ * @version 1
+ * @since 2023-11-19
+ */
 public abstract class UserInterface {
 
     protected boolean exit = false ;
-    
+
+    /**
+     * Create method for returning to menu
+     */
     protected void offerReturnToMenuOption() {
         System.out.print("Press 'M' to go back to the menu or any other key to exit: ");
         String backChoice = CAMSApp.scanner.nextLine();
@@ -16,6 +25,11 @@ public abstract class UserInterface {
         }
     }
 
+    /**
+     * Create a new method for handling password changes of users
+     * @param user
+     * @return 
+     */
     protected boolean handlePasswordChange(User user) {
         System.out.print("Enter your current password: ");
         String currentPassword = CAMSApp.scanner.nextLine();
@@ -39,6 +53,6 @@ public abstract class UserInterface {
         }
     }
 
-    
+
     abstract protected void handleDefaultPasswordChange (User user) ;
 }
