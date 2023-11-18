@@ -497,12 +497,14 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Performance report has been successfully generated!");
     }
 
 
    public void generateParticipantsReport(User loggedInStaff) {
 
-        System.out.println("Please enter the name of the camp you want the report to be generated");
+        System.out.print("Please enter the name of the camp you want the report to be generated: ");
         String campName = CAMSApp.scanner.nextLine();
         Camp camp ;
         try {
@@ -531,7 +533,8 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
             System.out.println("Select a way to generate the report");
             System.out.println("Press 1 for camp attendee only report.");
             System.out.println("Press 2 for camp committee only report.");
-            System.out.println("Enter any other keys to generate report for all members");
+            System.out.println("Press 3 for report of all members.");
+            System.out.print("Enter your choice: ");
             String filter = CAMSApp.scanner.nextLine();
             switch (filter) {
                 case "1":
@@ -544,7 +547,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
                         if (student.isCampCommittee(camp))
                             writer.write(student.getUserId() + "," + "committee" + '\n');
                     break;
-                default:
+                case "3":
                     for(Student student : currentCampParticipants) {
                         if (student.isCampCommittee(camp))
                             writer.write(student.getUserId() + "," + "committee" + '\n');
@@ -552,21 +555,32 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
                             writer.write(student.getUserId() + "," + "attendee" + '\n');
                     }
                     break;
+                default :
+                    System.out.println("Invalid choice entered!");
+                    return ;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Participant report has been successfully generated!");
     }
 
 
     public void generateEnquiryReport(User loggedInUser) {
         Staff loggedInStaff = (Staff) loggedInUser ;
 
-        System.out.println("Press 1 to view enquiries that have not been replied");
-        System.out.println("Press any other keys to view all enquiries including those that have been replied");
+        System.out.println("Press 1 to view enquiries that have not been replied.");
+        System.out.println("Press 2 to view all enquiries including those that have been replied.");
+        System.out.print("Enter your choice: ");
         String filter = CAMSApp.scanner.nextLine();
-        ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, filter == "1"?true:false);
+        if (! filter.equals("1") || ! filter.equals("2")) {
+            System.out.println("Invalid choice entered!");
+            return ;
+        }
+
+        ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, filter.equals("1") ?true:false);
         String filePath = "report//" + LocalDate.now() + "_enquiry_report.csv";
         File file = new File(filePath);
 
@@ -588,6 +602,8 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Enquiry report has been successfully generated!");
     }
 }
 
