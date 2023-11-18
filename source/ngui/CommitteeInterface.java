@@ -15,8 +15,18 @@ import source.camp.Enquiry;
 import source.user.Student;
 import source.user.User;
 
+/**
+ * Represents a interface that contains abstract methods to be implemented in CampCommittee class 
+ * @author daryl tan 
+ * @version 1
+ * @since 2023-11-19
+ */
 public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterface, ISuggestionSubmitterInterface{
-
+    /**
+     * Create a new method for handling CampCommitteeFunctionalities
+     * @param loggedInStudent
+     * @param camp
+     */
     public void handleCampCommiteeFunctionalities(Student loggedInStudent, Camp camp) {
 
         boolean innerMenu = true;
@@ -67,7 +77,10 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         }
     }
 
-
+    /**
+     * Create a method for handling addition of suggestions
+     * @param user
+     */
     public void handleSuggestionAdd (User user) {
         Student loggedInStudent = (Student) user ;
 
@@ -78,8 +91,11 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         System.out.println("Your suggestion has been successfully submitted!");
     }
 
-
-    public void handleEnquiryViewReply(User loggedInUser) { 
+    /**
+     * Create a method for handling enquiries and viewing replies
+     * @param loggedInUser
+     */
+    public void handleEnquiryViewReply(User loggedInUser) {
         Student loggedInStudent = (Student) loggedInUser ;
         Camp camp = loggedInStudent.getCampCommittee().getCamp() ;
 
@@ -107,13 +123,16 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         try {
             enquiries.get(Integer.parseInt(enquiryChoice) - 1).replyEnquriy(loggedInStudent, reply) ;
             System.out.println("Enquiry has been successfully replied!") ;
-        } 
+        }
         catch (NumberFormatException | IndexOutOfBoundsException ee) {
             System.out.println("Invalid enquiry choice.");
         }
     }
 
-
+    /**
+     * Create a method for generating participants report 
+     * @param loggedInUser
+     */
     public void generateParticipantsReport(User loggedInUser) {
 
         Student loggedInStudent = (Student) loggedInUser ;
@@ -130,7 +149,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write("CampInfo: ");
-            
+
             ArrayList<Student> currentCampParticipants = camp.getParticipants();
             writer.write(camp.getCampInfo().toString());
             writer.newLine();
@@ -171,7 +190,10 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         System.out.println("Participant report has been successfully generated!");
     }
 
-
+    /**
+     * Create a method for generating enquiry report 
+     * @param loggedInUser
+     */
     public void generateEnquiryReport(User loggedInUser) {
         Student loggedInStudent = (Student) loggedInUser ;
 
@@ -210,10 +232,12 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         System.out.println("Enquiry report has been successfully generated!");
     }
 
-        
+    /**
+     * Create a method for returning to menu option
+     */
     private void offerReturnToInnerMenuOption() {
         System.out.print("Press any key to continue...");
         CAMSApp.scanner.nextLine();
     }
-   
+
 }
