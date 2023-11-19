@@ -64,10 +64,12 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
                 case "4" :
                     generateParticipantsReport(loggedInStudent) ;
                     offerReturnToInnerMenuOption();
+                    break ;
 
                 case "5" :
                     generateEnquiryReport(loggedInStudent);
                     offerReturnToInnerMenuOption();
+                    break ;
 
                 default:
                     innerMenu = false;
