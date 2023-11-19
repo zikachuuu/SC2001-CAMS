@@ -77,6 +77,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         }
     }
 
+
     /**
      * Create a method for handling addition of suggestions
      * @param user
@@ -90,6 +91,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         loggedInStudent.submitSuggestion(suggestionContent) ;
         System.out.println("Your suggestion has been successfully submitted!");
     }
+
 
     /**
      * Create a method for handling enquiries and viewing replies
@@ -128,6 +130,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
             System.out.println("Invalid enquiry choice.");
         }
     }
+
 
     /**
      * Create a method for generating participants report 
@@ -190,6 +193,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         System.out.println("Participant report has been successfully generated!");
     }
 
+
     /**
      * Create a method for generating enquiry report 
      * @param loggedInUser
@@ -232,6 +236,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         System.out.println("Enquiry report has been successfully generated!");
     }
 
+    
     /**
      * Create a method for returning to menu option
      */

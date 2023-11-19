@@ -126,6 +126,7 @@ public class StudentInterface extends UserInterface implements IEnquirySubmitter
         }
     }
 
+
     /**
     * Allows user to change default password.
     * @param user The user who is required to change the default password after login.
@@ -149,16 +150,10 @@ public class StudentInterface extends UserInterface implements IEnquirySubmitter
         Utility.redirectingPage();
     }
 
+
     /**
     * Allows student to register for camp as attendee or committee.
     * @param user The student who wants to register from camp.
-    * @throws CampNotFoundException
-    * @throws InvalidUserGroupException
-    * @throws MultipleCommitteeRoleException
-    * @throws DateClashException
-    * @throws DeadlineOverException
-    * @throws CampFullException
-    * @throws WithdrawnException
     */
     public void handleCampRegister (User user) {
         Student loggedInStudent = (Student) user ;
@@ -189,10 +184,10 @@ public class StudentInterface extends UserInterface implements IEnquirySubmitter
         }
     }
 
+
     /**
     * Allows student to withdraw from camp.
     * @param user The student who wants to withdraw from camp.
-    * @throws CampNotFoundException
     */
     public void handleCampWithdraw(User user) {
         Student loggedInStudent = (Student) user ;
@@ -211,10 +206,10 @@ public class StudentInterface extends UserInterface implements IEnquirySubmitter
         }
     }
 
+
     /**
     * Allows student to submit enquiry.
     * @param loggedInUser The student who wants to submit the enquiry.
-    * @throws CampNotFoundException
     */
     public void handleSubmitEnquiry(User loggedInUser) {
         Student loggedInStudent = (Student) loggedInUser ;
@@ -233,12 +228,11 @@ public class StudentInterface extends UserInterface implements IEnquirySubmitter
         }
     }
 
+
     /**
     * Allows student to edit enquiry sent by them.
     * @param loggedInUser The student who want to edit the enquiry sent by himself/herself
-    * @return null if no enquiries to be deleted
-    * @throws NumberFormatException
-    * @throws IndexOutOfBoundsException
+    * @return null if no enquiries to be edited
     */
     public void handleEditEnquiry (User loggedInUser) {
         Student loggedInStudent = (Student) loggedInUser ;        
@@ -273,12 +267,11 @@ public class StudentInterface extends UserInterface implements IEnquirySubmitter
         }
     }
 
+
     /**
     * Allows student to delete enquiry sent by them.
     * @param loggedInUser The student who wants to delete the enquiry sent by himself/herself.
     * @return null if no enquiries to be deleted
-    * @throws NumberFormatException
-    * @throws IndexOutOfBoundsException
     */
     public void handleDeleteEnquiry(User loggedInUser) {
         Student loggedInStudent = (Student) loggedInUser ;

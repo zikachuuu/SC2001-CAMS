@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import source.camp.Camp;
 import source.camp.Enquiry;
 import source.exception.CampNotFoundException;
-import source.exception.NoAccessException;
 import source.user.Staff;
 import source.user.Student;
-import source.user.User;
 
 public class EnquiryManager {
 
@@ -21,6 +19,7 @@ public class EnquiryManager {
      */
     public static void addEnquiryToCamp(String campName, String content, Student student) {
         Camp camp = CampManager.findCampByName(campName) ;
+        if (! camp.isVisible()) throw new CampNotFoundException() ;
         camp.addEnquiry(new Enquiry(camp, student, content));
     }
 

@@ -14,14 +14,13 @@ import source.exception.NoAccessException;
 /**
  * Represents a staff. A staff is a user (inheritance).
  * @author Florian Goering, Le Yanzhi
- * @version beta 3 (added in a new attribute allCamps, so that whenever viewAllCamps is called, no need to generate data from csv all the time)
- * Methods are created for csv updates.
+ * @version beta 3
  * @since 2023-11-15
  */
 public class Staff extends User implements ICampAdmin {
 
     private ArrayList<Camp> createdCamps;
-
+    
 
     public Staff (String userId, String userName, Faculty faculty, String password) {
         super (userId , userName , faculty, password) ;
@@ -40,6 +39,9 @@ public class Staff extends User implements ICampAdmin {
 
     /**
      * Create a new camp by the staff.<p>
+     * Update the createdCamps list for successful creation.
+     * Update the allCamps list for successful creation.
+     * Update the csv file for successful creation. 
      * @param campName
      * @param startDate
      * @param endDate
@@ -49,9 +51,6 @@ public class Staff extends User implements ICampAdmin {
      * @param totalSlots
      * @param campCommitteeSlots
      * @param description
-     * Update the createdCamps list for successful creation.
-     * Update the allCamps list for successful creation.
-     * Update the csv file for successful creation.
      * @return True if successfully created, false if there is already a camp with the same camp name.
      * @throws ExceedMaximumException
      */

@@ -20,3 +20,4 @@ public class MultipleCommitteeRoleException extends RuntimeException {
     public MultipleCommitteeRoleException(String message) {
         super (message) ;
     }
+}

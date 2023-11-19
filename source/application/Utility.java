@@ -52,7 +52,7 @@ public class Utility {
 
 
     /**
-     * Comma in string will fk up the csv real bad. Call this method whenever there is a string input.
+     * Comma in string will f up the csv real bad. Call this method whenever there is a string input.
      * @param string The string to replace.
      * @return The new string.
      */

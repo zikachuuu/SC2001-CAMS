@@ -34,9 +34,8 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
     /**
      * Creates a method for handling staff functionalities
      * @param loggedInStaff
-     * @throws IOException
      */
-    public void handleStaffFunctionalities(Staff loggedInStaff) throws IOException {
+    public void handleStaffFunctionalities(Staff loggedInStaff) {
 
         if (loggedInStaff.isDefaultPassword()) handleDefaultPasswordChange(loggedInStaff);
 
@@ -128,6 +127,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
+
     /**
      * Create a method for changing user's password
      * @param user
@@ -150,6 +150,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         Utility.redirectingPage();
     }
 
+
     /**
      * Create method for adding a new camp
      * This method checks:
@@ -157,13 +158,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
      * 2) the end date is before start date
      * 3) registration closing date is after start date
      * 4) staff successfully creates new camp
-     * Corresponding exception will be thrown if there is any error. No exception means staff successfully created a new camp
      * @param loggedInUser
-     * @throws DateAfterDateException
-     * @throws DateTimeException
-     * @throws IllegalArgumentException
-     * @throws InputMismatchException
-     * @throws ExceedMaximumException
      */
     public void handleCampAdd(User loggedInUser) {
 
@@ -231,6 +226,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
+
     /**
      * Create method for editing camps
      * This method checks:
@@ -238,13 +234,6 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
      * 2) the start date is before local date
      * 3) the end date is before start date
      * 4) registration closing date is after start date
-     * Corresponding exception will be thrown if there is any error. No exception means staff successfully created a new camp
-     * @param loggedInUser
-     * @throws DateAfterDateException
-     * @throws DateTimeException
-     * @throws IllegalArgumentException
-     * @throws InputMismatchException
-     * @throws ExceedMaximumException
      * @param loggedInUser
      */
     public void handleCampEdit(User loggedInUser) {
@@ -378,6 +367,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
+
     /**
      * Create method for toggling the visiblity of camps 
      * @param loggedInUser
@@ -402,6 +392,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
+
     /**
      * Create a method for deleting camps
      * @param loggedInUser
@@ -420,6 +411,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
+
     /**
      * Create a method that handles suggestion and approve them
      * @param loggedInUser
@@ -429,7 +421,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
         ArrayList<Suggestion> suggestions = SuggestionManager.findAllSuggestions(loggedInStaff , true) ;
         if (suggestions.size() == 0) {
-            System.out.println("There are currently no unapproved suggestions regarding this camp.");
+            System.out.println("There are currently no unapproved suggestions regarding your camps.");
             return ;
         }
 
@@ -451,6 +443,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
+
     /**
      * Create method for handling enquiries and viewing replied
      * @param loggedInUser
@@ -461,7 +454,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStaff, true) ;
 
         if (enquiries.size() == 0) {
-            System.out.println("There are currently no unanswered enquiries regarding this camp.");
+            System.out.println("There are currently no unanswered enquiries regarding your camps.");
             return ;
         }
 
@@ -487,30 +480,6 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
-
-    // private static void generateCommitteeMembersReportAsStaff() {
-
-    //     String filePath =  "report//committee_report.csv";
-
-    //     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-    //         writer.write("Student ID,Student Email,Student UserName, Points");
-    //         writer.newLine();
-
-    //         for (Student students: CAMSApp.students) {
-    //             String studentId = students.getUserId();
-
-    //             Student student = UserManager.findStudentByUserId(studentId);
-
-    //             if(student.isCampCommittee()) {
-    //                 writer.write(studentId + "," + studentId + "@e.ntu.edu.sg," + student.getUserName() + "," + student.getCampCommittee().getPoints());
-    //                 writer.newLine();
-    //             }
-    //         }
-    //         System.out.println("Committee members report generated successfully. File: "+ filePath);
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
 
     /**
      * Create method for generating performance report
@@ -558,6 +527,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
         System.out.println("Performance report has been successfully generated!");
     }
+
 
     /**
      * Create method for generating partcipant report
@@ -628,6 +598,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         System.out.println("Participant report has been successfully generated!");
     }
 
+    
     /**
      * Create method for generating enquiry report
      * @param loggedInUser
