@@ -1,13 +1,9 @@
 # SC2001-CAMS
 
-updated 17/11/23 <br>
+updated 19/11/23 <br>
 
 TBD: <br>
-1. finish up all generate report<br>
-2. add more interface and abstract methods<br>
-3. test out the codes more<br>
-4. Clean up the codes<br>
-5. add javadoc<br>
+1. add javadoc<br>
 <br>
 
 some design considerations: <br>
