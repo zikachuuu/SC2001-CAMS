@@ -7,7 +7,11 @@ import source.user.User;
 public abstract class UserInterface {
 
     protected boolean exit = false ;
-    
+
+    /**
+    * Returns user to menu if M.
+    * Exits programme if other key.
+    */
     protected void offerReturnToMenuOption() {
         System.out.print("Press 'M' to go back to the menu or any other key to exit: ");
         String backChoice = CAMSApp.scanner.nextLine();
@@ -16,6 +20,13 @@ public abstract class UserInterface {
         }
     }
 
+    /**
+    * Changes password of user.
+    * @param user The user who wants to change the password.
+    * @return False if reentered password does not match new password.
+    * @return True if password is changed successfully.
+    * @return False if current password is entered incorrectly.
+    */
     protected boolean handlePasswordChange(User user) {
         System.out.print("Enter your current password: ");
         String currentPassword = CAMSApp.scanner.nextLine();
