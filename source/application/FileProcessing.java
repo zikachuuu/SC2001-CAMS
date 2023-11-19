@@ -392,6 +392,7 @@ public class FileProcessing {
             writer.write ("Name,CampName, Role, Status, Points\r\n") ;
 
             for (Camp camp : CAMSApp.camps) {
+                if (! camp.isActive()) continue ;
 
                 for (Student student : camp.getParticipants()) {
                     writer.write(
