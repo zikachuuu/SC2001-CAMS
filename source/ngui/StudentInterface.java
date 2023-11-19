@@ -18,7 +18,7 @@ import source.user.User;
 
 public class StudentInterface extends UserInterface implements IEnquirySubmitterInterface, ICampParticipantInterface {
 
-    CommitteeInterface committeeInterface ;
+    private CommitteeInterface committeeInterface ;
 
     public StudentInterface() {
         committeeInterface = new CommitteeInterface() ;

@@ -132,49 +132,25 @@ public class Enquiry {
 
 
     /**
-     * For use by replyEnquiry() of Student and Staff.
+     * Reply this enquiry by a camp committee or staff. The committee will receieve one point.
      * @param user The user who attempts to answer this enquiry.
      * @param replies The replies to this enquiry.
      * @return True if successfully replied, false if enquiry has already been deleted / answered.
      */
-    private boolean replyEnquriy (User user , String replies) {
+    public boolean replyEnquriy (User user , String replies) {
+
         if (! active || replied) return false ;
-        
+
+        if (user instanceof Student) {
+            Student student = (Student) user ;
+            if (! student.getCampCommittee().getCamp().equals(camp)) throw new NoAccessException("Only Camp Committee are allowed to answer enquiry!") ;      
+            student.getCampCommittee().addPoint() ;
+        }
+
         this.replied = true ;
         this.repliedBy = user ;
         this.replies = replies ;
         return true ;
     }
-
-
-
-    /** 
-     * Reply this enquiry by a camp committee. The committee will receieve one point.
-     * @param student The student who attempts to answer this enquiry.
-     * @param replies The replies to this enquiry.
-     * @return True if successfully replied, false if enquiry has already been deleted / answered.
-     * @throws NoAccessException if student is not the camp committee of this camp.
-     */
-    public boolean replyEnquriy (Student student , String replies) {
-
-        if (! student.getCampCommittee().getCamp().equals(camp)) throw new NoAccessException("Only Camp Committee are allowed to answer enquiry!") ;
-        
-        student.getCampCommittee().addPoint() ;
-        return replyEnquriy((User)student, replies) ;
-    }
-
-
-
-    /** 
-     * Reply this enquiry by a staff.
-     * For now this do not check whether the staff is actually the creator of this camp. May be added in future versions.
-     * @param staff The staff who attempts to answer this enquiry.
-     * @param replies The replies to this enquiry.
-     * @return True if successfully replied, false if enquiry has already been deleted / answered.
-     */
-    public boolean replyEnquriy (Staff staff , String replies) {
-        return replyEnquriy((User)staff, replies) ;
-    }
-
 }
 
