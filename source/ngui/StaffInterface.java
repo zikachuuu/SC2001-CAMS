@@ -23,8 +23,19 @@ import source.user.Staff;
 import source.user.Student;
 import source.user.User;
 
+/**
+ * Represents an interface for staff.
+ * @author ranielle chio, daryl
+ * @version 1
+ * @since 2023-11-19
+ */
 public class StaffInterface extends UserInterface implements IStaffReportInterface, ICampAdminInterface , IEnquiryAdminInterface , ISuggestionAdminInterface {
 
+    /**
+     * Creates a method for handling staff functionalities
+     * @param loggedInStaff
+     * @throws IOException
+     */
     public void handleStaffFunctionalities(Staff loggedInStaff) throws IOException {
 
         if (loggedInStaff.isDefaultPassword()) handleDefaultPasswordChange(loggedInStaff);
@@ -117,9 +128,12 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
-
+    /**
+     * Create a method for changing user's password
+     * @param user
+     */
     protected void handleDefaultPasswordChange (User user) {
-        
+
         System.out.println ("You are using the default password. Please change your password before proceeding.") ;
         System.out.println() ;
 
@@ -136,7 +150,21 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         Utility.redirectingPage();
     }
 
-
+    /**
+     * Create method for adding a new camp
+     * This method checks:
+     * 1) the start date is before local date
+     * 2) the end date is before start date
+     * 3) registration closing date is after start date
+     * 4) staff successfully creates new camp
+     * Corresponding exception will be thrown if there is any error. No exception means staff successfully created a new camp
+     * @param loggedInUser
+     * @throws DateAfterDateException
+     * @throws DateTimeException
+     * @throws IllegalArgumentException
+     * @throws InputMismatchException
+     * @throws ExceedMaximumException
+     */
     public void handleCampAdd(User loggedInUser) {
 
         Staff loggedInStaff = (Staff) loggedInUser ;
@@ -157,7 +185,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
             LocalDate endDate = Utility.convertStringToLocalDate(endDateStr) ;
 
             if (endDate.isBefore(startDate)) throw new DateAfterDateException("Sorry, camp end date cannot be before its start date.") ;
-            
+
             System.out.print("Enter registration closing date (yyyy-mm-dd): ");
             String registrationClosingDateStr = CAMSApp.scanner.nextLine();
             LocalDate registrationClosingDate = Utility.convertStringToLocalDate(registrationClosingDateStr) ;
@@ -185,11 +213,11 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
             if (loggedInStaff.createCamp(campName, startDate, endDate, registrationClosingDate, userGroup, location, totalSlots, campCommitteeSlots, description)){
                 System.out.println("Camp successfully created!") ;
-            } 
+            }
             else {
                 System.out.println("Sorry, there is already a camp with the same name.") ;
             }
-            
+
         } catch (DateTimeException dte) {
             System.out.println("Sorry, unsupported date format. Use yyyy-mm-dd") ;
         } catch (IllegalArgumentException iae) {
@@ -197,13 +225,28 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         } catch (InputMismatchException ipe) {
             System.out.println("Sorry, you did not enter a integer value for slots input.");
         } catch (DateAfterDateException dade) {
-            System.out.println(dade.getMessage()) ; 
+            System.out.println(dade.getMessage()) ;
         } catch (ExceedMaximumException eme) {
             System.out.println("Sorry, camp committee slots cannot exceed 10 or total slots.") ;
         }
     }
-    
 
+    /**
+     * Create method for editing camps
+     * This method checks:
+     * 1) the staff in charge of the camp to edit the camp
+     * 2) the start date is before local date
+     * 3) the end date is before start date
+     * 4) registration closing date is after start date
+     * Corresponding exception will be thrown if there is any error. No exception means staff successfully created a new camp
+     * @param loggedInUser
+     * @throws DateAfterDateException
+     * @throws DateTimeException
+     * @throws IllegalArgumentException
+     * @throws InputMismatchException
+     * @throws ExceedMaximumException
+     * @param loggedInUser
+     */
     public void handleCampEdit(User loggedInUser) {
         Staff loggedInStaff = (Staff) loggedInUser ;
 
@@ -247,7 +290,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
                     loggedInStaff.editCamp(campNameToEdit, startDate, camp.getCampInfo().getEndDate(), camp.getCampInfo().getRegistrationClosingDate(), camp.getCampInfo().getUserGroup(), camp.getCampInfo().getLocation(), camp.getCampInfo().getTotalSlots() , camp.getCampInfo().getCampCommitteeSlots(), camp.getCampInfo().getDescription());
                     break ;
-                
+
                 case "2" :
                     System.out.print("Enter new end date (yyyy-mm-dd): ");
                     String endDateStr = CAMSApp.scanner.nextLine();
@@ -256,13 +299,13 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
                     loggedInStaff.editCamp(campNameToEdit, camp.getCampInfo().getStartDate(), endDate, camp.getCampInfo().getRegistrationClosingDate(), camp.getCampInfo().getUserGroup(), camp.getCampInfo().getLocation(), camp.getCampInfo().getTotalSlots() , camp.getCampInfo().getCampCommitteeSlots(), camp.getCampInfo().getDescription());
                     break ;
-                
+
                 case "3" :
                     System.out.print("Enter new registration closing date (yyyy-mm-dd): ");
                     String registrationClosingDateStr = CAMSApp.scanner.nextLine();
                     LocalDate registrationClosingDate = Utility.convertStringToLocalDate(registrationClosingDateStr) ;
                     if (registrationClosingDate.isAfter(camp.getCampInfo().getStartDate())) throw new DateAfterDateException("Sorry, camp registration closing date cannot be after its start date.") ;
-                  
+
                     loggedInStaff.editCamp(campNameToEdit, camp.getCampInfo().getStartDate(), camp.getCampInfo().getEndDate(), registrationClosingDate, camp.getCampInfo().getUserGroup(), camp.getCampInfo().getLocation(), camp.getCampInfo().getTotalSlots() , camp.getCampInfo().getCampCommitteeSlots(), camp.getCampInfo().getDescription());
                     break ;
 
@@ -289,7 +332,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
                     loggedInStaff.editCamp(campNameToEdit, camp.getCampInfo().getStartDate(), camp.getCampInfo().getEndDate(), camp.getCampInfo().getRegistrationClosingDate(), camp.getCampInfo().getUserGroup(), camp.getCampInfo().getLocation(), totalSlots , camp.getCampInfo().getCampCommitteeSlots(), camp.getCampInfo().getDescription());
                     break ;
-                
+
                 case "7" :
                     System.out.print("Enter new camp committee slots (max 10): ");
                     int campCommitteeSlots = CAMSApp.scanner.nextInt();
@@ -305,28 +348,28 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
                     loggedInStaff.editCamp(campNameToEdit, camp.getCampInfo().getStartDate(), camp.getCampInfo().getEndDate(), camp.getCampInfo().getRegistrationClosingDate(), camp.getCampInfo().getUserGroup(), camp.getCampInfo().getLocation(), camp.getCampInfo().getTotalSlots() , camp.getCampInfo().getCampCommitteeSlots(), description);
                     break ;
-                
+
                 default :
                     System.out.println("Sorry, invalid option selected");
                     return ;
             }
             System.out.println("Camp successfully edited!");
-        }   
+        }
         catch (CampNotFoundException cnfe) {
             System.out.println("Sorry, the camp you entered does not exist.");
-        } 
+        }
         catch (DateTimeException dte) {
             System.out.println("Sorry, unsupported date format. Use yyyy-mm-dd") ;
-        } 
+        }
         catch (IllegalArgumentException iae) {
             System.out.println("Sorry, the entered faculty cannot be found. Try 'SCSE', 'SPMS', 'NTU', etc.");
-        } 
+        }
         catch (InputMismatchException ipe) {
             System.out.println("Sorry, you did not enter a integer value for slots input.");
-        } 
+        }
         catch (DateAfterDateException dade) {
-            System.out.println(dade.getMessage()) ; 
-        } 
+            System.out.println(dade.getMessage()) ;
+        }
         catch (ExceedMaximumException eme) {
             System.out.println("Sorry, camp committee slots cannot exceed 10 or total slots.") ;
         }
@@ -335,7 +378,10 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
-
+    /**
+     * Create method for toggling the visiblity of camps 
+     * @param loggedInUser
+     */
     public void handleCampToggle (User loggedInUser) {
         Staff loggedInStaff = (Staff) loggedInUser ;
 
@@ -344,9 +390,9 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
         try {
             boolean newVisibility = loggedInStaff.toggleVisibility(campNameToToggle) ;
-            System.out.printf("Camp's visibility has been set from %s to %s.\n" , 
-                (newVisibility ? "unvisible" : "visible") ,
-                (newVisibility ? "visible" : "unvisible")
+            System.out.printf("Camp's visibility has been set from %s to %s.\n" ,
+                    (newVisibility ? "unvisible" : "visible") ,
+                    (newVisibility ? "visible" : "unvisible")
             );
 
         } catch (CampNotFoundException cnfe) {
@@ -356,7 +402,10 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
-
+    /**
+     * Create a method for deleting camps
+     * @param loggedInUser
+     */
     public void handleCampDelete(User loggedInUser) {
         Staff loggedInStaff = (Staff) loggedInUser ;
 
@@ -371,7 +420,10 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         }
     }
 
-
+    /**
+     * Create a method that handles suggestion and approve them
+     * @param loggedInUser
+     */
     public void handleSuggestionViewApprove (User loggedInUser) {
         Staff loggedInStaff = (Staff) loggedInUser ;
 
@@ -393,13 +445,16 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         try {
             suggestions.get (Integer.parseInt(suggestionChoice) - 1).approveSuggestion(loggedInStaff) ;
             System.out.println("Suggestion has been successfully approved!") ;
-        } 
+        }
         catch (NumberFormatException | IndexOutOfBoundsException ee) {
             System.out.println("Invalid suggestion choice.");
         }
     }
 
-
+    /**
+     * Create method for handling enquiries and viewing replied
+     * @param loggedInUser
+     */
     public void handleEnquiryViewReply(User loggedInUser) {
         Staff loggedInStaff = (Staff) loggedInUser ;
 
@@ -426,7 +481,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         try {
             enquiries.get(Integer.parseInt(enquiryChoice) - 1).replyEnquriy(loggedInStaff, reply) ;
             System.out.println("Enquiry has been successfully replied!") ;
-        } 
+        }
         catch (NumberFormatException | IndexOutOfBoundsException ee) {
             System.out.println("Invalid enquiry choice.");
         }
@@ -457,7 +512,10 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
     //     }
     // }
 
-
+    /**
+     * Create method for generating performance report
+     * @param loggedInUser
+     */
     public void generatePerformanceReport(User loggedInUser) {
 
         Staff loggedInStaff = (Staff) loggedInUser ;
@@ -472,23 +530,23 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
                 e.printStackTrace();
             }
         }
-        
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write("CommitteeMemberName, StudentID, CampName, Points \r\n");
-            
+
             for (Camp camp : camps) {
                 // Write each camp's details to the file
                 if (! camp.isActive()) continue ;
                 ArrayList<Student> students = camp.getParticipants();
                 for(Student student: students) {
-                // write only camp committee member's info
-                    if(student.isCampCommittee()) { 
-                
+                    // write only camp committee member's info
+                    if(student.isCampCommittee()) {
+
                         writer.write(
-                            student.getUserName() + "," +
-                            student.getUserId() + "," +
-                            camp.getCampInfo().getCampName() + "," +
-                            student.getCampCommittee().getPoints()
+                                student.getUserName() + "," +
+                                        student.getUserId() + "," +
+                                        camp.getCampInfo().getCampName() + "," +
+                                        student.getCampCommittee().getPoints()
                         ) ;
                         writer.newLine();
                     }
@@ -501,8 +559,11 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         System.out.println("Performance report has been successfully generated!");
     }
 
-
-   public void generateParticipantsReport(User loggedInStaff) {
+    /**
+     * Create method for generating partcipant report
+     * @param loggedInStaff
+     */
+    public void generateParticipantsReport(User loggedInStaff) {
 
         System.out.print("Please enter the name of the camp you want the report to be generated: ");
         String campName = CAMSApp.scanner.nextLine();
@@ -526,7 +587,7 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write("CampInfo: ");
-            
+
             ArrayList<Student> currentCampParticipants = camp.getParticipants();
             writer.write(camp.getCampInfo().toString());
             writer.newLine();
@@ -567,7 +628,10 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         System.out.println("Participant report has been successfully generated!");
     }
 
-
+    /**
+     * Create method for generating enquiry report
+     * @param loggedInUser
+     */
     public void generateEnquiryReport(User loggedInUser) {
         Staff loggedInStaff = (Staff) loggedInUser ;
 
@@ -606,4 +670,3 @@ public class StaffInterface extends UserInterface implements IStaffReportInterfa
         System.out.println("Enquiry report has been successfully generated!");
     }
 }
-
