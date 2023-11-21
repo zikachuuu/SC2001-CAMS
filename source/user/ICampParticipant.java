@@ -1,6 +1,11 @@
 package source.user;
 
-
+/**
+ * Represents an interface to provide functionalities of a camp participant.
+ * @author Le Yanzhi
+ * @version 1
+ * @since 2023-11-19
+ */
 public interface ICampParticipant {
 
     /**
@@ -8,20 +13,23 @@ public interface ICampParticipant {
     */
     public void viewOpenCamps() ;
 
+
     /**
     * Print out a list of registered camps (only camp information).
     */
     public void viewRegisteredCamps() ;
 
+
     /**
-    * Register for a camp. <p>
+    * Register for a camp.
     * @param campName Name of the camp.
     * @param committeeRole True for committee, false for attendee.
     */
     public void registerForCamp (String campName , boolean committeeRole) ;
 
+    
     /**
-    * Withdraw from a camp.<p>
+    * Withdraw from a camp.
     * @param campName Name of the camp.
     * @return True if sucessfully withdrawn, false if student is not attending the camp as attendee in the first place.
     */

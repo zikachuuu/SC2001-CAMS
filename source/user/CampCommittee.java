@@ -9,8 +9,11 @@ import source.camp.Camp;
  * @since 2023-11-7
  */
 public class CampCommittee extends CampRole {
-
+    /**
+     * The current number of points this committee has.
+     */
     private int points;
+
 
     /**
      * Creates a new default camp committee with 0 points.
@@ -34,7 +37,15 @@ public class CampCommittee extends CampRole {
         this.points = points ;
     }
 
-    
+
+    /**
+     * @return The points of this committee.
+     */
     public int getPoints() {return points ;}
+
+
+    /**
+     * Add one point to this committee.
+     */
     public void addPoint() {points++ ;}
 }

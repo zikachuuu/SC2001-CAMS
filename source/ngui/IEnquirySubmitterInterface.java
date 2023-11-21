@@ -15,12 +15,14 @@ public interface IEnquirySubmitterInterface {
      */
     public void handleSubmitEnquiry(User user) ;
 
+
     /**
      * Create an abstract method for editing enquiries 
      * @param user
      */
     public void handleEditEnquiry(User user) ;
 
+    
     /**
      * Create an abstract method for deleting enquiries 
      * @param user

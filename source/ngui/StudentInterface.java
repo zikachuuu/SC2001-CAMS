@@ -16,14 +16,27 @@ import source.exception.WithdrawnException;
 import source.user.Student;
 import source.user.User;
 
+/**
+ * Represents a interface for student user.
+ * @author Le Yanzhi
+ * @version 1
+ * @since 2023-11-19
+ */
 public class StudentInterface extends UserInterface implements IEnquirySubmitterInterface, ICampParticipantInterface {
-
+    /**
+     * A committee interface is part of a student interface.
+     */
     private CommitteeInterface committeeInterface ;
 
+
+    /**
+     * Construct a new student interface.
+     */
     public StudentInterface() {
         committeeInterface = new CommitteeInterface() ;
     }
    
+    
     /**
     * Allows user to have student functionalities.
     * @param loggedInStudent The user logged in as a student.

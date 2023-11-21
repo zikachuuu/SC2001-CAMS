@@ -4,7 +4,6 @@ import source.camp.Camp;
 
 /**
  * Represents a camp role for a student, which can be either attendee or committee (ie both CampAttendee and CampCommittee inherit from this class).
- * Might make it an abstract class or interface later on.
  * @author Le Yanzhi
  * @version beta 1
  * @since 2023-11-8
@@ -23,8 +22,15 @@ public class CampRole {
         this.student = student ;
     }
 
-    
+    /**
+     * @return The camp this role belong to.
+     */
     public Camp getCamp() {return camp ;}
+
+
+    /**
+     * @return The student this role belong to.
+     */
     public Student getStudent() {return student ;}
 
 

@@ -7,11 +7,37 @@ package source.user;
  * @since 2023-11-11
  */
 public abstract class User {
+    /**
+     * UserId (The part before '@' in email)
+     */
     private String userId ;
+
+
+    /**
+     * Name of user.
+     */
     private String userName ;
+
+
+    /**
+     * Faculty this user belongs to.
+     */
     private Faculty faculty ;
+
+
+    /**
+     * Password
+     */
     private String password ;
 
+
+    /**
+     * Construct a new user object.
+     * @param userId
+     * @param userName
+     * @param faculty
+     * @param password
+     */
     public User (String userId, String userName, Faculty faculty, String password) {
         this.userId = userId ;
         this.userName = userName ;
@@ -27,7 +53,18 @@ public abstract class User {
     protected void setPassword(String newPassword) {this.password = newPassword ;}
 
 
+    /**
+     * @return True if this user is using the default password, false otherwise.
+     */
     public abstract boolean isDefaultPassword() ;
+
+
+    /**
+     * Change password (duh).
+     * @param oldPassword The old password (to verify).
+     * @param newPassword The new password.
+     * @return True if successfully changed, false if oldPassword does not match.
+     */
     public abstract boolean changePassword (String oldPassword, String newPassword) ;
 
 

@@ -9,12 +9,12 @@ import source.user.User;
  * @since 2023-11-19
  */
 public interface IReportInterface {
-
     /**
      * Creates a method for generating participants report 
      * @param user
      */
     public void generateParticipantsReport (User user) ;
+
 
     /**
      * Creates a method for generating enquiry report 

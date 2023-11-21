@@ -3,7 +3,7 @@ package source.user;
 import java.time.LocalDate;
 
 /**
- * Represents an interface for handling the functionalities for ICampAdmin
+ * Represents an interface to provide functionalities of a camp admin.
  * @author daryl tan
  * @version 1
  * @since 2023-11-19
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public interface ICampAdmin {
 
     /**
-     * Create a new camp by the user.<p>
+     * Create a new camp by the user
      * @param campName
      * @param startDate
      * @param endDate
@@ -49,7 +49,7 @@ public interface ICampAdmin {
    
     
     /**
-     * Iterate through all the camps in createdCamps list, and display camp details to the command line interface.
+     * Display camp details to the command line interface.
      */
     public void viewCreatedCamps () ;
     

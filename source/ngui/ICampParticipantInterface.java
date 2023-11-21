@@ -15,6 +15,7 @@ public interface ICampParticipantInterface {
      */
     public void handleCampRegister(User user) ;
 
+    
     /**
      * Create a new handle for camp withdrawal for user
      * @param user

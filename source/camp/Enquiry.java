@@ -1,7 +1,6 @@
 package source.camp;
 
 import source.exception.NoAccessException;
-import source.user.Staff;
 import source.user.Student;
 import source.user.User;
 

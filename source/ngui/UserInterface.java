@@ -11,8 +11,11 @@ import source.user.User;
  * @since 2023-11-19
  */
 public abstract class UserInterface {
-
+    /**
+     * Denotes whether the user choose to exit the interface (ie log out)
+     */
     protected boolean exit = false ;
+
 
     /**
      * Create method for returning to menu
@@ -24,6 +27,7 @@ public abstract class UserInterface {
             exit = true;
         }
     }
+
 
     /**
      * Create a new method for handling password changes of users
@@ -54,5 +58,9 @@ public abstract class UserInterface {
     }
 
 
+    /**
+     * Calls this method when the user is using the default password (eg. "password")
+     * @param user
+     */
     abstract protected void handleDefaultPasswordChange (User user) ;
 }

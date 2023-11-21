@@ -250,6 +250,10 @@ public class Student extends User implements ICampParticipant{
         campCommittee.addPoint();
     }
 
+
+    /**
+     * @return True if student is using the default password, false otherwise.
+     */
     public boolean isDefaultPassword() {
         return super.getPassword().equals("password") ;
     }
@@ -257,7 +261,6 @@ public class Student extends User implements ICampParticipant{
 
     /**
      * Change password (duh).
-     * 
      * @param oldPassword The old password (to verify).
      * @param newPassword The new password.
      * @return True if successfully changed, false if oldPassword does not match.

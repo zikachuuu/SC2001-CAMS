@@ -15,11 +15,13 @@ public interface ICampAdminInterface {
      */
     public void handleCampAdd(User user) ;
 
+
     /**
      * Create a method for editing a camp
      * @param user
      */
     public void handleCampEdit(User user) ;
+
 
     /**
      * Create a method for toggling camp visibility 
@@ -27,6 +29,7 @@ public interface ICampAdminInterface {
      */
     public void handleCampToggle (User user) ;
 
+    
     /**
      * Create a method for deleting a camp 
      * @param user

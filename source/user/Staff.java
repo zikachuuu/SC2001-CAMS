@@ -18,10 +18,19 @@ import source.exception.NoAccessException;
  * @since 2023-11-15
  */
 public class Staff extends User implements ICampAdmin {
-
+    /**
+     * ArrayList of all camps created by this staff.
+     */
     private ArrayList<Camp> createdCamps;
     
 
+    /**
+     * Construct a staff object.
+     * @param userId
+     * @param userName
+     * @param faculty
+     * @param password
+     */
     public Staff (String userId, String userName, Faculty faculty, String password) {
         super (userId , userName , faculty, password) ;
         createdCamps = new ArrayList<Camp>() ;
@@ -29,11 +38,15 @@ public class Staff extends User implements ICampAdmin {
 
 
     /**
-     * the vanilla methods, returned array list includes deleted cammps as well
-     * @return
+     * @return ArrayList of all camps created (including deleted camps.)
      */
     public ArrayList<Camp> getCreatedCamps() {return createdCamps ;}
 
+
+    /**
+     * Add a new camp to the list of created camps.
+     * @param camp
+     */
     public void addCreatedCamps(Camp camp) {createdCamps.add(camp) ;}
 
 
@@ -155,11 +168,21 @@ public class Staff extends User implements ICampAdmin {
         throw new CampNotFoundException() ;
     }
 
+
+    /**
+     * @return True if this staff is using the default password, false otherwise.
+     */
     public boolean isDefaultPassword() {
         return super.getPassword().equals("password") ;
     }
 
 
+    /**
+     * Change password (duh).
+     * @param oldPassword The old password (to verify).
+     * @param newPassword The new password.
+     * @return True if successfully changed, false if oldPassword does not match.
+     */
     public boolean changePassword(String oldPassword, String newPassword) {
         if (!oldPassword.equals(super.getPassword()))
             return false;

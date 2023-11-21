@@ -1,4 +1,8 @@
 package source.user;
+
+/**
+ * An enumeration of all faculties in NTU.
+ */
 public enum Faculty {
     NTU , 
 
