@@ -16,7 +16,10 @@ public class DateAfterDateException extends RuntimeException {
     public DateAfterDateException(String preDate, String postDate) {
         super (preDate + " cannot be after " + postDate + "!") ;
     }
-
+    /**
+     * Create a new DateAfterDateException for the case where the start date exceeds the end date
+     * @param message
+     */
     public DateAfterDateException(String message) {
         super (message) ;
     }
