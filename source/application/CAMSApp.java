@@ -23,8 +23,19 @@ public class CAMSApp {
     protected static final String ENQUIRIES_FILE_PATH = "data//enquiries.csv";
     protected static final String SUGGESTIONS_FILE_PATH = "data//suggestions.csv";
 
+    /**
+     * The arrayList of all staffs.
+     */
     protected static ArrayList<Staff> staffs = new ArrayList<Staff>();
+
+    /**
+     * The arrayList of all camps.
+     */
     protected static ArrayList<Camp> camps = new ArrayList<Camp>();
+
+    /**
+     * The arrayList of all students.
+     */
     protected static ArrayList<Student> students = new ArrayList<Student>();
 
     public static Scanner scanner ;
