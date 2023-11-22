@@ -57,26 +57,125 @@ public class CampInformation {
         this.description = description ;
         this.staffInCharge = staffInCharge ;
     }
-
+    
+    /**
+     * retrieve campName from this camp.
+     * @return campName
+     */
     public String getCampName() {return campName ;}
+ 
+    /**
+     * set this camp's campName to campName
+     * @param campName
+     */
     public void setCampname(String campName) {this.campName = campName ;} 
+        
+    /**
+     * retrieve the start date of this camp.
+     * @return startDate
+     */
     public LocalDate getStartDate() {return startDate ;}
+        
+    /**
+     * set this camp's start date to startDate
+     * @param startDate
+     */
     public void setStartState(LocalDate startDate) {this.startDate = startDate ;}
+        
+    /**
+     * retrieve the end date of this camp.
+     * @return endDate
+     */
     public LocalDate getEndDate() {return endDate ;}
+        
+    /**
+     * set this camps's end date to endDate.
+     * @param endDate
+     */
     public void setEndDate(LocalDate endDate) {this.endDate = endDate ;}
+        
+    /**
+     * retreive registration closing date of this camp.
+     * @return registrationClosingDate
+     */
     public LocalDate getRegistrationClosingDate() {return registrationClosingDate ;}
+        
+    /**
+     * set the registration closing date of this camp to registationClosingDate
+     * @param registrationClosingDate
+     */
     public void setRegistrationClosingDate(LocalDate registrationClosingDate) {this.registrationClosingDate = registrationClosingDate ;}
+        
+    /**
+     * retrieve user group data from this camp.
+     * @return userGroup
+     */
     public Faculty getUserGroup() {return userGroup ;}
+        
+    /**
+     * set the user group of this camp to userGroup
+     * @param userGroup
+     */
     public void setUserGroup(Faculty userGroup) {this.userGroup = userGroup ;}
+        
+    /**
+     * retrieve the location information of this camp
+     * @return location
+     */
     public String getLocation() {return location ;}
+        
+    /**
+     * set the location of the camp into location
+     * @param location
+     */
     public void setLocation(String location) {this.location = location ;}
+        
+    /**
+     * retrieve total slots info from this camp.,
+     * @return totalSlots
+     */
     public int getTotalSlots() {return totalSlots ;}
+        
+    /**
+     * set total slots info for this camp into totalSlots
+     * @param totalSlots
+     */
     public void setTotalSlots(int totalSlots) {this.totalSlots = totalSlots ;}
+        
+    /**
+     * retrieve Camp committee member slots in this camp.
+     * @return campCommiitteeSlots
+     */
     public int getCampCommitteeSlots() {return campCommitteeSlots ;}
+        
+    /**
+     * set method for campCommitteeSlots.
+     * @param campCommitteeSlots
+     */
     public void setCampCommitteeSlots(int campCommitteeSlots) {this.campCommitteeSlots = campCommitteeSlots ;}
+        
+    /**
+     * retrieve description from this camp.
+     * @return description
+     */
     public String getDescription() {return description ;}
+        
+    /**
+     * set method for description
+     * @param description
+     */
     public void setDescription(String description) {this.description = description ;}
+        
+    /**
+     * retrive the staff in charge for this camp.
+     * @return staffInCharge
+     */
     public Staff getStaffInCharge() {return staffInCharge ;}
+        
+    /**
+     * Change the camp information attributes into strings that can be print out.
+     * @return string of campInfo
+     */
     public String toString() {
         return campName + " " + startDate + " " + endDate + " " + registrationClosingDate + " " +
                                     userGroup + " " + location + " " + totalSlots + " " + campCommitteeSlots + " " +
