@@ -9,7 +9,14 @@ import source.camp.Camp;
  * @since 2023-11-8
  */
 public class CampRole {
+    /**
+     * The Camp this camp role belongs to.
+     */
     private Camp camp ;
+
+    /**
+     * The student who took this role.
+     */
     private Student student;
 
     /**
