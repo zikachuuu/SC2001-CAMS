@@ -13,7 +13,8 @@ public class Utility {
      * Clears the console (for aesthetic purposes).
      */
     public static void clearConsole() {
-        System.out.print("\033\143");
+        for(int i = 0; i<100;i++)
+            System.out.println();
     }
 
 

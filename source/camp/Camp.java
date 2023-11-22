@@ -65,15 +65,49 @@ public class Camp {
         this.active = true ;
     }
 
-
+    /**
+     * @return campInfo
+     */
     public CampInformation getCampInfo() {return campInfo ;}
+
+    /**
+     * @return numCommittees
+     */
     public int getNumCommittees() {return numCommittees ;}
+
+    /**
+     * @return numAttendees
+     */
     public int getNumAttendees() {return numAttendees ;}
+
+    /**
+     * @return ArrayList of participants
+     */
     public ArrayList<Student> getParticipants() {return participants ;}
+
+    /**
+     * @return ArrayList of withdrawnParticipants
+     */
     public ArrayList<Student> getWithdrawnParticipants() {return withdrawnParticipants ;}
+
+    /**
+     * @return ArrayList of enquiries
+     */
     public ArrayList<Enquiry> getEnquiries() {return enquiries ;}
+
+    /**
+     * @return ArrayList of suggestions
+     */
     public ArrayList<Suggestion> getSuggestions() {return suggestions ;}
+
+    /**
+     * @return true if visible, false if not visible
+     */
     public boolean isVisible() {return visible ;}
+
+    /**
+     * @return true if active, false if not active
+     */
     public boolean isActive () {return active ;}
 
     
