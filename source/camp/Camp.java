@@ -11,7 +11,7 @@ import source.user.User;
 /**
  * Represents a camp. A camp has students (association), enquries and suggestions (composition).
  * @author Le Yanzhi
- * @version beta 1 (Some methods have yet to be implemented)
+ * @version 3
  * @since 2023-11-10
  */
 public class Camp {
