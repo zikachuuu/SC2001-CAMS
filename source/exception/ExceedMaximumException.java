@@ -9,12 +9,14 @@ package source.exception;
 public class ExceedMaximumException extends RuntimeException{
     /**
      * Create an ExceedMaximumException for when the maximum capacity of a camp has been exceeded. 
-     * @param message 
      */
     public ExceedMaximumException() {
         super ("Maximum exceeded!") ;
     }
-
+    /**
+     * Create an ExceedMaximumException for when the maximum capacity of a camp has been exceeded. 
+     * @param message 
+     */
     public ExceedMaximumException(String message) {
         super (message) ;
     }

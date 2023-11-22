@@ -9,12 +9,14 @@ package source.exception;
 public class DateClashException extends RuntimeException {
     /**
      * Create a DateClashException that prints a message for when there is a clash in dates between any 2 camps registered by the student 
-     * @param message 
      */
     public DateClashException() {
         super ("Clash in date!") ;
     }
-
+    /**
+     * Create a DateClashException that prints a message for when there is a clash in dates between any 2 camps registered by the student 
+     * @param message 
+     */
     public DateClashException(String message) {
         super (message) ;
     }

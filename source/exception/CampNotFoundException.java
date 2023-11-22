@@ -8,13 +8,16 @@ package source.exception;
  */
 public class CampNotFoundException extends RuntimeException {
     /**
-     * Create an exception for when Camp is not found and prints message for user 
-     * @param message 
+     * Create an exception for when Camp is not found and prints message for user
      */
     public CampNotFoundException () {
         super ("No such camp with given camp name!") ;
     }
-
+    
+    /**
+     * Create an exception for when Camp is not found and prints message for user 
+     * @param message 
+     */
     public CampNotFoundException (String message) {
         super (message) ;
     }
