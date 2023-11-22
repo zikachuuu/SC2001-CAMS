@@ -212,7 +212,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
             return;
         }
 
-        ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStudent, filter == "1"?true:false);
+        ArrayList<Enquiry> enquiries = EnquiryManager.findAllEnquiry(loggedInStudent.getCampCommittee().getCamp(), filter.equals("1")?true:false);
         String filePath = "report//" + LocalDate.now() + "_enquiry_report.csv";
         File file = new File(filePath);
 

@@ -88,6 +88,26 @@ public class EnquiryManager {
         return enquiries ;
     }
 
+    
+    /**
+     * Find all enquiries regarding the given camp.
+     * @param camp
+     * @param notReplied True to only find enquiries that have not been replied, false to find all.
+     * @return ArrayList of camps.
+     */
+    public static ArrayList<Enquiry> findAllEnquiry (Camp camp, boolean notReplied) {
+
+        ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>() ;
+
+        for (Enquiry enquiry : camp.getEnquiries()) {
+
+            if (! enquiry.isActive() || (notReplied && enquiry.isReplied())) continue ;
+            enquiries.add(enquiry) ;
+        }
+
+        return enquiries ;
+    }
+
 
     /**
      * Print out a list of all enquiries that student has submitted (including replied enquiries).
