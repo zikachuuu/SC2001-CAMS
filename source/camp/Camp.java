@@ -216,14 +216,14 @@ public class Camp {
         System.out.println("Current number of attendees: " + numAttendees);
 
         if (numCommittees != 0) {
-            System.err.print("Current committee members: ") ;
+            System.out.print("Current committee members: ") ;
             for (Student participant : participants) {
                 if (participant.isCampCommittee(this)) System.out.print (participant.getUserName() + ", ") ;
             }
             System.out.println() ;
         }
         if (numAttendees != 0){
-            System.err.print("Current atttendee members: ") ;
+            System.out.print("Current atttendee members: ") ;
             for (Student participant : participants) {
                 if (participant.isCampAttendee(this)) System.out.print (participant.getUserName() + ", ") ;
             }
