@@ -15,16 +15,55 @@ import source.user.Staff;
  * @since 2023-11-15
  */
 public class CampInformation {
-
+    
+    /**
+     * Name of the camp
+     */
     private String campName ;
+     
+    /**
+     * Start date of the camp
+     */
     private LocalDate startDate ;
+     
+    /**
+     * End date of the camp
+     */
     private LocalDate endDate ;
+     
+    /**
+     * registration closing date of this camp
+     */
     private LocalDate registrationClosingDate ;
+     
+    /**
+     * user group that this camp is opened to.
+     */
     private Faculty userGroup ;
+     
+    /**
+     * location the camp will be held at
+     */
     private String location ;
+      
+    /**
+     * total number of slots the camp has
+     */
     private int totalSlots ;
+     
+    /**
+     * number of camp committee slots the camps has
+     */
     private int campCommitteeSlots ;
+     
+    /**
+     * description of the camp
+     */
     private String description ;
+     
+    /**
+     * staff that created camp.
+     */
     private Staff staffInCharge ;
 
 
