@@ -45,11 +45,30 @@ public abstract class User {
         this.password = password ;
     }
 
-    
+    /**
+     * @return userName of this user.
+     */
     public String getUserName() {return userName ;}
+    
+    /**
+     * @return userID of this user.
+     */
+    
     public String getUserId() {return userId ;}
+    /**
+     * @return Faculty of this user.
+     */
     public Faculty getFaculty() {return faculty ;}
+    
+    /**
+     * @return password of this user.
+     */
     public String getPassword() {return password ;}
+    
+    /**
+     * set the password of this user into newPassword.
+     * @param newPassword
+     */
     protected void setPassword(String newPassword) {this.password = newPassword ;}
 
 

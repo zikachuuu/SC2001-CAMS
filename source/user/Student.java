@@ -51,8 +51,14 @@ public class Student extends User implements ICampParticipant{
         this.campAttendees = campAttendees ;
     }
 
-    
+    /**
+     * returns campCommittee
+     */
     public CampCommittee getCampCommittee() {return campCommittee ;}
+
+    /**
+     * returns the ArrayList for campAttendees
+     */
     public ArrayList<CampAttendee> getCampAttendees() {return campAttendees ;}
 
 
