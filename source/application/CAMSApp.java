@@ -129,6 +129,12 @@ public class CAMSApp {
         }
     }
 
+    /**
+     * Iterate through the student ArrayList to check if the student identified by log in credentials is found in student ArrayList.
+     * @param userId
+     * @param password
+     * return Student if userId and password are found in student ArrayList, Null if not found.
+     */
     private static Student authenticateStudent(String userId, String password) {
         for (Student student : students) {
             if (student.getUserId().equals(userId) && student.getPassword().equals(password)) {
@@ -138,6 +144,12 @@ public class CAMSApp {
         return null; 
     }
 
+    /**
+     * Iterate through the staff ArrayList to check if the staff identified by log in credentials is found in staff ArrayList.
+     * @param userId
+     * @param password
+     * return staffMember if userId and password are found in staff ArrayList, Null if not found.
+     */
     private static Staff authenticateStaff(String userId, String password) {
         for (Staff staffMember : staffs) {
             if (staffMember.getUserId().equals(userId) && staffMember.getPassword().equals(password)) {
