@@ -107,8 +107,11 @@ public class Suggestion {
         student.getCampCommittee().addPoint();
         return true ;
     }
+    
 
-
+    /**
+     * Print out the content of the suggestion.
+    */
     public void viewSuggestion() {
         System.out.println("Camp: " + camp.getCampInfo().getCampName());
         System.out.println("Submitted by: " + student.getUserName());
