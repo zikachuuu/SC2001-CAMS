@@ -8,13 +8,15 @@ package source.exception;
  */
 public class NoAccessException extends RuntimeException {
     /**
-     * Create a NoAccessException for when the user has no access
-     * @param message 
+     * Create a NoAccessException for when the user has no access 
      */
     public NoAccessException() {
         super ("You do not have access!") ;
     }
-
+    /**
+     * Create a NoAccessException for when the user has no access
+     * @param message 
+     */
     public NoAccessException(String message) {
         super (message) ;
     }
