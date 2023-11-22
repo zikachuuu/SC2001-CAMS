@@ -9,12 +9,14 @@ package source.exception;
 public class WithdrawnException extends RuntimeException {
     /**
      * Create a WithdrawnException that prints a message for the user 
-     * @param message 
      */
     public WithdrawnException() {
         super("Student has already withdrawn from the camp before!") ;
     }
-
+    /**
+     * Create a WithdrawnException that prints a message for the user 
+     * @param message 
+     */
     public WithdrawnException(String message) {
         super (message) ;
     }
