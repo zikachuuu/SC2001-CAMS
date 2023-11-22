@@ -18,9 +18,24 @@ public class Suggestion {
      */
     private boolean active;
 
+    /**
+     * The camp this suggestion belongs to.
+     */
     private Camp camp;
+
+    /**
+     * The student who made this suggestion.
+     */
     private Student student;
+
+    /**
+     * The content of this suggestion.
+     */
     private String content;
+
+    /**
+     * Whether this suggestion has been approved or not (true for approved).
+     */
     private boolean approved;
 
 
@@ -52,11 +67,29 @@ public class Suggestion {
         this.approved = approved ;
     }
 
-
+    /**
+     * @return Whether the suggestion is active (not deleted).
+     */
     public boolean isActive() {return active ;}
+
+    /**
+     * @return The camp object this suggestion is regarding.
+     */
     public Camp getCamp() {return camp ;}
+
+    /**
+     * @return The student who made the suggestion.
+     */
     public Student getStudent() {return student ;}
+
+    /**
+     * @return The content of the suggestion.
+     */
     public String getContent() {return content ;}
+
+    /**
+     * @return Whether the suggestion is approved or not.
+     */
     public boolean isApproved() {return approved ;}
 
 

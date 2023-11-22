@@ -5,6 +5,9 @@ import source.user.Staff;
 import source.user.Student;
 import source.user.User;
 
+/**
+ * Manage users.
+ */
 public class UserManager {
     /**
      * Find the user object using the userId provided.

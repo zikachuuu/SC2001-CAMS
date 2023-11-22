@@ -50,8 +50,8 @@ public class Camp {
      * @param campInfo
      * @param numCommittees
      * @param numAttendees
-     //* @param enquiries
-     //* @param suggestions
+     * @param enquiries
+     * @param suggestions
      */
     public Camp (CampInformation campInfo , int numCommittees , int numAttendees, boolean visible) {
         this.campInfo = campInfo ;

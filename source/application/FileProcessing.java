@@ -17,9 +17,14 @@ import source.user.Student;
 import source.user.Staff;
 import source.user.User;
 
-
+/**
+ * Process file (read and write to csv),
+ */
 public class FileProcessing {
 
+    /**
+     * Read from csv.
+     */
     public static void readDataFromFile () {
         readStaffsFromFile() ;
         readCampsFromFile() ;

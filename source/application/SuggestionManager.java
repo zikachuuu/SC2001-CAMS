@@ -6,6 +6,9 @@ import source.camp.Camp;
 import source.camp.Suggestion;
 import source.user.Staff;
 
+/**
+ * Manage suggestion
+ */
 public class SuggestionManager {
 
     /**

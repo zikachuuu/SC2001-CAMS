@@ -17,12 +17,34 @@ public class Enquiry {
      */
     private boolean active ;
     
+    /**
+     * The camp this enquiry belongs to.
+     */
     private Camp camp ;
+
+    /**
+     * The student who made this enquiry.
+     */
     private Student student ;
+
+    /**
+     * The content of the enquiry.
+     */
     private String content ;
 
+    /**
+     * Whether this enquiry has been replied or not (true for replied already).
+     */
     private boolean replied ;
+
+    /**
+     * The user who replied this enquiry.
+     */
     private User repliedBy ;
+
+    /**
+     * The content of the replies.
+     */
     private String replies ;
 
     /**
@@ -58,15 +80,39 @@ public class Enquiry {
         this.replies = replies ;
     }
 
-
-
-
+    /**
+     * @return Whether the camp is active (not deleted).
+     */
     public boolean isActive() {return active ;}
+
+    /**
+     * @return The camp object this enquiry belongs to.
+     */
     public Camp getCamp() {return camp ;}
+
+    /**
+     * @return The student object who made this enquiry.
+     */
     public Student getStudent() {return student ;}
+
+    /**
+     * @return The content of the enquiry.
+     */
     public String getContent() {return content ;}
+
+    /**
+     * @return Whether the enquiry has been replied or not (true for replied already).
+     */
     public boolean isReplied() {return replied ;}
+
+    /**
+     * @return The user object who replied this enquiry. 
+     */
     public User getRepliedBy() {return repliedBy ;}
+
+    /**
+     * @return The content of the replies.
+     */
     public String getReplies() {return replies ;}
 
 

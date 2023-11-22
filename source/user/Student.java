@@ -15,8 +15,14 @@ import java.lang.String ;
  * @since 2023-11-10
  */
 public class Student extends User implements ICampParticipant{
-
+    /**
+     * The camp committee role of this student (null if none)
+     */
     private CampCommittee campCommittee ;
+
+    /**
+     * The list of camp attendee roles of this student (null if none)
+     */
     private ArrayList<CampAttendee> campAttendees ;
 
 

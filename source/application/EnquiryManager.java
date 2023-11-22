@@ -8,6 +8,9 @@ import source.exception.CampNotFoundException;
 import source.user.Staff;
 import source.user.Student;
 
+/**
+ * Manage enquiries.
+ */
 public class EnquiryManager {
 
     /**
