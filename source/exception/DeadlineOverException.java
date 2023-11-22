@@ -10,12 +10,14 @@ public class DeadlineOverException extends RuntimeException{
 
     /**
      * Create a DeadlineOverException which prints a message when the camp registration deadline has passed 
-     * @param message 
      */
     public DeadlineOverException() {
         super("Camp registration deadline passed!") ;
     }
-
+    /**
+     * Create a DeadlineOverException which prints a message when the camp registration deadline has passed 
+     * @param message 
+     */
     public DeadlineOverException(String message) {
         super (message) ;
     }
