@@ -305,7 +305,9 @@ public class FileProcessing {
         camp.addSuggestion(suggestion);
     }
 
-
+    /**
+     * Write all updates into the csv files using the methods
+     */
     protected static void writeDataToFile() {
         writeStaffsToFile() ;
         writeCampsToFile() ;
@@ -315,7 +317,9 @@ public class FileProcessing {
         writeSuggestionsToFiles();
     }
 
-
+    /**
+     * Write from the staff arrayList, CAMSAPP.staff into CAMSApp.STAFF_FILE_PATH
+     */
     private static void writeStaffsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.STAFF_FILE_PATH, false))) {
             writer.write ("Name,Email@e.ntu.edu.sg,Faculty,Password\r\n") ;
@@ -335,7 +339,9 @@ public class FileProcessing {
 
     }
 
-
+    /**
+     * Write from the camps arrayList, CAMSAPP.camps into CAMSApp.CAMP_FILE_PATH
+     */
     private static void writeCampsToFile() {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.CAMP_FILE_PATH, false))) {
@@ -367,7 +373,9 @@ public class FileProcessing {
         }
     }
 
-
+    /**
+     * Write from the student arrayList, CAMSAPP.students into CAMSApp.STUDENT_FILE_PATH
+     */
     private static void writeStudentsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.STUDENT_FILE_PATH, false))) {
             writer.write ("Name,Email@e.ntu.edu.sg,Faculty,Password\r\n") ;
@@ -385,8 +393,12 @@ public class FileProcessing {
             e.printStackTrace();
         }
     }
-
-
+    
+    /**
+     * Write camp members from each camp into CAMSApp.CAMP_MEMBERS_FILE_PATH
+     * Go throgh each camp in camp arrayList, CAMSApp.camps
+     * go thorugh student list by camp.getParticipants and camp.getWithdrawnParticipants
+     */
     private static void writeCampMembersToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.CAMP_MEMBERS_FILE_PATH, false))) {
             writer.write ("Name,CampName, Role, Status, Points\r\n") ;
@@ -422,7 +434,9 @@ public class FileProcessing {
         }
     }
 
-    
+    /**
+     * Write from the enquiries arrayList, enquiries into CAMSApp.ENQUIRIES_FILE_PATH
+     */
     private static void writeEnquiriesToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.ENQUIRIES_FILE_PATH , false))) {
             writer.write("Camp,Student,EnquiryText,Processed,ProcessedBy,Replies\r\n");
@@ -445,7 +459,9 @@ public class FileProcessing {
         }
     }
 
-
+    /**
+     * Write from the suggestion arrayList into CAMSApp.SUGGESTIONS_FILE_PATH
+     */
     private static void writeSuggestionsToFiles() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMSApp.SUGGESTIONS_FILE_PATH , false))) {
             writer.write("Camp,Student,Suggestion,Approved\r\n");
