@@ -207,7 +207,7 @@ public class CommitteeInterface implements IReportInterface, IEnquiryAdminInterf
         System.out.println("Press 2 to view all enquiries including those that have been replied.");
         System.out.print("Enter your choice: ");
         String filter = CAMSApp.scanner.nextLine();
-        if (!filter.equals("1") || !filter.equals("2")) {
+        if (!filter.equals("1") && !filter.equals("2")) {
             System.out.println("Invalid choice entered!");
             return;
         }
