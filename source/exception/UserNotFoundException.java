@@ -9,12 +9,14 @@ package source.exception;
 public class UserNotFoundException extends RuntimeException {
     /**
      * Create a UserNotFoundException for when the user is not found in the camp registration 
-     * @param message 
      */
     public UserNotFoundException() {
         super ("User not found") ;
     }
-
+    /**
+     * Create a UserNotFoundException for when the user is not found in the camp registration 
+     * @param message 
+     */
     public UserNotFoundException (String message) {
         super (message) ;
     }
