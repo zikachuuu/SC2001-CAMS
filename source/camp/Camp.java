@@ -92,46 +92,55 @@ public class Camp {
     }
 
     /**
+     * Get camp information.
      * @return campInfo
      */
     public CampInformation getCampInfo() {return campInfo ;}
 
     /**
+     * Get number of committees.
      * @return numCommittees
      */
     public int getNumCommittees() {return numCommittees ;}
 
     /**
+     * Get number of attendees.
      * @return numAttendees
      */
     public int getNumAttendees() {return numAttendees ;}
 
     /**
+     * Get all participants.
      * @return ArrayList of participants
      */
     public ArrayList<Student> getParticipants() {return participants ;}
 
     /**
+     * Get all withdrawn participants.
      * @return ArrayList of withdrawnParticipants
      */
     public ArrayList<Student> getWithdrawnParticipants() {return withdrawnParticipants ;}
 
     /**
+     * Get all enquiries.
      * @return ArrayList of enquiries
      */
     public ArrayList<Enquiry> getEnquiries() {return enquiries ;}
 
     /**
+     * Get all suggestions.
      * @return ArrayList of suggestions
      */
     public ArrayList<Suggestion> getSuggestions() {return suggestions ;}
 
     /**
+     * Get visibility.
      * @return true if visible, false if not visible
      */
     public boolean isVisible() {return visible ;}
 
     /**
+     * Get active.
      * @return true if active, false if not active
      */
     public boolean isActive () {return active ;}

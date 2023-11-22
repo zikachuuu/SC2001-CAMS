@@ -68,26 +68,31 @@ public class Suggestion {
     }
 
     /**
+     * Get whether active.
      * @return Whether the suggestion is active (not deleted).
      */
     public boolean isActive() {return active ;}
 
     /**
+     * Get camp.
      * @return The camp object this suggestion is regarding.
      */
     public Camp getCamp() {return camp ;}
 
     /**
+     * Get student.
      * @return The student who made the suggestion.
      */
     public Student getStudent() {return student ;}
 
     /**
+     * Get content.
      * @return The content of the suggestion.
      */
     public String getContent() {return content ;}
 
     /**
+     * Get whether approved.
      * @return Whether the suggestion is approved or not.
      */
     public boolean isApproved() {return approved ;}

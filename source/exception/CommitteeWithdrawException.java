@@ -1,7 +1,6 @@
 package source.exception;
 
-
-    /**
+/**
  * Represents exception for when camp committee tries to withdraw from camp 
  * @author minjie
  * @version 1

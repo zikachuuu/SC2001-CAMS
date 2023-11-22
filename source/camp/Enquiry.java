@@ -81,36 +81,43 @@ public class Enquiry {
     }
 
     /**
+     * Get active.
      * @return Whether the camp is active (not deleted).
      */
     public boolean isActive() {return active ;}
 
     /**
+     * Get camp.
      * @return The camp object this enquiry belongs to.
      */
     public Camp getCamp() {return camp ;}
 
     /**
+     * Get student.
      * @return The student object who made this enquiry.
      */
     public Student getStudent() {return student ;}
 
     /**
+     * Get content.
      * @return The content of the enquiry.
      */
     public String getContent() {return content ;}
 
     /**
+     * Get whether replied.
      * @return Whether the enquiry has been replied or not (true for replied already).
      */
     public boolean isReplied() {return replied ;}
 
     /**
+     * Get the user who replied.
      * @return The user object who replied this enquiry. 
      */
     public User getRepliedBy() {return repliedBy ;}
 
     /**
+     * Get content of reply.
      * @return The content of the replies.
      */
     public String getReplies() {return replies ;}
