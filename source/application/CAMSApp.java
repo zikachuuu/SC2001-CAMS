@@ -16,11 +16,34 @@ import source.user.Student;
  */
 public class CAMSApp {
 
+    /**
+     * File path for student csv.
+     */
     protected static final String STUDENT_FILE_PATH = "data//student_list.csv";
+
+    /**
+     * File path for staff csv.
+     */
     protected static final String STAFF_FILE_PATH = "data//staff_list.csv";
+
+    /**
+     * File path for camp csv.
+     */
     protected static final String CAMP_FILE_PATH = "data//camps_list.csv";
+
+    /**
+     * File path for camp members.
+     */
     protected static final String CAMP_MEMBERS_FILE_PATH = "data//camp_members.csv";
+
+    /**
+     * File path for enquiries csv.
+     */
     protected static final String ENQUIRIES_FILE_PATH = "data//enquiries.csv";
+
+    /**
+     * File path for suggestions csv.
+     */
     protected static final String SUGGESTIONS_FILE_PATH = "data//suggestions.csv";
 
     /**
