@@ -10,12 +10,14 @@ package source.exception;
 public class CommitteeWithdrawException extends RuntimeException{
     /**
      * Create an exception for when Camp Committee tries to withdraw from camp
-     * @param message 
      */
     public CommitteeWithdrawException() {
         super ("Cannot withdraw as a camp committee!") ;
     }
-
+    /**
+     * Create an exception for when Camp Committee tries to withdraw from camp
+     * @param message 
+     */
     public CommitteeWithdrawException(String message) {
         super (message) ;
     }
