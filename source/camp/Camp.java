@@ -15,16 +15,43 @@ import source.user.User;
  * @since 2023-11-10
  */
 public class Camp {
-    
+
+    /**
+     * CampInformation of this camp
+     */
     private CampInformation campInfo ;
+    /**
+     * number of committees in this camp
+     */
     private int numCommittees ;
+    /**
+     * number of attendees in this camp
+     */
     private int numAttendees ;
+    /**
+     * ArrayList which stores all the participants in this camp
+     */
     private ArrayList<Student> participants;
+    /**
+     * ArrayList which stores all the withdrawn participants from this camp
+     */
     private ArrayList<Student> withdrawnParticipants;
+    /**
+     * ArrayList which stores all the enquiries from this camp
+     */
     private ArrayList<Enquiry> enquiries ;
+    /**
+     * ArrayList which store all the suggestions from this camp
+     */
     private ArrayList<Suggestion> suggestions ;
+    /**
+     * boolean value to toggle camp visibility, true for visible, false for not visible
+     */
 
     private boolean visible ;
+    /**
+     * boolean value to toggle camp activeness, true for active, false for not active
+     */
     private boolean active ;
 
 
@@ -50,8 +77,7 @@ public class Camp {
      * @param campInfo
      * @param numCommittees
      * @param numAttendees
-     * @param enquiries
-     * @param suggestions
+     * @param visible
      */
     public Camp (CampInformation campInfo , int numCommittees , int numAttendees, boolean visible) {
         this.campInfo = campInfo ;
