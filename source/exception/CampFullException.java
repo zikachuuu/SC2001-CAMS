@@ -11,12 +11,14 @@ public class CampFullException extends RuntimeException {
 
     /**
      * Create exception for when camp is full with a message for user
-     * @param message
-     */
+     */   
     public CampFullException () {
         super ("Camp is full.") ;
     }
-
+    /**
+     * Create exception for when camp is full with a message for user
+     * @param message
+     */
     public CampFullException (String message) {
         super (message) ;
     }
