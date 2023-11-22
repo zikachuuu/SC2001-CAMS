@@ -11,12 +11,15 @@ public class MultipleCommitteeRoleException extends RuntimeException {
     /**
      * Creates a MultipleCommitteeRoleException that prints an error message to Camp Committee member if they were to 
      * register as a camp committee member for more than one camp 
-     * @param message 
      */
     public MultipleCommitteeRoleException() {
         super ("Can only be in the camp committee for one camp!") ;
     }
-
+    /**
+     * Creates a MultipleCommitteeRoleException that prints an error message to Camp Committee member if they were to 
+     * register as a camp committee member for more than one camp 
+     * @param message 
+     */
     public MultipleCommitteeRoleException(String message) {
         super (message) ;
     }
